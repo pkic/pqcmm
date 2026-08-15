@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { stdout } from "node:process";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
@@ -90,6 +91,6 @@ if (
   );
 }
 
-console.log(
-  `Validated PQCMM ${model.model.version}: ${model.levels.length} levels, ${ids.length} stable identifiers, profile ${profile.profile.version}.`,
+stdout.write(
+  `Validated PQCMM ${model.model.version}: ${model.levels.length} levels, ${ids.length} stable identifiers, profile ${profile.profile.version}.\n`,
 );
