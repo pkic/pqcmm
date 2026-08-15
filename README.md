@@ -30,7 +30,7 @@ pnpm run validate
 
 ## Releases
 
-Released model files are immutable. Substantive changes require a new semantic model version while assessment behavior can advance independently through a new profile version. Tags use `v<model-version>`, and the release workflow publishes `.tar.gz` and `.zip` archives with SHA-256 checksums.
+Released model files are immutable. Substantive changes require a new semantic model version while assessment behavior can advance independently through a new profile version. Tags use `v<model-version>`. The release workflow publishes the model, profile, and schemas as individual assets for build integrations, plus `.tar.gz` and `.zip` archives and a `SHA256SUMS` file.
 
 The PKI Consortium website and assessment tooling should consume a pinned release or commit rather than an unversioned copy from the default branch.
 
