@@ -11,7 +11,7 @@ This repository is the versioned, machine-readable source package for the PKI Co
 - `schemas/` contains JSON Schemas for models and assessment profiles. Portable assessment packages use the model-neutral schema maintained by the assessment tool.
 - `scripts/validate.mjs` validates all current package contracts and stable identifiers.
 
-The model and assessment profile are deliberately separate. Criteria and assessment questions remain immutable within a released model version, while form fields, cross-field subject rules, evidence limits, assurance states, report sections, and registered policy identifiers can advance in a separately versioned profile.
+The model and assessment profile are deliberately separate. Criteria and assessment questions remain immutable within a released model version, while form defaults, cross-field subject rules, evidence limits, assurance states, report sections, and registered policy identifiers can advance in a separately versioned profile. Model 1.1.0 adds explicit criterion-to-question links and machine-readable response definitions. The profile supplies generic defaults and finding statuses, so assessment tools do not need PQCMM-specific rendering or scoring code.
 
 PQCMM requires at least one canonical CPE 2.3 name or package URL (pURL) for inventory correlation. The profile expresses that requirement through a generic `at-least-one` subject rule. Portable assessment credentials expose CPE and pURL as separate named properties; the runtime does not use a PQCMM-specific validation branch.
 
