@@ -48,11 +48,18 @@ const solutionIdentityRule = profile.runtime.subjectRules?.find(
 if (
   !solutionIdentityRule ||
   subjectFields.get("cpe")?.format !== "cpe-2.3" ||
-  subjectFields.get("purl")?.format !== "package-url"
+  subjectFields.get("purl")?.format !== "package-url" ||
+  subjectFields.get("cpe")?.suggestion?.strategy !==
+    "cpe-2.3-application" ||
+  subjectFields.get("assessorOrganization")?.defaultFrom !== "vendorName"
 ) {
   throw new Error(
-    "PQCMM must require at least one separately typed CPE 2.3 or pURL identifier.",
+    "PQCMM must keep separate typed identifiers and its configured self-assessment conveniences.",
   );
+}
+
+if (profile.runtime.methodology.parameters.defaultBaselineStatus !== "met") {
+  throw new Error("PQCMM Level 0 must default to Met for a new assessment.");
 }
 
 if (
