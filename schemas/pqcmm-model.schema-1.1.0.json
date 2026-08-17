@@ -209,6 +209,17 @@
         "text": { "$ref": "#/$defs/markdown" }
       }
     },
+    "levelSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "body"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[0-5]\\.s\\.[1-9][0-9]*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "body": { "$ref": "#/$defs/markdown" },
+        "placement": { "enum": ["after-criteria", "after-assessment", "after-evidence-checklist"], "default": "after-criteria" }
+      }
+    },
     "level": {
       "type": "object",
       "additionalProperties": false,
@@ -232,6 +243,10 @@
               "items": { "$ref": "#/$defs/criterion" }
             }
           }
+        },
+        "sections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/levelSection" }
         },
         "assessment": {
           "type": "object",

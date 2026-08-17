@@ -73,6 +73,7 @@ if (
 
 const ids = model.levels.flatMap((level) => [
   ...level.criteria.items.map((item) => item.id),
+  ...(level.sections ?? []).map((section) => section.id),
   ...level.assessment.groups.flatMap((group) =>
     group.questions.map((question) => question.id),
   ),
@@ -80,8 +81,18 @@ const ids = model.levels.flatMap((level) => [
 ]);
 if (new Set(ids).size !== ids.length) {
   throw new Error(
-    "Criterion, question, and evidence identifiers must be unique.",
+    "Criterion, question, section, and evidence identifiers must be unique.",
   );
+}
+
+for (const level of model.levels) {
+  for (const section of level.sections ?? []) {
+    if (!section.id.startsWith(`${level.number}.s.`)) {
+      throw new Error(
+        `Level ${level.number} section ${section.id} does not carry its level prefix.`,
+      );
+    }
+  }
 }
 
 const questionIds = new Set(

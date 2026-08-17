@@ -463,8 +463,29 @@ levels:
           text: "**Crypto-agility mechanisms** exist for key product features: at least two algorithms can be selected for the same cryptographic role through configuration (for example two different signature algorithms, or a pure-PQC vs. hybrid option in the same role) without major architectural redesign or a hardware refresh. Selecting only between parameter sets of the same algorithm (for example ML-KEM-768 and ML-KEM-1024) does not by itself satisfy this criterion."
           assessmentQuestionIds: [3.5.1, 3.5.2, 3.5.3]
         - id: 3.1.5
-          text: A documented **HNDL exposure register** identifies which data flows handled by the product carry a Harvest-Now-Decrypt-Later risk (long-lived confidentiality requirement), and which algorithm protects each.
+          text: "A documented **long-lived exposure register** identifies which data flows handled by the product carry a long-lived protection requirement, and which algorithm protects each. The register must cover both exposure classes: **Harvest-Now-Decrypt-Later (HNDL)**, where confidentiality must survive future decryption, and **long-lived verifiability**, where signatures, seals, timestamps, or other integrity evidence must remain verifiable after the protecting algorithms are deprecated."
           assessmentQuestionIds: [3.7.1]
+    sections:
+      - id: 3.s.1
+        title: Cryptographic Inventory Taxonomy
+        placement: after-criteria
+        body: |-
+          A Level 3 cryptographic inventory must cover, at minimum, the following categories. For each category, list the algorithms, parameter sets, and components used — or mark the category *not applicable* with a justification:
+
+          - Data in transit (e.g., TLS, VPN, application protocols)
+          - Data at rest (e.g., disk, database, object storage encryption)
+          - Identity, authentication, and certificates
+          - Code, firmware, and update signing
+          - Key wrapping and key-encryption keys (KEKs)
+          - Random number generation and entropy sources
+          - Telemetry, logging, and audit-trail integrity
+          - Build, CI/CD, and supply-chain signing (where part of the product)
+          - Attestation and remote-attestation (where applicable)
+          - Backup, archival, and long-term storage
+          - Long-term validation of existing evidence (verification of previously created signatures, seals, and timestamps; archive timestamp renewal; hash and signature agility for already-signed records)
+
+          > The final category concerns evidence that has **already been created**. Harvest-Now-Decrypt-Later exposure is remedied by re-encrypting, but a signature, seal, or timestamp applied years ago usually cannot be reissued, because the signer, the approval context, or the legal moment has passed. Products that create, validate, or preserve signed or timestamped records must account for how that evidence stays verifiable as algorithms are deprecated. Products that hold no such evidence mark the category *not applicable* with a justification.
+          {.callout-info}
     assessment:
       methodology: |-
         The assessment report must record:
@@ -715,30 +736,38 @@ levels:
               question: Has the vendor published an algorithm deprecation policy describing how it responds to a vulnerability or parameter-set deprecation in an algorithm the product depends on?
               guidance: "Record the policy document URL, version, and date. The policy should state: how the vendor monitors algorithm developments; the maximum time between a credible deprecation event and a vendor advisory; and the mechanism used to remove or disable the affected algorithm. Absence of any published policy is a finding. The detail need not match a security-incident response process but must be a written commitment."
         - id: "3.7"
-          name: Harvest-Now-Decrypt-Later (HNDL) Exposure Register
+          name: Long-Lived Exposure Register (including Harvest-Now-Decrypt-Later)
           kind: assessment
           questions:
             - id: 3.7.1
-              question: Does the vendor maintain a written HNDL exposure register identifying data flows handled by the product that carry long-lived confidentiality requirements?
-              guidance: "Request the register. Record document title, version, and date. Each entry should identify: the data class (e.g., \"customer-uploaded documents\", \"signed audit logs\"), the expected confidentiality lifetime (years), the algorithm currently protecting it, and whether it is quantum-safe. A register that lists no HNDL-exposed data despite the product handling long-lived data is a finding — record the gap and the vendor's justification."
+              question: Does the vendor maintain a written long-lived exposure register identifying data flows handled by the product that carry long-lived confidentiality or long-lived verifiability requirements?
+              guidance: "Request the register. Record document title, version, and date. Each entry should identify: the data class (e.g., \"customer-uploaded documents\", \"signed audit logs\"), the exposure class, the expected protection lifetime (years), the algorithm currently protecting it, and whether it is quantum-safe. Two exposure classes must be considered separately, because they have different remedies. **Harvest-Now-Decrypt-Later (HNDL)** concerns confidentiality and is remedied by re-encrypting. **Long-lived verifiability** concerns signatures, seals, timestamps, and other integrity evidence that must still verify years after creation; it usually cannot be remedied by reissuing, because the signer, the approval context, or the legal moment has passed. A register that lists no HNDL-exposed data despite the product handling long-lived data is a finding. A register that records no long-lived verifiability entries despite the product creating, validating, or preserving signed or timestamped records is equally a finding — record the gap and the vendor's justification."
               response:
                 fields:
                   - key: registerVersion
-                    label: HNDL exposure register version
+                    label: Long-lived exposure register version
                     type: text
                     required: true
                   - key: lastUpdated
                     label: Register last updated
                     type: date
                     required: true
+                  - key: exposureClassesCovered
+                    label: Exposure classes covered by the register
+                    type: multiselect
+                    required: true
+                    options:
+                      - { value: hndl-confidentiality, label: "Harvest-Now-Decrypt-Later (long-lived confidentiality)" }
+                      - { value: long-lived-verifiability, label: "Long-lived verifiability (signatures, seals, timestamps)" }
+                      - { value: none-applicable, label: "Neither class applies, justification recorded" }
                   - key: dataFlowCoverage
-                    label: Data flows, confidentiality lifetimes, and protecting algorithms
+                    label: Data flows, exposure classes, protection lifetimes, and protecting algorithms
                     type: textarea
                     rows: 6
                     required: true
                 evidence:
-                  label: HNDL exposure register
-                  description: Attach the written register covering the data flows and algorithms summarized above.
+                  label: Long-lived exposure register
+                  description: Attach the written register covering the data flows, exposure classes, and algorithms summarized above.
                   required: true
                   acceptedMediaTypes: [application/pdf, application/json, text/csv, text/plain]
                   maxFiles: 1
@@ -763,7 +792,7 @@ levels:
         - id: 3.e.5
           text: Algorithm deprecation policy.
         - id: 3.e.6
-          text: HNDL exposure register.
+          text: Long-lived exposure register, covering both harvest-now-decrypt-later confidentiality and long-lived verifiability.
         - id: 3.e.7
           text: Identification of the DRBG / RNG used for cryptographic key material and its seed strength.
         - id: 3.e.8
@@ -784,7 +813,7 @@ levels:
           text: "**Zero-Legacy Capability:** the product can be configured to disable **all** non-quantum-safe algorithms throughout the product — including in low-level components such as boot, firmware update signing, hardware-bound operations, and internal diagnostics — while remaining fully functional. *Zero legacy means zero legacy.* If a non-quantum-safe algorithm cannot be disabled in any in-scope component, the product does not meet Level 4 for that component, and an assessment must record this as a finding that caps the product's level."
           assessmentQuestionIds: [4.3.1, 4.3.2, 4.3.3]
         - id: 4.1.3
-          text: Symmetric and hash algorithms used to protect data with long-lived confidentiality or integrity requirements meet the parameter strengths recommended by NIST (or an equivalent national authority) for use beyond the anticipated availability of cryptographically relevant quantum computers.
+          text: Symmetric and hash algorithms used to protect data with long-lived confidentiality or integrity requirements, for every exposure class recorded in the Level 3 long-lived exposure register, meet the parameter strengths recommended by NIST (or an equivalent national authority) for use beyond the anticipated availability of cryptographically relevant quantum computers.
           assessmentQuestionIds: [4.4.1]
         - id: 4.1.4
           text: The vendor clearly documents whether **hybrid** (classical + quantum-safe combined) and/or **composite** (algorithm-fused) modes are supported, and in which contexts.
@@ -887,19 +916,110 @@ levels:
             - id: 4.3.1
               question: Can the product be configured to disable all non-quantum-safe algorithms? Provide the exact configuration steps.
               guidance: "Record the exact configuration mechanism (configuration file key, API call, CLI flag, UI setting) and the documentation URL. Where possible, reproduce in a test environment: apply the zero-legacy configuration, then test using a client that supports only classical algorithms — e.g., `openssl s_client -cipher \"AES256-SHA\" -tls1_2 -connect host:port`. Record: test tool name and version, exact command used, product version, configuration applied, and outcome (connection rejected / accepted). A connection that succeeds under this test is a finding."
+              response:
+                fields:
+                  - key: configurationMechanism
+                    label: Zero-legacy configuration mechanism
+                    type: text
+                    required: true
+                    hint: Configuration file key, API call, CLI flag, or UI setting.
+                  - key: documentationUrl
+                    label: Configuration documentation URL
+                    type: url
+                    required: false
+                  - key: testTool
+                    label: Test tool and version
+                    type: text
+                    required: true
+                  - key: testCommand
+                    label: Exact test command or procedure
+                    type: textarea
+                    rows: 3
+                    required: true
+                  - key: classicalConnectionOutcome
+                    label: Classical-only client connection outcome
+                    type: select
+                    required: true
+                    options:
+                      - { value: rejected, label: Rejected as expected }
+                      - { value: accepted, label: "Accepted, which is a finding" }
+                      - { value: untested, label: Not tested }
             - id: 4.3.2
               question: When configured in zero-legacy mode, does the product remain fully functional with a quantum-safe client?
               guidance: "Test with a representative quantum-safe workload. Record: test environment details, product version, zero-legacy configuration applied, quantum-safe client tool and version (e.g., OQS-OpenSSL, a TLS client with ML-KEM support), test procedure, and outcome. Document any feature that fails or degrades in zero-legacy mode — each exception must be named, scoped, and risk-assessed."
+              response:
+                fields:
+                  - key: quantumSafeClient
+                    label: Quantum-safe client tool and version
+                    type: text
+                    required: true
+                  - key: testProcedure
+                    label: Test environment, product version, and procedure
+                    type: textarea
+                    rows: 4
+                    required: true
+                  - key: functionalOutcome
+                    label: Functional outcome in zero-legacy mode
+                    type: select
+                    required: true
+                    options:
+                      - { value: fully-functional, label: Fully functional }
+                      - { value: degraded, label: Functional with degraded features }
+                      - { value: failed, label: Failed }
+                  - key: degradations
+                    label: Features that fail or degrade in zero-legacy mode
+                    type: textarea
+                    rows: 3
+                    required: false
+                    hint: Name, scope, and risk-assess each exception. Leave empty when fully functional.
+                evidence:
+                  label: Zero-legacy functional test results
+                  description: Attach the test output or report confirming operation in zero-legacy mode.
+                  required: true
+                  acceptedMediaTypes: [application/pdf, application/json, text/plain]
+                  maxFiles: 2
             - id: 4.3.3
               question: Are there components in which non-quantum-safe algorithms cannot be disabled — e.g., internal diagnostics, boot sequences, hardware-enforced algorithms, firmware update signing, or root-of-trust operations?
               guidance: "Zero legacy means zero legacy: any in-scope component in which a non-quantum-safe algorithm cannot be disabled is a finding that caps the product's PQCMM level below Level 4 for the affected component. Record each such component by: name, algorithm in use, reason it cannot be disabled, the vendor's planned remediation timeline, and the resulting effective maturity level for that component. The assessment report must clearly state where the product does and does not achieve zero-legacy operation."
+              response:
+                fields:
+                  - key: allComponentsDisableable
+                    label: Non-quantum-safe algorithms can be disabled in every in-scope component
+                    type: boolean
+                    required: true
+                  - key: nonDisableableComponents
+                    label: Components where non-quantum-safe algorithms cannot be disabled
+                    type: textarea
+                    rows: 5
+                    required: true
+                    hint: One row per component with algorithm, reason, planned remediation, and the resulting effective level. Record "none" when every component can be disabled.
         - id: "4.4"
           name: Symmetric and Hash Strengths for Long-Lived Data
           kind: assessment
           questions:
             - id: 4.4.1
-              question: For data with long-lived confidentiality or integrity requirements (as identified in the HNDL exposure register at Level 3), do the symmetric and hash algorithms used meet the strengths recommended by NIST or an equivalent national authority for use beyond the anticipated availability of cryptographically relevant quantum computers?
-              guidance: "Record, for each long-lived data class identified in the HNDL register: the symmetric algorithm and key length, the hash algorithm and output length, and the NIST or national-authority guidance referenced (e.g., NIST SP 800-131A, BSI TR-02102, ANSSI cryptographic recommendations). A long-lived data class protected with symmetric or hash strengths below the referenced guidance is a finding."
+              question: For data with long-lived confidentiality or integrity requirements (as identified in the long-lived exposure register at Level 3), do the symmetric and hash algorithms used meet the strengths recommended by NIST or an equivalent national authority for use beyond the anticipated availability of cryptographically relevant quantum computers?
+              guidance: "Record, for each long-lived data class identified in the register: the exposure class, the symmetric algorithm and key length, the hash algorithm and output length, and the NIST or national-authority guidance referenced (e.g., NIST SP 800-131A, BSI TR-02102, ANSSI cryptographic recommendations). Both exposure classes must be covered. For harvest-now-decrypt-later classes, assess the strengths protecting confidentiality. For long-lived verifiability classes, assess the hash and signature strengths that the existing evidence depends on, including any archive timestamp or evidence-renewal mechanism the product applies. A long-lived data class protected with symmetric or hash strengths below the referenced guidance is a finding. A register entry with no corresponding assessment here is also a finding."
+              response:
+                fields:
+                  - key: exposureClassesAssessed
+                    label: Exposure classes assessed
+                    type: multiselect
+                    required: true
+                    options:
+                      - { value: hndl-confidentiality, label: "Harvest-Now-Decrypt-Later (long-lived confidentiality)" }
+                      - { value: long-lived-verifiability, label: "Long-lived verifiability (signatures, seals, timestamps)" }
+                      - { value: none-applicable, label: "Neither class applies, justification recorded" }
+                  - key: dataClassStrengths
+                    label: Data classes with exposure class, symmetric algorithm and key length, and hash algorithm and output length
+                    type: textarea
+                    rows: 6
+                    required: true
+                  - key: guidanceReferenced
+                    label: NIST or national-authority guidance referenced
+                    type: text
+                    required: true
+                    hint: For example NIST SP 800-131A, BSI TR-02102, or ANSSI cryptographic recommendations.
         - id: "4.5"
           name: Hybrid and Composite Support
           kind: assessment
@@ -907,12 +1027,71 @@ levels:
             - id: 4.5.1
               question: Does the product support hybrid key exchange or hybrid authentication? If yes, which specific hybrid schemes, and which standard or draft?
               guidance: "Record scheme-level specifics: e.g., X25519+ML-KEM-768 per draft-ietf-tls-hybrid-design (record the draft version number — implementations based on superseded drafts may not interoperate with current versions). \"We support hybrid\" without naming the scheme and draft version is not assessable. Where possible, test interoperability with a reference implementation (e.g., OQS-OpenSSL configured for the same scheme) and record: tool name and version, test command, and outcome."
+              response:
+                fields:
+                  - key: hybridSupported
+                    label: Hybrid key exchange or authentication supported
+                    type: boolean
+                    required: true
+                  - key: schemes
+                    label: Hybrid schemes and the contexts they apply to
+                    type: textarea
+                    rows: 4
+                    required: true
+                    hint: For example X25519+ML-KEM-768 for TLS 1.3 key exchange.
+                  - key: referenceStandard
+                    label: Reference standard or draft, including version
+                    type: text
+                    required: true
+                  - key: interoperabilityOutcome
+                    label: Interoperability outcome against a reference implementation
+                    type: select
+                    required: true
+                    options:
+                      - { value: pass, label: Pass }
+                      - { value: partial, label: Partial }
+                      - { value: fail, label: Fail }
+                      - { value: not-tested, label: Not tested }
             - id: 4.5.2
               question: Does the product support composite algorithms? If yes, which schemes and which standard or draft?
               guidance: "Record: scheme name (e.g., id-MLDSA65-RSA2048-PKCS15-SHA256), reference standard or draft (e.g., draft-ounsworth-pq-composite-sigs with specific draft version, or ETSI TS 119 312 with section reference). Proprietary composite schemes that deviate from published drafts must be flagged as an interoperability risk and recorded with the vendor's explanation of the deviation."
+              response:
+                fields:
+                  - key: compositeSupported
+                    label: Composite algorithms supported
+                    type: boolean
+                    required: true
+                  - key: schemes
+                    label: Composite schemes and the contexts they apply to
+                    type: textarea
+                    rows: 4
+                    required: true
+                    hint: For example id-MLDSA65-RSA2048-PKCS15-SHA256.
+                  - key: referenceStandard
+                    label: Reference standard or draft, including version
+                    type: text
+                    required: true
+                  - key: deviations
+                    label: Deviations from the published scheme and the vendor's explanation
+                    type: textarea
+                    rows: 3
+                    required: false
+                    hint: Proprietary deviations are an interoperability risk and must be recorded.
             - id: 4.5.3
               question: In which protocols, features, or configurations is hybrid/composite mode available?
               guidance: Record each feature area with the specific hybrid/composite scheme implemented and a configuration example or documentation URL. "Full hybrid support" without a feature-level breakdown requires decomposition before recording. Request the specific configuration parameter or API call for each named feature.
+              response:
+                fields:
+                  - key: featureCoverage
+                    label: Feature areas with the hybrid or composite scheme implemented in each
+                    type: textarea
+                    rows: 5
+                    required: true
+                    hint: One row per protocol, feature, or configuration, with the specific scheme.
+                  - key: documentationUrl
+                    label: Configuration or documentation URL
+                    type: url
+                    required: false
     evidenceChecklist:
       introduction: The items below are a level-specific summary of the artefacts a vendor should be able to produce. They can serve as a concise request list for an assessor, or as a self-assessment reference for a vendor preparing evidence before a formal assessment. The detailed requirements and acceptance criteria for each item are in the assessment questions above. All artefacts from [Level 1](/wg/pqc/pqcmm/levels/1-initial/#evidence-checklist), [Level 2](/wg/pqc/pqcmm/levels/2-foundational/#evidence-checklist), and [Level 3](/wg/pqc/pqcmm/levels/3-advanced/#evidence-checklist) remain required.
       items:
@@ -966,12 +1145,88 @@ levels:
             - id: 5.2.1
               question: What is the default algorithm configuration for each feature area in a fresh installation?
               guidance: "The assessor should perform or observe a fresh installation. Record: product version, installation method (binary installer / container image / cloud deployment), environment (OS version, cloud provider, hardware type), and the configuration captured (exported configuration file, screenshot of settings UI, or API response for the default configuration endpoint — record which method was used). Verify that quantum-safe algorithms appear as the default without any manual modification. A finding based on documentation review only — without a fresh installation test — must be flagged as \"not independently reproduced\"."
+              response:
+                fields:
+                  - key: productVersion
+                    label: Product version installed
+                    type: text
+                    required: true
+                  - key: installationMethod
+                    label: Installation method
+                    type: select
+                    required: true
+                    options:
+                      - { value: binary-installer, label: Binary installer }
+                      - { value: container-image, label: Container image }
+                      - { value: cloud-deployment, label: Cloud deployment }
+                      - { value: package-manager, label: Package manager }
+                      - { value: other, label: Other }
+                  - key: environment
+                    label: Environment used for the fresh installation
+                    type: textarea
+                    rows: 3
+                    required: true
+                  - key: captureMethod
+                    label: How the default configuration was captured
+                    type: select
+                    required: true
+                    options:
+                      - { value: exported-config, label: Exported configuration file }
+                      - { value: settings-screenshot, label: Settings screenshot }
+                      - { value: api-response, label: Default-configuration API response }
+                      - { value: documentation-only, label: "Documentation only, not independently reproduced" }
+                  - key: defaultsQuantumSafe
+                    label: Quantum-safe algorithms are the default without manual modification
+                    type: boolean
+                    required: true
             - id: 5.2.2
               question: How does an operator explicitly enable classical (non-quantum-safe) algorithms? Show the exact configuration step.
               guidance: "Record the exact configuration step required (configuration key, flag, UI setting, API call). Test it: apply the enablement step, verify it works, and verify the product emits a warning or audit log entry indicating a downgrade. Record: test environment, product version, steps performed, and outcome. **A default that silently falls back to classical when a quantum-safe peer is unavailable — without an explicit operator action and an audit log entry — is a disqualifying finding for Level 5.**"
+              response:
+                fields:
+                  - key: enablementStep
+                    label: Exact step required to enable classical algorithms
+                    type: text
+                    required: true
+                  - key: warningOrAuditEntry
+                    label: Product emits a warning or audit log entry on downgrade
+                    type: boolean
+                    required: true
+                  - key: silentFallbackObserved
+                    label: Silent fallback to classical observed without operator action
+                    type: boolean
+                    required: true
+                    hint: A silent fallback is a disqualifying finding for Level 5.
+                  - key: testOutcome
+                    label: Test environment, product version, steps performed, and outcome
+                    type: textarea
+                    rows: 4
+                    required: true
             - id: 5.2.3
               question: Is the default quantum-safe configuration consistent across all supported deployment modes — cloud, on-premises, container, embedded?
               guidance: "Record each supported deployment mode and the evidence type for each: (a) assessor-tested — record installation method, environment, and result; (b) vendor-provided configuration export — record document title, version, and date; (c) documentation only — flag as \"not independently reproduced\". Inconsistency between modes is a finding — record which mode fails and note that the effective maturity level for that mode is lower."
+              response:
+                fields:
+                  - key: deploymentModes
+                    label: Supported deployment modes assessed
+                    type: multiselect
+                    required: true
+                    options:
+                      - { value: cloud, label: Cloud }
+                      - { value: on-premises, label: On-premises }
+                      - { value: container, label: Container }
+                      - { value: embedded, label: Embedded }
+                      - { value: other, label: Other }
+                  - key: evidenceTypeByMode
+                    label: Evidence type and result per deployment mode
+                    type: textarea
+                    rows: 5
+                    required: true
+                    hint: Record assessor-tested, vendor-provided configuration export, or documentation only for each mode.
+                  - key: inconsistenciesFound
+                    label: Default configuration differs between deployment modes
+                    type: boolean
+                    required: true
         - id: "5.3"
           name: Performance
           kind: assessment
