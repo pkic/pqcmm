@@ -144,15 +144,102 @@ levels:
             - id: 1.2.1
               question: Which quantum-safe algorithms are available for testing and evaluation?
               guidance: "Record exact algorithm names and parameter sets (e.g., ML-KEM-768, ML-DSA-65 — not just \"ML-KEM\" or \"PQC\"). Request two URLs: (a) the product documentation page describing the feature; (b) the release notes for the version that introduced it. Both must be accessible to the assessor and must cover the assessed product version — not a future or generic version. Record the product version, both URLs, and the date accessed."
+              response:
+                fields:
+                  - key: algorithms
+                    label: Algorithms and parameter sets available for evaluation
+                    type: textarea
+                    rows: 3
+                    required: true
+                    hint: Record exact names such as ML-KEM-768 or ML-DSA-65, not "ML-KEM" or "PQC".
+                  - key: productVersion
+                    label: Product version covered
+                    type: text
+                    required: true
+                  - key: documentationUrl
+                    label: Product documentation URL for the feature
+                    type: url
+                    required: false
+                  - key: releaseNotesUrl
+                    label: Release notes URL for the version that introduced it
+                    type: url
+                    required: false
+                  - key: dateAccessed
+                    label: Date the sources were accessed
+                    type: date
+                    required: true
+                rules:
+                  - kind: at-least-one
+                    fields: [documentationUrl, releaseNotesUrl]
+                    message: Provide the product documentation URL or the release notes URL.
             - id: 1.2.2
               question: Which release channel provides access — stable, beta, preview, or experimental?
               guidance: Record the channel name, the release identifier (version number or build tag), and whether access is public or requires programme enrolment. Request the public announcement URL or enrolment page URL. Record the URL and date accessed.
+              response:
+                fields:
+                  - key: releaseChannel
+                    label: Release channel providing access
+                    type: select
+                    required: true
+                    options:
+                      - { value: stable, label: Stable }
+                      - { value: beta, label: Beta }
+                      - { value: preview, label: Preview }
+                      - { value: experimental, label: Experimental }
+                  - key: releaseIdentifier
+                    label: Release identifier (version number or build tag)
+                    type: text
+                    required: true
+                  - key: accessModel
+                    label: Access model
+                    type: select
+                    required: true
+                    options:
+                      - { value: public, label: Public }
+                      - { value: enrolment, label: Requires programme enrolment }
+                  - key: announcementUrl
+                    label: Announcement or enrolment page URL
+                    type: url
+                    required: false
             - id: 1.2.3
               question: Is the feature available to all customers or only to a subset?
               guidance: Record the access model as stated in the vendor's written documentation or announcement — quote the relevant text with the source URL. Any restriction must be sourced from a written document, not paraphrased from a verbal claim.
             - id: 1.2.4
               question: Is the quantum-safe feature accessible without custom builds or source-code modification?
               guidance: "The assessor should attempt to reproduce the access path using the standard product release, following the documented steps. Record: the steps followed, the product version, the environment, and whether the reproduction succeeded. A feature that cannot be accessed by following its published documentation fails this check."
+              response:
+                fields:
+                  - key: accessibleWithoutCustomBuild
+                    label: Feature is accessible without custom builds or source-code modification
+                    type: boolean
+                    required: true
+                  - key: productVersion
+                    label: Product version used for the reproduction attempt
+                    type: text
+                    required: true
+                  - key: environment
+                    label: Environment type
+                    type: select
+                    required: true
+                    options:
+                      - { value: vendor-sandbox, label: Vendor sandbox }
+                      - { value: trial-licence, label: Trial licence }
+                      - { value: own-installation, label: Own installation }
+                      - { value: not-attempted, label: Not attempted }
+                  - key: reproductionOutcome
+                    label: Reproduction outcome
+                    type: select
+                    required: true
+                    options:
+                      - { value: succeeded, label: Succeeded }
+                      - { value: partially-reproduced, label: Partially reproduced }
+                      - { value: failed, label: "Failed, which is a finding" }
+                      - { value: not-attempted, label: Not attempted }
+                  - key: stepsFollowed
+                    label: Documented steps followed
+                    type: textarea
+                    rows: 3
+                    required: true
         - id: "1.3"
           name: Component Coverage
           kind: assessment
@@ -173,9 +260,47 @@ levels:
             - id: 1.4.1
               question: How is the quantum-safe feature enabled? Provide the specific configuration step, flag name, or API parameter.
               guidance: Record the exact mechanism — configuration key, flag name, or API parameter name — and the documentation URL. Where possible, reproduce the enablement step in a test environment and record the outcome. A feature that cannot be enabled by following its published documentation is a finding.
+              response:
+                fields:
+                  - key: enablementMechanism
+                    label: Exact enablement mechanism
+                    type: text
+                    required: true
+                    hint: Configuration key, flag name, or API parameter name.
+                  - key: documentationUrl
+                    label: Documentation URL for the enablement step
+                    type: url
+                    required: false
+                  - key: reproductionOutcome
+                    label: Enablement reproduced by the assessor
+                    type: select
+                    required: true
+                    options:
+                      - { value: reproduced, label: Reproduced successfully }
+                      - { value: not-reproduced, label: "Could not be reproduced, which is a finding" }
+                      - { value: not-attempted, label: Not attempted }
             - id: 1.4.2
               question: Is the enablement process documented in official product documentation? Provide the URL and section reference.
               guidance: Record the documentation URL and confirm it is accessible for the assessed product version (not a newer release or generic page). Documentation that exists only in an internal wiki or internal knowledge base does not satisfy this criterion — it must be accessible to customers.
+              response:
+                fields:
+                  - key: documentationUrl
+                    label: Official documentation URL
+                    type: url
+                    required: true
+                  - key: sectionReference
+                    label: Section reference
+                    type: text
+                    required: true
+                  - key: coversAssessedVersion
+                    label: Documentation covers the assessed product version
+                    type: boolean
+                    required: true
+                  - key: customerAccessible
+                    label: Documentation is accessible to customers
+                    type: boolean
+                    required: true
+                    hint: Internal wikis and internal knowledge bases do not satisfy this criterion.
         - id: "1.5"
           name: Evidence & Testing
           kind: assessment
@@ -276,18 +401,85 @@ levels:
             - id: 2.2.1
               question: Which quantum-safe algorithms are available in the stable/production release? Name the specific algorithms and parameter sets.
               guidance: Record exact names (e.g., ML-KEM-768, ML-DSA-65 — not "ML-KEM" or "full PQC support"). Request the release notes URL for the production release that introduced or confirmed GA status. Confirm the URL covers the assessed product version. Record the product version, release notes URL, and date accessed.
+              response:
+                fields:
+                  - key: algorithms
+                    label: Algorithms and parameter sets in the production release
+                    type: textarea
+                    rows: 3
+                    required: true
+                  - key: productVersion
+                    label: Production product version
+                    type: text
+                    required: true
+                  - key: releaseNotesUrl
+                    label: Release notes URL confirming general availability
+                    type: url
+                    required: true
+                  - key: dateAccessed
+                    label: Date the release notes were accessed
+                    type: date
+                    required: true
             - id: 2.2.2
               question: In which product components or functional areas is each quantum-safe algorithm used in production?
               guidance: "Request a per-component breakdown and record each entry with: component name, algorithm, parameter set, and usage context — e.g., \"ML-KEM-768 — TLS 1.3 key exchange — server-side\". Blanket claims (\"we use ML-KEM everywhere\") must be decomposed into specific component entries before recording."
+              response:
+                fields:
+                  - key: componentBreakdown
+                    label: Per-component algorithm use in production
+                    type: textarea
+                    rows: 5
+                    required: true
+                    hint: One row per component with algorithm, parameter set, and usage context.
             - id: 2.2.3
               question: Does the product implement quantum-safe algorithms via a third-party cryptographic library, or through a custom in-house implementation? If a library is used, which library and exact version?
               guidance: "Most products rely on a well-known cryptographic library rather than writing cryptographic primitives from scratch. Common libraries include OpenSSL (with or without oqs-provider), wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, and Crypto++. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** the URL from the library's own official release notes or PQC documentation page confirming that the identified version supports the claimed quantum-safe algorithm in production (not only in a beta or preview build) — the assessor must verify this independently against the library's official sources; **(c)** whether the library version is currently maintained and eligible for security patches (record the library's support policy URL). If the vendor claims a custom in-house implementation, record the justification and apply heightened scrutiny to standards conformance questions."
             - id: 2.2.4
               question: Is the feature supported under the vendor's standard support and maintenance terms, including security patch coverage?
               guidance: Request the support policy document or URL. Record the specific policy clause or page that confirms the quantum-safe feature is included in standard support. A verbal assurance without a written policy reference is recorded as "vendor-stated, not contractually confirmed".
+              response:
+                fields:
+                  - key: includedInStandardSupport
+                    label: Feature is covered by standard support, including security patches
+                    type: boolean
+                    required: true
+                  - key: supportPolicyUrl
+                    label: Support policy URL
+                    type: url
+                    required: false
+                  - key: policyClause
+                    label: Policy clause or page confirming coverage
+                    type: text
+                    required: false
+                rules:
+                  - kind: at-least-one
+                    fields: [supportPolicyUrl, policyClause]
+                    message: Provide the support policy URL or the specific policy clause.
             - id: 2.2.5
               question: Has the vendor declared this feature generally available (GA) in the product's stable release channel?
               guidance: "Record the release notes URL or changelog entry, the GA date, the product version, and the stable release channel identifier. The distinction between Level 1 and Level 2 is the **release channel**, not adoption: the feature must be present in a stable, generally available release available to all customers — not in a beta, preview, or experimental channel. A GA declaration without a dated, versioned written document reference is not independently verifiable."
+              response:
+                fields:
+                  - key: gaDeclared
+                    label: Feature declared generally available in the stable channel
+                    type: boolean
+                    required: true
+                  - key: gaDate
+                    label: General availability date
+                    type: date
+                    required: true
+                  - key: productVersion
+                    label: Product version at general availability
+                    type: text
+                    required: true
+                  - key: releaseChannel
+                    label: Stable release channel identifier
+                    type: text
+                    required: true
+                  - key: releaseNotesUrl
+                    label: Release notes or changelog URL
+                    type: url
+                    required: false
         - id: "2.3"
           name: Standards Compliance
           kind: assessment
@@ -295,6 +487,26 @@ levels:
             - id: 2.3.1
               question: Which standards does the quantum-safe implementation conform to? Provide the specific standard document reference and edition.
               guidance: Record the exact standard designation and publication date — e.g., NIST FIPS 203 (ML-KEM, August 2024, https://csrc.nist.gov/publications/detail/fips/203/final). Conformance to a pre-standardisation draft (e.g., Kyber round 3 / CRYSTALS-Kyber) that predates the final FIPS publication does not count — check whether the implementation names are FIPS names (ML-KEM, ML-DSA, SLH-DSA) or draft names (Kyber, Dilithium, SPHINCS+). Record which is used.
+              response:
+                fields:
+                  - key: standards
+                    label: Standards conformed to, with designation and publication date
+                    type: textarea
+                    rows: 3
+                    required: true
+                    hint: For example NIST FIPS 203 (ML-KEM, August 2024).
+                  - key: algorithmNaming
+                    label: Algorithm naming used by the implementation
+                    type: select
+                    required: true
+                    options:
+                      - { value: fips-names, label: "Final standard names (ML-KEM, ML-DSA, SLH-DSA)" }
+                      - { value: draft-names, label: "Pre-standardisation names (Kyber, Dilithium, SPHINCS+)" }
+                      - { value: mixed, label: Mixed naming across components }
+                  - key: standardUrl
+                    label: Standard publication URL
+                    type: url
+                    required: false
             - id: 2.3.2
               question: Can the vendor provide proof of standards conformance — such as a NIST CMVP listing, conformance test results, or an interoperability test report?
               guidance: "Verify independently: search the NIST CMVP database (https://csrc.nist.gov/projects/cryptographic-module-validation-program) by product or library name. If the product uses a third-party cryptographic library (see question 2.2.3), search by that library name and version — the library's own certificate may cover the module boundary. Record: certificate number, module name, vendor, module version, validation date, approved algorithm list, and the certificate page URL. Confirm that (a) the module version matches the assessed product version or the library version in use, and (b) the quantum-safe algorithms appear in the approved algorithm list. A FIPS 140-2 certificate predating PQC standardisation does not cover quantum-safe algorithms — check the validation date against the FIPS 203/204/205 publication dates (August 2024)."
@@ -534,6 +746,24 @@ levels:
             - id: 3.2.2
               question: Does each inventory entry include algorithm, parameter set, key size, usage context, and component?
               guidance: Sample at least five entries across different components. For each sampled entry, record whether all five fields are present. An entry showing "ML-KEM" without a parameter set (512 / 768 / 1024) cannot be independently verified against a standard — flag each such entry.
+              response:
+                fields:
+                  - key: entriesSampled
+                    label: Inventory entries sampled and the components they came from
+                    type: textarea
+                    rows: 3
+                    required: true
+                    hint: Sample at least five entries across different components.
+                  - key: allFieldsPresent
+                    label: Every sampled entry carries algorithm, parameter set, key size, usage context, and component
+                    type: boolean
+                    required: true
+                  - key: incompleteEntries
+                    label: Sampled entries with missing fields
+                    type: textarea
+                    rows: 4
+                    required: true
+                    hint: Record "none" when every sampled entry is complete.
             - id: 3.2.3
               question: How frequently is the inventory reviewed and updated?
               guidance: Request the inventory for the current and one previous product release. Compare entries. Record the version and last-updated date for each document. An inventory with no changes between major releases that included PQC updates is not actively maintained — record this as a process gap.
@@ -576,9 +806,43 @@ levels:
             - id: 3.3.1
               question: Does the product contain any features that still use non-quantum-safe algorithms? If yes, list them by component and algorithm.
               guidance: "Cross-reference the vendor's disclosure against SBOM analysis: run the SBOM through a quantum-safety checking tool (e.g., a CycloneDX crypto analyser or a script that checks library versions against a known PQC-capable threshold). Record: tool name and version, date run, and any gap between tool findings and vendor disclosure. Each gap is a finding and must be individually recorded with the component name, algorithm, and the vendor's explanation (or its absence). Ask explicitly: \"What features in this product cannot currently operate with quantum-safe algorithms only?\""
+              response:
+                fields:
+                  - key: nonQuantumSafeFeaturesPresent
+                    label: Product contains features using non-quantum-safe algorithms
+                    type: boolean
+                    required: true
+                  - key: featureList
+                    label: Non-quantum-safe features by component and algorithm
+                    type: textarea
+                    rows: 5
+                    required: true
+                    hint: Record "none" when no such feature exists.
+                  - key: analysisTool
+                    label: Quantum-safety analysis tool and version
+                    type: text
+                    required: true
+                  - key: toolVsDisclosureGaps
+                    label: Gaps between tool findings and vendor disclosure
+                    type: textarea
+                    rows: 4
+                    required: true
+                    hint: Record each gap individually with component, algorithm, and the vendor's explanation.
             - id: 3.3.2
               question: "For each non-quantum-safe feature: is the risk formally documented with a target remediation date?"
               guidance: "Record each non-quantum-safe feature with: algorithm name and parameter set, component, risk acceptance statement reference (document title, version, date), and target remediation version/date. \"Some legacy features remain\" without a feature-by-feature breakdown is not acceptable. Each non-quantum-safe feature must have its own entry."
+              response:
+                fields:
+                  - key: allFeaturesHaveRemediationEntries
+                    label: Every non-quantum-safe feature has its own documented risk entry
+                    type: boolean
+                    required: true
+                  - key: remediationEntries
+                    label: Risk entries with algorithm, component, risk acceptance reference, and target remediation
+                    type: textarea
+                    rows: 5
+                    required: true
+                    hint: One entry per feature. A general statement that some legacy features remain is not acceptable.
             - id: 3.3.3
               question: Can the vendor provide a redacted or anonymised SBOM or CBOM that preserves algorithm-level detail?
               guidance: Record the format (SPDX / CycloneDX), schema version, and the scope of redaction (e.g., "proprietary component names removed, algorithm entries preserved"). A redacted artefact that removes all algorithm data is not useful — record this as a limitation of the evidence. If the vendor refuses to provide any inventory artefact in any form, record this explicitly and flag it as a risk signal that limits the evidential basis of the assessment.
@@ -655,6 +919,25 @@ levels:
             - id: 3.4.2
               question: Does the SBOM include cryptographic library dependencies with version numbers?
               guidance: Check that all cryptographic libraries appear in the SBOM with explicit version numbers — a library entry without a version cannot be assessed. Common libraries to look for include OpenSSL (with or without oqs-provider), wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, and Crypto++. For each library, the assessor must independently verify — from the library's own official release notes or PQC documentation page — whether the listed version supports the vendor's claimed quantum-safe algorithms. A library version that does not support the claimed algorithm is a finding; record the library name, listed version, and the vendor's explanation. Record any library whose version number is absent.
+              response:
+                fields:
+                  - key: allLibrariesVersioned
+                    label: Every cryptographic library in the SBOM carries an explicit version
+                    type: boolean
+                    required: true
+                  - key: libraryVersions
+                    label: Cryptographic libraries with their listed versions
+                    type: textarea
+                    rows: 4
+                    required: true
+                  - key: versionSupportsClaimedAlgorithms
+                    label: Listed versions support the claimed quantum-safe algorithms
+                    type: boolean
+                    required: true
+                  - key: verificationSource
+                    label: Library release notes or documentation used to verify support
+                    type: text
+                    required: true
             - id: 3.4.3
               question: Is the SBOM updated with each product release?
               guidance: Request SBOMs for the current and one previous release. Compare the library entries and version numbers. If two SBOMs are identical for releases that should have included dependency updates, the SBOM process is likely not integrated with the build pipeline — record this as a process gap. Record the version and date of each SBOM compared.
@@ -716,12 +999,74 @@ levels:
             - id: 3.5.1
               question: How does the product support algorithm updates without major architectural redesign? Demonstrate that at least two distinct algorithms can be selected for the same cryptographic role through configuration.
               guidance: "Request a design document or written architectural description of the crypto agility mechanism. Record: document title, version, date. Ask the vendor to identify, for at least one role (e.g., signing, key exchange), the two algorithms that can be selected and the configuration step to switch between them. The two options must be different algorithms or different constructions (e.g., pure-PQC vs. hybrid) — selecting between parameter sets of the same algorithm (e.g., ML-KEM-768 vs. ML-KEM-1024) does not satisfy this question on its own. Ask the vendor: \"If ML-KEM-768 were deprecated tomorrow, walk me through exactly what would change in this product and what the customer impact would be.\" Record the answer with its source (document reference or \"verbal, unconfirmed\"). A credible answer names a specific mechanism — configurable cipher suite list, algorithm policy file, algorithm registry — not \"we would release a patch\"."
+              response:
+                fields:
+                  - key: designDocumentReference
+                    label: Crypto-agility design document title, version, and date
+                    type: text
+                    required: true
+                  - key: cryptographicRole
+                    label: Cryptographic role demonstrated
+                    type: text
+                    required: true
+                    hint: For example signing or key exchange.
+                  - key: selectableAlgorithms
+                    label: The two algorithms selectable for that role
+                    type: text
+                    required: true
+                    hint: Must be different algorithms or constructions, not two parameter sets of one algorithm.
+                  - key: switchMechanism
+                    label: Configuration step to switch between them, and the deprecation walkthrough
+                    type: textarea
+                    rows: 4
+                    required: true
             - id: 3.5.2
               question: Are cryptographic algorithm identifiers and parameters externalised from hard-coded values?
               guidance: "Ask to see the specific configuration file, policy document, or API that controls algorithm selection. Record the file name, format, and a sample of relevant content (which algorithm identifiers appear). Confirm by asking: \"Can you change the algorithm for TLS key exchange without rebuilding the product?\" Record the answer and whether the assessor was able to verify it in a test environment. Hard-coded algorithm names requiring a full rebuild are a finding."
+              response:
+                fields:
+                  - key: identifiersExternalised
+                    label: Algorithm identifiers and parameters are externalised from hard-coded values
+                    type: boolean
+                    required: true
+                  - key: configurationArtifact
+                    label: Configuration file, policy document, or API controlling algorithm selection
+                    type: text
+                    required: true
+                  - key: changeWithoutRebuild
+                    label: Algorithm can be changed without rebuilding the product
+                    type: boolean
+                    required: true
+                  - key: verifiedInTestEnvironment
+                    label: Assessor verified this in a test environment
+                    type: boolean
+                    required: true
             - id: 3.5.3
               question: Has the vendor executed or simulated a controlled algorithm transition for at least one feature?
               guidance: "Request written documentation: what was changed, the test environment, the test procedure, and the outcome. Record document title, version, and date. A verbal claim that a transition was tested without any written record is flagged as \"vendor-stated, not documented\". A documented proof-of-concept with a test procedure and result is strong evidence — note whether the procedure is reproducible by an independent assessor."
+              response:
+                fields:
+                  - key: transitionPerformed
+                    label: Controlled algorithm transition
+                    type: select
+                    required: true
+                    options:
+                      - { value: executed, label: Executed in production or staging }
+                      - { value: simulated, label: Simulated or proof of concept }
+                      - { value: none, label: "Not performed, which is a finding" }
+                  - key: documentReference
+                    label: Document title, version, and date recording the transition
+                    type: text
+                    required: true
+                  - key: testProcedure
+                    label: What was changed, the test environment, procedure, and outcome
+                    type: textarea
+                    rows: 4
+                    required: true
+                  - key: reproducibleByAssessor
+                    label: Procedure is reproducible by an independent assessor
+                    type: boolean
+                    required: true
         - id: "3.6"
           name: Key Lifecycle and Deprecation
           kind: assessment
@@ -873,12 +1218,71 @@ levels:
             - id: 4.2.2
               question: Does the CBOM record algorithm, parameter set, key size, protocol context, and usage purpose per entry?
               guidance: "Validate a sample of at least five entries across different components. For each: record whether all fields are present — algorithm, parameter set (e.g., ML-KEM-768 not just \"ML-KEM\"), key size, protocol context, and usage purpose. Record the sampling method (which entries were checked and why). An entry reading \"AES-256-GCM — TLS 1.3 record encryption — post-handshake\" is complete. An entry reading \"AES\" or \"ML-KEM\" without parameter set and context is not — record it as a gap."
+              response:
+                fields:
+                  - key: samplingMethod
+                    label: Entries sampled and why they were chosen
+                    type: textarea
+                    rows: 3
+                    required: true
+                    hint: Validate at least five entries across different components.
+                  - key: allFieldsPresent
+                    label: Every sampled entry carries algorithm, parameter set, key size, protocol context, and usage purpose
+                    type: boolean
+                    required: true
+                  - key: incompleteEntries
+                    label: Sampled entries with missing fields
+                    type: textarea
+                    rows: 4
+                    required: true
+                    hint: Record "none" when every sampled entry is complete.
             - id: 4.2.3
               question: Does the CBOM cover third-party cryptographic libraries, listing which algorithms each library contributes?
               guidance: "A CBOM that lists \"OpenSSL 3.3\" without listing which OpenSSL algorithms are in active use is incomplete at Level 4. Check: does each third-party cryptographic library entry have child entries for specific algorithms? Record which libraries have algorithm-level entries and which have library-name entries only. Libraries with no algorithm-level entries must be flagged."
+              response:
+                fields:
+                  - key: librariesWithAlgorithmEntries
+                    label: Third-party libraries that have algorithm-level entries
+                    type: textarea
+                    rows: 4
+                    required: true
+                  - key: librariesWithoutAlgorithmEntries
+                    label: Libraries listed by name only, without algorithm-level entries
+                    type: textarea
+                    rows: 4
+                    required: true
+                    hint: Record "none" when every library has algorithm-level entries.
             - id: 4.2.4
               question: What tools and processes are used to generate and validate the CBOM? What are the known coverage gaps?
               guidance: "Request the vendor's CBOM generation process document. Record: tool(s) name and version, automation level (fully automated / manual / hybrid), whether the CBOM is generated per build or periodically, and the documented coverage gaps. Common gaps include: native code (C/C++) with statically compiled libraries, dynamically loaded plugins, hardware-bound cryptography, and firmware blobs. A vendor who cannot state how the CBOM was generated cannot have its accuracy independently assessed — record this as a fundamental evidence limitation."
+              response:
+                fields:
+                  - key: generationTool
+                    label: CBOM generation and validation tools with versions
+                    type: text
+                    required: true
+                  - key: automationLevel
+                    label: Automation level
+                    type: select
+                    required: true
+                    options:
+                      - { value: fully-automated, label: Fully automated }
+                      - { value: hybrid, label: Hybrid }
+                      - { value: manual, label: Manual }
+                  - key: generationCadence
+                    label: Generation cadence
+                    type: select
+                    required: true
+                    options:
+                      - { value: per-build, label: Per build }
+                      - { value: periodic, label: Periodic }
+                      - { value: on-request, label: On request }
+                  - key: documentedGaps
+                    label: Documented coverage gaps
+                    type: textarea
+                    rows: 4
+                    required: true
+                    hint: Common gaps include statically compiled native code, dynamically loaded plugins, hardware-bound cryptography, and firmware blobs.
             - id: 4.2.5
               question: Does the CBOM bind each cryptographic-asset entry to the component that contains it via a standardised product identifier — Common Platform Enumeration (CPE) or Package URL (purl) — so that algorithm-level findings can be correlated with CVE feeds and asset inventories?
               guidance: In CycloneDX (cryptography extension), this is typically a `cpe` or `purl` field on the component referenced by each `cryptographic-asset`. Sample at least five cryptographic-asset entries and record, for each, the referenced component identifier and whether a CPE or purl is present. Library-level entries that are not linked to a component identifier cannot be matched against the NIST National Vulnerability Database — record each gap individually. The top-level product component must carry the same CPE identifier as the one recorded for the [certification application](/wg/pqc/pqcmm/assessment/certification/#product-identifiers).
@@ -1272,9 +1676,53 @@ levels:
             - id: 5.3.2
               question: Do quantum-safe configurations meet performance requirements for the product's stated use cases?
               guidance: Record the vendor's SLA or performance specification (document title, version, URL) and compare it against the benchmark results field by field. *Note the hardware on which the benchmarks were run versus the customer's expected deployment hardware — a result on premium hardware may not translate to the customer's environment.* Performance shortfalls relative to the SLA must be documented and risk-assessed.
+              response:
+                fields:
+                  - key: performanceSpecification
+                    label: SLA or performance specification title, version, and URL
+                    type: text
+                    required: true
+                  - key: requirementsOutcome
+                    label: Quantum-safe configuration against the stated requirements
+                    type: select
+                    required: true
+                    options:
+                      - { value: meets, label: Meets requirements }
+                      - { value: partially, label: Partially meets requirements }
+                      - { value: does-not-meet, label: Does not meet requirements }
+                  - key: hardwareComparison
+                    label: Benchmark hardware compared with expected deployment hardware
+                    type: textarea
+                    rows: 3
+                    required: true
+                  - key: shortfalls
+                    label: Shortfalls against the specification and their risk assessment
+                    type: textarea
+                    rows: 3
+                    required: false
             - id: 5.3.3
               question: Have algorithm implementations been optimised for the product's target hardware?
               guidance: "Ask which optimisation paths are enabled: AVX2, AVX-512, ARMv8 crypto extensions, hardware accelerator offload. Record each optimisation with: whether it is enabled by default (yes/no), the documentation URL confirming it, and whether the assessor verified it is active (e.g., by checking CPU feature flag usage in a running process, reviewing build flags in the binary, or consulting the documentation). An unoptimised software reference implementation in a performance-sensitive production deployment is a risk signal — record the optimisation status explicitly."
+              response:
+                fields:
+                  - key: optimisationPaths
+                    label: Optimisation paths enabled
+                    type: textarea
+                    rows: 3
+                    required: true
+                    hint: For example AVX2, AVX-512, ARMv8 crypto extensions, or hardware accelerator offload.
+                  - key: enabledByDefault
+                    label: Optimisations are enabled by default
+                    type: boolean
+                    required: true
+                  - key: verificationMethod
+                    label: How the assessor verified the optimisation is active
+                    type: select
+                    required: true
+                    options:
+                      - { value: runtime-check, label: Runtime check of CPU feature usage }
+                      - { value: build-flags, label: Review of build flags in the binary }
+                      - { value: documentation-only, label: "Documentation only, not independently verified" }
         - id: "5.4"
           name: Standards Alignment
           kind: assessment
@@ -1282,6 +1730,27 @@ levels:
             - id: 5.4.1
               question: Which NIST-approved PQC standards are implemented as the primary algorithm suite? Provide the specific FIPS publication reference and date.
               guidance: "Verify each claimed algorithm name against the FIPS publication. Record the exact FIPS designation with publication URL: NIST FIPS 203 (ML-KEM, August 2024, https://csrc.nist.gov/publications/detail/fips/203/final), FIPS 204 (ML-DSA, https://csrc.nist.gov/publications/detail/fips/204/final), FIPS 205 (SLH-DSA, https://csrc.nist.gov/publications/detail/fips/205/final). Implementations based on pre-standardisation round 3 submissions that have not been updated to the final FIPS name are a finding — record whether the product uses FIPS names or draft names."
+              response:
+                fields:
+                  - key: primaryStandards
+                    label: NIST-approved standards implemented as the primary algorithm suite
+                    type: textarea
+                    rows: 3
+                    required: true
+                    hint: Record the exact FIPS designation and publication date for each.
+                  - key: algorithmNaming
+                    label: Algorithm naming used by the implementation
+                    type: select
+                    required: true
+                    options:
+                      - { value: fips-names, label: "Final standard names (ML-KEM, ML-DSA, SLH-DSA)" }
+                      - { value: draft-names, label: "Pre-standardisation names, which is a finding" }
+                      - { value: mixed, label: Mixed naming across components }
+                  - key: publicationUrls
+                    label: FIPS publication URLs
+                    type: textarea
+                    rows: 3
+                    required: false
             - id: 5.4.2
               question: Does the CBOM confirm that algorithm usage matches the declared FIPS standards? Cross-reference the CBOM against the declared algorithms.
               guidance: "Run a CBOM analysis. Record: tool name and version, date run, and for each algorithm entry checked — the name found in the CBOM and whether it matches the FIPS name. A CBOM entry showing \"Kyber-768\" instead of \"ML-KEM-768\", or \"Dilithium-3\" instead of \"ML-DSA-65\", indicates the implementation was not updated to the final standard — this is a disqualifying finding for Level 5. Sample at least three entries per algorithm type and record the results individually."
@@ -1391,6 +1860,37 @@ levels:
             - id: 5.5.3
               question: Which cryptographic library implements the quantum-safe algorithms?
               guidance: "Common libraries include OpenSSL (with or without oqs-provider), wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, and Crypto++. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** for open-source libraries: the repository URL and the specific commit hash or release tag; **(c)** verify independently — from the library's own official release notes or PQC documentation page — that the identified version supports the claimed quantum-safe algorithms; **(d)** check for NIST CAVP validation for the library (https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program) — record the validation URL and certificate scope if available; **(e)** for proprietary implementations: whether a published security analysis exists, the analysis firm name, and the analysis URL or reference."
+              response:
+                fields:
+                  - key: libraryName
+                    label: Cryptographic library name
+                    type: text
+                    required: true
+                  - key: libraryVersion
+                    label: Exact library version string
+                    type: text
+                    required: true
+                  - key: repositoryUrl
+                    label: Repository URL for open-source libraries
+                    type: url
+                    required: false
+                  - key: commitOrTag
+                    label: Commit hash or release tag
+                    type: text
+                    required: false
+                  - key: supportIndependentlyVerified
+                    label: Algorithm support verified from the library's own official sources
+                    type: boolean
+                    required: true
+                  - key: cavpValidationUrl
+                    label: NIST CAVP validation URL for the library
+                    type: url
+                    required: false
+                  - key: publishedAnalysis
+                    label: Published security analysis for a proprietary implementation
+                    type: text
+                    required: false
+                    hint: Record the analysing organisation and the analysis reference.
             - id: 5.5.4
               question: Are the results of any third-party cryptographic audit of the quantum-safe implementation available?
               guidance: "Record: audit firm name, report title, date, and URL if publicly available (or document reference if under NDA). Review the report's methodology section and record explicitly: **(a)** scope — which components and which algorithms were audited; **(b)** assessment method — CBOM-based analysis, static code review, dynamic analysis, functional testing, or a combination; **(c)** tools used — e.g., CodeQL, Semgrep, manual code review, NIST KAT test vectors, specific version of each; **(d)** whether the PQC algorithms and parameter sets implemented in the assessed product were within the audit scope. An audit whose scope excluded the quantum-safe implementation does not satisfy this criterion — record the gap."
