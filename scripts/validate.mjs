@@ -15,13 +15,13 @@ const readYaml = async (relativePath) =>
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);
 
-const model = await readYaml("model/pqcmm-model-1.0.1.yaml");
+const model = await readYaml("model/pqcmm-model-1.1.0.yaml");
 const profile = await readYaml(
-  "profiles/pqcmm-self-assessment-profile-1.0.0.yaml",
+  "profiles/pqcmm-self-assessment-profile-1.1.0.yaml",
 );
-const modelSchema = await readJson("schemas/pqcmm-model.schema-1.0.0.json");
+const modelSchema = await readJson("schemas/pqcmm-model.schema-1.1.0.json");
 const profileSchema = await readJson(
-  "schemas/assessment-profile.schema-1.0.0.json",
+  "schemas/assessment-profile.schema-1.1.0.json",
 );
 
 const validate = (schema, value, label) => {
@@ -48,11 +48,18 @@ const solutionIdentityRule = profile.runtime.subjectRules?.find(
 if (
   !solutionIdentityRule ||
   subjectFields.get("cpe")?.format !== "cpe-2.3" ||
-  subjectFields.get("purl")?.format !== "package-url"
+  subjectFields.get("purl")?.format !== "package-url" ||
+  subjectFields.get("cpe")?.suggestion?.strategy !==
+    "cpe-2.3-application" ||
+  subjectFields.get("assessorOrganization")?.defaultFrom !== "vendorName"
 ) {
   throw new Error(
-    "PQCMM must require at least one separately typed CPE 2.3 or pURL identifier.",
+    "PQCMM must keep separate typed identifiers and its configured self-assessment conveniences.",
   );
+}
+
+if (profile.runtime.methodology.parameters.defaultBaselineStatus !== "met") {
+  throw new Error("PQCMM Level 0 must default to Met for a new assessment.");
 }
 
 if (
@@ -66,6 +73,7 @@ if (
 
 const ids = model.levels.flatMap((level) => [
   ...level.criteria.items.map((item) => item.id),
+  ...(level.sections ?? []).map((section) => section.id),
   ...level.assessment.groups.flatMap((group) =>
     group.questions.map((question) => question.id),
   ),
@@ -73,8 +81,74 @@ const ids = model.levels.flatMap((level) => [
 ]);
 if (new Set(ids).size !== ids.length) {
   throw new Error(
-    "Criterion, question, and evidence identifiers must be unique.",
+    "Criterion, question, section, and evidence identifiers must be unique.",
   );
+}
+
+for (const level of model.levels) {
+  for (const section of level.sections ?? []) {
+    if (!section.id.startsWith(`${level.number}.s.`)) {
+      throw new Error(
+        `Level ${level.number} section ${section.id} does not carry its level prefix.`,
+      );
+    }
+  }
+}
+
+const questionIds = new Set(
+  model.levels.flatMap((level) =>
+    level.assessment.groups.flatMap((group) =>
+      group.questions.map((question) => question.id),
+    ),
+  ),
+);
+for (const level of model.levels) {
+  for (const criterion of level.criteria.items) {
+    for (const questionId of criterion.assessmentQuestionIds) {
+      if (!questionIds.has(questionId)) {
+        throw new Error(
+          `Criterion ${criterion.id} references unknown assessment question ${questionId}.`,
+        );
+      }
+      if (!questionId.startsWith(`${level.number}.`)) {
+        throw new Error(
+          `Criterion ${criterion.id} references a question from another level: ${questionId}.`,
+        );
+      }
+    }
+  }
+  for (const group of level.assessment.groups) {
+    for (const question of group.questions) {
+      if (!question.response) continue;
+      const fieldKeys = new Set(
+        question.response.fields.map((field) => field.key),
+      );
+      if (fieldKeys.size !== question.response.fields.length) {
+        throw new Error(`Question ${question.id} has duplicate response fields.`);
+      }
+      for (const rule of question.response.rules ?? []) {
+        for (const field of rule.fields) {
+          if (!fieldKeys.has(field)) {
+            throw new Error(
+              `Question ${question.id} response rule references unknown field ${field}.`,
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
+const questionFindingValues = profile.runtime.questions.findings.map(
+  (finding) => finding.value,
+);
+for (const passingFinding of
+  profile.runtime.methodology.parameters.passingQuestionFindings ?? []) {
+  if (!questionFindingValues.includes(passingFinding)) {
+    throw new Error(
+      `Assessment methodology references unknown question finding ${passingFinding}.`,
+    );
+  }
 }
 
 const browserAssurance = profile.assurance.profiles.filter(
