@@ -126,6 +126,8 @@ levels:
           assessmentQuestionIds: [1.4.2]
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **Evidence method** — documentation review, functional reproduction, or both.
@@ -382,6 +384,8 @@ levels:
           assessmentQuestionIds: [2.4.1, 2.4.2]
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **Evidence method** — documentation review, CMVP/CAVP database verification, interoperability testing, hands-on configuration, or a combination.
@@ -700,6 +704,8 @@ levels:
           {.callout-info}
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **SBOM analysis** — tool name and version (e.g., Syft, cdxgen, Dependency-Track, Microsoft sbom-tool), and date run.
@@ -1165,6 +1171,8 @@ levels:
           assessmentQuestionIds: [4.5.1, 4.5.2, 4.5.3]
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **CBOM analysis** — whether vendor-provided or assessor-generated; tool name and version; generation method (automated CI pipeline / manual export / hybrid); date generated; product version covered.
@@ -1530,6 +1538,8 @@ levels:
           assessmentQuestionIds: [5.5.1, 5.5.2, 5.5.3, 5.5.4]
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **Default configuration** — whether the assessor performed a fresh installation test (product version, installation method, environment, and configuration captured) or relied on documentation only (flag as *"documentation review only, not independently reproduced"*).
