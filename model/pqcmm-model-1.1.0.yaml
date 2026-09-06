@@ -679,7 +679,7 @@ levels:
           text: "**Crypto-agility mechanisms** exist for key product features: at least two algorithms can be selected for the same cryptographic role through configuration (for example two different signature algorithms, or a pure-PQC vs. hybrid option in the same role) without major architectural redesign or a hardware refresh. Selecting only between parameter sets of the same algorithm (for example ML-KEM-768 and ML-KEM-1024) does not by itself satisfy this criterion."
           assessmentQuestionIds: [3.5.1, 3.5.2, 3.5.3]
         - id: 3.1.5
-          text: "A documented **long-lived exposure register** identifies which data flows handled by the product carry a long-lived protection requirement, and which algorithm protects each. The register must cover both exposure classes: **Harvest-Now-Decrypt-Later (HNDL)**, where confidentiality must survive future decryption, and **long-lived verifiability**, where signatures, seals, timestamps, or other integrity evidence must remain verifiable after the protecting algorithms are deprecated."
+          text: "A documented **long-lived exposure register** identifies which data flows handled by the product carry a long-lived protection requirement, and which algorithm protects each. The register must cover both exposure classes: **Harvest-Now-Decrypt-Later (HNDL)**, where confidentiality must survive future decryption, and **long-lived integrity and authenticity**, including Trust Now, Forge Later (TNFL), where signed artifacts and trust relationships must remain trustworthy against future signature forgery throughout their required lifetime."
           assessmentQuestionIds: [3.7.1]
     sections:
       - id: 3.s.1
@@ -700,7 +700,7 @@ levels:
           - Backup, archival, and long-term storage
           - Long-term validation of existing evidence (verification of previously created signatures, seals, and timestamps; archive timestamp renewal; hash and signature agility for already-signed records)
 
-          > The final category concerns evidence that has **already been created**. Harvest-Now-Decrypt-Later exposure is remedied by re-encrypting, but a signature, seal, or timestamp applied years ago usually cannot be reissued, because the signer, the approval context, or the legal moment has passed. Products that create, validate, or preserve signed or timestamped records must account for how that evidence stays verifiable as algorithms are deprecated. Products that hold no such evidence mark the category *not applicable* with a justification.
+          > The final category concerns evidence that has **already been created**. Re-encryption can protect retained copies and reduce future confidentiality exposure, but cannot protect ciphertext already captured by an adversary. For signatures, seals, and timestamps, continued mathematical verification alone does not establish authenticity once forgery becomes feasible. Products that create, validate, or preserve such evidence must identify how its integrity and authenticity are preserved, for example through timely archive timestamp or evidence renewal before the existing protection becomes vulnerable. Simply replacing a signature does not recreate the original signing event. Products that hold no such evidence mark the category *not applicable* with a justification.
           {.callout-info}
     assessment:
       methodology: |-
@@ -1087,12 +1087,12 @@ levels:
               question: Has the vendor published an algorithm deprecation policy describing how it responds to a vulnerability or parameter-set deprecation in an algorithm the product depends on?
               guidance: "Record the policy document URL, version, and date. The policy should state: how the vendor monitors algorithm developments; the maximum time between a credible deprecation event and a vendor advisory; and the mechanism used to remove or disable the affected algorithm. Absence of any published policy is a finding. The detail need not match a security-incident response process but must be a written commitment."
         - id: "3.7"
-          name: Long-Lived Exposure Register (including Harvest-Now-Decrypt-Later)
+          name: Long-Lived Exposure Register (including HNDL and TNFL)
           kind: assessment
           questions:
             - id: 3.7.1
-              question: Does the vendor maintain a written long-lived exposure register identifying data flows handled by the product that carry long-lived confidentiality or long-lived verifiability requirements?
-              guidance: "Request the register. Record document title, version, and date. Each entry should identify: the data class (e.g., \"customer-uploaded documents\", \"signed audit logs\"), the exposure class, the expected protection lifetime (years), the algorithm currently protecting it, and whether it is quantum-safe. Two exposure classes must be considered separately, because they have different remedies. **Harvest-Now-Decrypt-Later (HNDL)** concerns confidentiality. Quantum-safe protection can reduce future exposure, and re-encryption can protect retained copies, but neither makes ciphertext already captured by an adversary confidential again. Record the period of exposure and the limits of remediation. **Long-lived verifiability** concerns signatures, seals, timestamps, and other integrity evidence that must still verify years after creation; it usually cannot be remedied by reissuing, because the signer, the approval context, or the legal moment has passed. A register that lists no HNDL-exposed data despite the product handling long-lived data is a finding. A register that records no long-lived verifiability entries despite the product creating, validating, or preserving signed or timestamped records is equally a finding — record the gap and the vendor's justification."
+              question: Does the vendor maintain a written long-lived exposure register covering confidentiality, integrity, and authenticity requirements for data, signed artifacts, and trust dependencies handled by the product?
+              guidance: "Request the register and record its title, version, and date. For each applicable data class, signed artifact, or trust dependency, identify the exposure class, required protection or reliance lifetime, algorithms and parameter sets, affected components or relying parties, and planned protection or migration measures. Long-lived confidentiality includes Harvest Now, Decrypt Later (HNDL): re-encryption can protect retained copies, but cannot protect ciphertext already captured by an adversary. Long-lived integrity and authenticity include Trust Now, Forge Later (TNFL): future compromise of a signature algorithm can permit forged artifacts or impersonation while the corresponding keys or trust anchors remain accepted. Consider signed documents, seals, timestamps, audit records, certificates, software and firmware updates, and authentication trust dependencies where applicable. Record both preservation of authentic existing evidence and replacement or retirement of vulnerable signing and verification dependencies before compromise. Mathematical signature verification alone is insufficient to establish authenticity after forgery becomes feasible. Identify the timing and limitations of archive timestamp renewal, evidence renewal, or other preservation measures; do not imply that re-signing recreates the original event. HNDL and TNFL are descriptive risk labels, not additional maturity levels. If either exposure class is omitted despite an applicable product use, record a finding; justify any not-applicable conclusion."
               response:
                 fields:
                   - key: registerVersion
@@ -1108,17 +1108,17 @@ levels:
                     type: multiselect
                     required: true
                     options:
-                      - { value: hndl-confidentiality, label: "Harvest-Now-Decrypt-Later (long-lived confidentiality)" }
-                      - { value: long-lived-verifiability, label: "Long-lived verifiability (signatures, seals, timestamps)" }
+                      - { value: hndl-confidentiality, label: "Long-lived confidentiality (including HNDL)" }
+                      - { value: long-lived-verifiability, label: "Long-lived integrity and authenticity (including TNFL)" }
                       - { value: none-applicable, label: "Neither class applies, justification recorded" }
                   - key: dataFlowCoverage
-                    label: Data flows, exposure classes, protection lifetimes, and protecting algorithms
+                    label: Data, signed artifacts, trust dependencies, lifetimes, algorithms, and protection measures
                     type: textarea
                     rows: 6
                     required: true
                 evidence:
                   label: Long-lived exposure register
-                  description: Attach the written register covering the data flows, exposure classes, and algorithms summarized above.
+                  description: Attach the register covering the data, signed artifacts, trust dependencies, exposure classes, lifetimes, algorithms, and protection measures summarized above.
                   required: true
                   acceptedMediaTypes: [application/pdf, application/json, text/csv, text/plain]
                   maxFiles: 1
@@ -1143,7 +1143,7 @@ levels:
         - id: 3.e.5
           text: Algorithm deprecation policy.
         - id: 3.e.6
-          text: Long-lived exposure register, covering both harvest-now-decrypt-later confidentiality and long-lived verifiability.
+          text: Long-lived exposure register covering confidentiality (including HNDL), integrity and authenticity (including TNFL), required lifetimes, affected trust dependencies, and protection or migration measures.
         - id: 3.e.7
           text: Identification of the DRBG / RNG used for cryptographic key material and its seed strength.
         - id: 3.e.8
@@ -1411,7 +1411,7 @@ levels:
           questions:
             - id: 4.4.1
               question: For data with long-lived confidentiality or integrity requirements (as identified in the long-lived exposure register at Level 3), do the symmetric and hash algorithms used meet the strengths recommended by NIST or an equivalent national authority for use beyond the anticipated availability of cryptographically relevant quantum computers?
-              guidance: "Record, for each long-lived data class identified in the register: the exposure class, the symmetric algorithm and key length, the hash algorithm and output length, and the NIST or national-authority guidance referenced (e.g., NIST SP 800-131A, BSI TR-02102, ANSSI cryptographic recommendations). Both exposure classes must be covered. For harvest-now-decrypt-later classes, assess the strengths protecting confidentiality. For long-lived verifiability classes, assess the hash and signature strengths that the existing evidence depends on, including any archive timestamp or evidence-renewal mechanism the product applies. A long-lived data class protected with symmetric or hash strengths below the referenced guidance is a finding. A register entry with no corresponding assessment here is also a finding."
+              guidance: "Record, for each long-lived data class identified in the register: the exposure class, the symmetric algorithm and key length, the hash algorithm and output length, and the NIST or national-authority guidance referenced (e.g., NIST SP 800-131A, BSI TR-02102, ANSSI cryptographic recommendations). Both exposure classes must be covered. For harvest-now-decrypt-later classes, assess the strengths protecting confidentiality. For long-lived integrity and authenticity classes, including TNFL exposure, assess the hash and signature strengths that the existing evidence depends on, including the timing and protection of any archive timestamp or evidence-renewal mechanism the product applies. Cross-reference the signing, verification, and trust-dependency migration recorded in 3.7.1; adequate hash strength alone does not establish resistance to signature forgery. A long-lived data class protected with symmetric or hash strengths below the referenced guidance is a finding. A register entry with no corresponding assessment here is also a finding."
               response:
                 fields:
                   - key: exposureClassesAssessed
@@ -1419,8 +1419,8 @@ levels:
                     type: multiselect
                     required: true
                     options:
-                      - { value: hndl-confidentiality, label: "Harvest-Now-Decrypt-Later (long-lived confidentiality)" }
-                      - { value: long-lived-verifiability, label: "Long-lived verifiability (signatures, seals, timestamps)" }
+                      - { value: hndl-confidentiality, label: "Long-lived confidentiality (including HNDL)" }
+                      - { value: long-lived-verifiability, label: "Long-lived integrity and authenticity (including TNFL)" }
                       - { value: none-applicable, label: "Neither class applies, justification recorded" }
                   - key: dataClassStrengths
                     label: Data classes with exposure class, symmetric algorithm and key length, and hash algorithm and output length
