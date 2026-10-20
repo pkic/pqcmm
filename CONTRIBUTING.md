@@ -6,7 +6,7 @@ PQCMM is maintained by the PKI Consortium Post-Quantum Cryptography Working Grou
 
 1. Open an issue describing the intended model, profile, or schema change.
 2. Keep normative model changes separate from assessment-tool behavior changes whenever possible.
-3. Edit the stable working files documented in README.md. Advance the relevant internal versions for changes to released contracts; preserve every released snapshot. Create versioned copies only when preparing an approved release with `pnpm run release:snapshot`.
+3. Edit the stable working files documented in README.md. Advance the relevant internal versions for changes to released contracts; preserve every released snapshot. The GitHub release workflow generates versioned assets automatically from the approved tagged source; do not commit new versioned copies.
 4. Preserve existing stable identifiers and introduce new kebab-case identifiers for new concepts.
 5. Run `pnpm install --frozen-lockfile` and `pnpm run validate`.
 6. Open a pull request explaining compatibility and versioning impact.
