@@ -48,7 +48,7 @@ A minor release can change how an assessor establishes and reports that a criter
 
 The model, assessment profile, and schemas have independent versions. Model versions follow the criteria-versus-assessment distinction above. Profile and schema versions also account for their own consumer and data compatibility: incompatible contract changes require a major version of the affected profile or schema, even when the model's objectives remain unchanged and its release is minor. Document any effects on existing assessment data and tooling, and update references so the package remains consistent.
 
-The GitHub release tag follows the **model version**; generated profile and schema filenames use their own versions. For example, a model patch can retain an unchanged profile and schema version.
+The GitHub release tag follows the **model version**; generated profile and schema filenames use their own versions. For example, a model patch can retain an unchanged schema version. If the profile names the model version explicitly, updating that reference changes the profile and requires its own version increment.
 
 Drafts may carry their intended release version while they are under review; a branch's internal version alone does not make it a release. Published tags and assets are immutable. For an explicitly labeled preview, pin the draft commit rather than presenting it as an approved release.
 
