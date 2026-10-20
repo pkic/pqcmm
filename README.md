@@ -109,3 +109,9 @@ The PKI Consortium website and assessment tooling should consume pinned, version
 ## Contributing and license
 
 Suggest an improvement through the [feedback form](https://github.com/pkic/pqcmm/issues/new?template=model-feedback.yml), or edit the working files through GitHub. You do not need YAML or versioning expertise to contribute. See [CONTRIBUTING.md](CONTRIBUTING.md) for browser editing, maintainer triage, and maintenance releases. This repository is available under the [MIT License](LICENSE), and contributions are subject to the PKI Consortium [Intellectual Property Rights Agreement](https://pkic.org/ipr/).
+
+### Shared release draft
+
+The active 1.1.0 proposal lives on `agent/pqcmm-1.1.0-draft`. Open model and assessment contribution PRs against that branch. Its single draft PR against `main` shows the complete proposed release; do not merge that PR until release preparation. Individual contribution PRs are merged into the shared draft so their approved changes are reviewed and previewed together.
+
+The website explicitly registers this branch and its provisional version. Successful push validation makes a new revision eligible for automatic draft preview refresh; a branch name alone never publishes it. The website verifies the model version and source digest before updating its draft pin. Released entries and the released default are excluded from that updater. Expected-version changes need a reviewed website registry change; old draft URLs can remain as aliases.
