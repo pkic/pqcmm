@@ -30,7 +30,7 @@ pnpm run validate
 
 ## Releases
 
-Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. When changing a released contract, advance its version before tagging a release.
+Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. Contributors normally leave version fields unchanged; maintainers advance the affected versions in a release-preparation PR before tagging.
 
 For review, compare the same working path between a draft branch and its intended base. Link proposed changes to the relevant feedback or tracking issues; merging draft work does not itself approve or publish a release.
 
@@ -41,14 +41,16 @@ Versions follow `MAJOR.MINOR.PATCH`, for example `1.2.3`. For the model, disting
 | Increment | Meaning | Example |
 | --- | --- | --- |
 | **Patch** (`1.0.1 → 1.0.2`) | Corrections that preserve criteria, objectives, and assessment behavior. | Correct a typo or replace an obsolete documentation link without changing its meaning. |
-| **Minor** (`1.0.1 → 1.1.0`) | Criteria and objectives remain unchanged; how they are checked, tested, evidenced, or reported may change. | Revise assessment questions, test procedures, evidence guidance, or report structure to assess the same objectives. |
-| **Major** (`1.0.1 → 2.0.0`) | Criteria or objectives may change, including what is required to achieve a maturity level. | Add, remove, or change a criterion, or change the objective a product must meet. |
+| **Minor** (`1.0.1 → 1.1.0`) | Substantive criteria and objectives remain unchanged; their wording may be clarified and how they are checked, tested, evidenced, or reported may change. | Revise assessment questions, test procedures, evidence guidance, or report structure to assess the same objectives. |
+| **Major** (`1.0.1 → 2.0.0`) | Substantive criteria or objectives may change, including the required capabilities, scope, or meaning of a maturity level. | Add, remove, or change a criterion, or change the objective a product must meet. |
 
-A minor release can change how an assessor establishes and reports that a criterion is met; it must not change the criterion or objective itself. A wording edit that changes the objective requires a major release, even if the edit is small. Working-group agreement is still required for requirement changes.
+“Unchanged criteria” means unchanged substantive objectives, not identical sentences. A minor release can clarify a criterion and change how an assessor establishes and reports that it is met. Additional checks may expose an existing nonconformance without creating a new obligation; that alone does not require a major release. Patch corrections preserve both meaning and assessment behavior.
+
+Use a major release when the change introduces or removes a substantive obligation, changes the intended scope of an objective, or changes the meaning of a maturity level. For a disputed clarification, record the old and proposed interpretation, existing supporting requirements, an example product or assessment affected, and whether the difference is a new obligation or improved evidence of an existing one. Maintainers and the working group decide the classification; a textual diff alone does not decide it. Working-group agreement is still required for requirement changes.
 
 The model, assessment profile, and schemas have independent versions. Model versions follow the criteria-versus-assessment distinction above. Profile and schema versions also account for their own consumer and data compatibility: incompatible contract changes require a major version of the affected profile or schema, even when the model's objectives remain unchanged and its release is minor. Document any effects on existing assessment data and tooling, and update references so the package remains consistent.
 
-The GitHub release tag follows the **model version**; generated profile and schema filenames use their own versions. For example, a model patch can retain an unchanged profile and schema version.
+The GitHub release tag follows the **model version**; generated profile and schema filenames use their own versions. For example, a model patch can retain an unchanged schema version. If the profile names the model version explicitly, updating that reference changes the profile and requires its own version increment.
 
 Drafts may carry their intended release version while they are under review; a branch's internal version alone does not make it a release. Published tags and assets are immutable. For an explicitly labeled preview, pin the draft commit rather than presenting it as an approved release.
 
@@ -102,4 +104,4 @@ The PKI Consortium website and assessment tooling should consume pinned, version
 
 ## Contributing and license
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the authoring and versioning workflow. This repository is available under the [MIT License](LICENSE), and contributions are subject to the PKI Consortium [Intellectual Property Rights Agreement](https://pkic.org/ipr/).
+Suggest an improvement through the [feedback form](https://github.com/pkic/pqcmm/issues/new?template=model-feedback.yml), or edit the working files through GitHub. You do not need YAML or versioning expertise to contribute. See [CONTRIBUTING.md](CONTRIBUTING.md) for browser editing, maintainer triage, and maintenance releases. This repository is available under the [MIT License](LICENSE), and contributions are subject to the PKI Consortium [Intellectual Property Rights Agreement](https://pkic.org/ipr/).
