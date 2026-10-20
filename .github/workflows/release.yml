@@ -31,36 +31,27 @@ jobs:
       - name: Validate model package
         run: pnpm run validate
 
+      - name: Verify snapshots and stage release assets
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: node scripts/release-snapshot.mjs --check --stage
+
       - name: Build release archives
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          mkdir -p "dist/pqcmm-${RELEASE_TAG}"
-          cp -R model profiles schemas README.md CONTRIBUTING.md LICENSE "dist/pqcmm-${RELEASE_TAG}/"
-          cp model/pqcmm-model-1.1.0.yaml dist/
-          cp profiles/pqcmm-self-assessment-profile-1.1.0.yaml dist/
-          cp schemas/pqcmm-model.schema-1.1.0.json dist/
-          cp schemas/assessment-profile.schema-1.1.0.json dist/
           tar -C dist -czf "dist/pqcmm-${RELEASE_TAG}.tar.gz" "pqcmm-${RELEASE_TAG}"
           cd dist
           zip -qr "pqcmm-${RELEASE_TAG}.zip" "pqcmm-${RELEASE_TAG}"
-          sha256sum \
-            assessment-profile.schema-1.1.0.json \
-            pqcmm-model-1.1.0.yaml \
-            pqcmm-model.schema-1.1.0.json \
-            pqcmm-self-assessment-profile-1.1.0.yaml \
-            "pqcmm-${RELEASE_TAG}.tar.gz" \
-            "pqcmm-${RELEASE_TAG}.zip" > SHA256SUMS
+          sha256sum *.yaml *.json *.tar.gz *.zip > SHA256SUMS
 
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
           gh release create "${{ github.ref_name }}"
-          dist/assessment-profile.schema-1.1.0.json
-          dist/pqcmm-model-1.1.0.yaml
-          dist/pqcmm-model.schema-1.1.0.json
-          dist/pqcmm-self-assessment-profile-1.1.0.yaml
+          dist/*.yaml
+          dist/*.json
           dist/pqcmm-${{ github.ref_name }}.tar.gz
           dist/pqcmm-${{ github.ref_name }}.zip
           dist/SHA256SUMS

@@ -6,9 +6,9 @@ This repository is the versioned, machine-readable source package for the PKI Co
 
 ## Package contents
 
-- `model/` contains approved normative model releases.
-- `profiles/` contains versioned tool behavior that references, but does not rewrite, a model release.
-- `schemas/` contains JSON Schemas for models and assessment profiles. Portable assessment packages use the model-neutral schema maintained by the assessment tool.
+- `model/pqcmm-model.yaml` is the editable working model; versioned files in `model/` are immutable release snapshots.
+- `profiles/pqcmm-self-assessment-profile.yaml` is the editable working profile; versioned files preserve released assessment behavior.
+- `schemas/pqcmm-model.schema.json` and `schemas/assessment-profile.schema.json` are the working schemas; versioned files preserve released contracts. Portable assessment packages use the model-neutral schema maintained by the assessment tool.
 - `scripts/validate.mjs` validates all current package contracts and stable identifiers.
 
 The model and assessment profile are deliberately separate. Criteria and assessment questions remain immutable within a released model version, while form defaults, cross-field subject rules, evidence limits, assurance states, report sections, and registered policy identifiers can advance in a separately versioned profile. Model 1.1.0 adds explicit criterion-to-question links and machine-readable response definitions. The profile supplies generic defaults and finding statuses, so assessment tools do not need PQCMM-specific rendering or scoring code.
@@ -30,9 +30,22 @@ pnpm run validate
 
 ## Releases
 
-Released model files are immutable. Substantive changes require a new semantic model version while assessment behavior can advance independently through a new profile version. Tags use `v<model-version>`. The release workflow publishes the model, profile, and schemas as individual assets for build integrations, plus `.tar.gz` and `.zip` archives and a `SHA256SUMS` file.
+Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. When changing a released contract, advance its version before preparing a snapshot.
 
-The PKI Consortium website and assessment tooling should consume a pinned release or commit rather than an unversioned copy from the default branch.
+For review, compare the same working path between `main` and the draft branch. Establish the working paths on `main` first, then merge that baseline into the draft branch. Keep feedback proposals linked to their issues (including [the 1.1.0 feedback tracker](https://github.com/pkic/pqcmm/issues/26)); merging draft work does not itself approve or publish a release.
+
+After release approval:
+
+```sh
+pnpm run release:snapshot
+pnpm run release:snapshot --check
+```
+
+The command derives snapshot filenames from the model version, profile version, and each document's schema version. It creates missing snapshots and refuses to overwrite an existing snapshot with different bytes. `--check` requires all four snapshots to exist and match the working files exactly. Commit the snapshots, then tag that commit as `v<model-version>`. Never move a published tag or edit released snapshots.
+
+The tag workflow validates the working package, verifies the tag matches the model version, and checks the committed snapshots before publishing versioned individual assets, `.tar.gz` and `.zip` archives, and `SHA256SUMS`. Archives contain only the selected release snapshots and documentation, not working copies or historical releases.
+
+The PKI Consortium website and assessment tooling should consume pinned, versioned release assets or a pinned commit. Reviewers and draft integrations may use the stable paths at an explicit commit.
 
 ## Contributing and license
 
