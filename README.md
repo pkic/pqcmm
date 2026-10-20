@@ -30,7 +30,7 @@ pnpm run validate
 
 ## Releases
 
-Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. When changing a released contract, advance its version before tagging a release.
+Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. Contributors normally leave version fields unchanged; maintainers advance the affected versions in a release-preparation PR before tagging.
 
 For review, compare the same working path between a draft branch and its intended base. Link proposed changes to the relevant feedback or tracking issues; merging draft work does not itself approve or publish a release.
 
@@ -102,4 +102,4 @@ The PKI Consortium website and assessment tooling should consume pinned, version
 
 ## Contributing and license
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the authoring and versioning workflow. This repository is available under the [MIT License](LICENSE), and contributions are subject to the PKI Consortium [Intellectual Property Rights Agreement](https://pkic.org/ipr/).
+Suggest an improvement through the [feedback form](https://github.com/pkic/pqcmm/issues/new?template=model-feedback.yml), or edit the working files through GitHub. You do not need YAML or versioning expertise to contribute. See [CONTRIBUTING.md](CONTRIBUTING.md) for browser editing, maintainer triage, and maintenance releases. This repository is available under the [MIT License](LICENSE), and contributions are subject to the PKI Consortium [Intellectual Property Rights Agreement](https://pkic.org/ipr/).
