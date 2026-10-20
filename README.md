@@ -32,6 +32,10 @@ pnpm run validate
 
 Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. Contributors normally leave version fields unchanged; maintainers advance the affected versions in a release-preparation PR before tagging.
 
+Keep the released model's content and model version on `main`. Tooling-only changes may add typed representations, mappings, validation, or independently versioned schemas and profiles without advancing the model version or changing its criteria, question wording, guidance, or evidence requirements. A newer schema or profile does not mean that a newer model has been released. The tagged release remains the exact published source; the working representation may use newer tooling contracts.
+
+Proposed model and assessment content stays on explicitly registered draft branches until release preparation. Parallel drafts can target different expected versions, such as 1.1.0 and 2.0.0; these expectations may change during review. Before merging approved model content into `main`, prepare the final model/profile versions and release tag. The website defaults to the released model and publishes draft branches only as labeled, commit-pinned previews. A maintenance release can be prepared independently from its released tag while future drafts remain on their branches.
+
 For review, compare the same working path between a draft branch and its intended base. Link proposed changes to the relevant feedback or tracking issues; merging draft work does not itself approve or publish a release.
 
 ### Semantic versioning
