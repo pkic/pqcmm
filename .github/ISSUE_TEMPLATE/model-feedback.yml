@@ -1,0 +1,54 @@
+name: Suggest a model improvement
+description: Report unclear wording, suggest a correction, or improve an assessment. No YAML or versioning knowledge needed.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tell us what could be better. You do not need to choose a release version, edit YAML, or know the replacement wording. Maintainers will review and assign accepted changes to a release.
+  - type: dropdown
+    id: change-kind
+    attributes:
+      label: What would you like to improve?
+      options:
+        - Correct wording or a broken link
+        - Improve how something is checked, tested, or reported
+        - Change what a product must achieve
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: source-page
+    attributes:
+      label: Page you were reading
+      description: Paste the page link if this was not filled in automatically.
+  - type: input
+    id: source-version
+    attributes:
+      label: Version or draft you were reading
+      description: If shown on the page. It is fine to say you do not know.
+  - type: input
+    id: source-revision
+    attributes:
+      label: Source revision
+      description: Release tag or draft commit, if supplied by the website.
+  - type: input
+    id: item-id
+    attributes:
+      label: Criterion or question
+      description: Its identifier or heading, if known.
+  - type: textarea
+    id: selected-text
+    attributes:
+      label: Relevant wording
+      description: The text you selected or the wording you want to discuss.
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: What could be better?
+      description: Explain the problem. Suggest replacement wording if you have it, but it is not required.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Feedback about an older release is welcome. Maintainers decide which maintained release lines need the correction and whether to carry it forward. Submitting feedback does not change an approved model.
