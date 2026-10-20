@@ -36,17 +36,19 @@ For review, compare the same working path between a draft branch and its intende
 
 ### Semantic versioning
 
-Versions follow `MAJOR.MINOR.PATCH`, for example `1.2.3`. Choose the increment by its effect on existing consumers and assessments:
+Versions follow `MAJOR.MINOR.PATCH`, for example `1.2.3`. For the model, distinguish **what must be achieved** (the criteria and objectives) from **how it is assessed** (the checks, tests, evidence, and reporting):
 
 | Increment | Meaning | Example |
 | --- | --- | --- |
-| **Patch** (`1.0.1 → 1.0.2`) | Backward-compatible corrections that preserve requirements, pass conditions, and data contracts. | Correct a typo or replace an obsolete documentation link without changing the obligation. |
-| **Minor** (`1.0.1 → 1.1.0`) | Backward-compatible additions; existing valid data and supported behavior continue to work. | Add optional guidance or an optional field that existing consumers can safely ignore. |
-| **Major** (`1.0.1 → 2.0.0`) | Incompatible changes to meaning, requirements, or data contracts. | Change a pass condition, remove or repurpose a question, or introduce a required field that makes existing data invalid. |
+| **Patch** (`1.0.1 → 1.0.2`) | Corrections that preserve criteria, objectives, and assessment behavior. | Correct a typo or replace an obsolete documentation link without changing its meaning. |
+| **Minor** (`1.0.1 → 1.1.0`) | Criteria and objectives remain unchanged; how they are checked, tested, evidenced, or reported may change. | Revise assessment questions, test procedures, evidence guidance, or report structure to assess the same objectives. |
+| **Major** (`1.0.1 → 2.0.0`) | Criteria or objectives may change, including what is required to achieve a maturity level. | Add, remove, or change a criterion, or change the objective a product must meet. |
 
-A small wording edit can be a breaking change if it changes what must be demonstrated. Adding a mandatory criterion is not automatically a minor change. Review both the assessment meaning and machine-readable compatibility; an added field is only compatible if the applicable schema and consumers permit it. Working-group agreement is still required for requirement changes, regardless of the chosen version.
+A minor release can change how an assessor establishes and reports that a criterion is met; it must not change the criterion or objective itself. A wording edit that changes the objective requires a major release, even if the edit is small. Working-group agreement is still required for requirement changes.
 
-The model, assessment profile, and schemas have independent versions. Advance each affected contract according to its own compatibility impact, and update references so the package remains consistent. The GitHub release tag follows the **model version**; generated profile and schema filenames use their own versions. For example, a model patch can retain an unchanged profile and schema version.
+The model, assessment profile, and schemas have independent versions. Model versions follow the criteria-versus-assessment distinction above. Profile and schema versions also account for their own consumer and data compatibility: incompatible contract changes require a major version of the affected profile or schema, even when the model's objectives remain unchanged and its release is minor. Document any effects on existing assessment data and tooling, and update references so the package remains consistent.
+
+The GitHub release tag follows the **model version**; generated profile and schema filenames use their own versions. For example, a model patch can retain an unchanged profile and schema version.
 
 Drafts may carry their intended release version while they are under review; a branch's internal version alone does not make it a release. Published tags and assets are immutable. For an explicitly labeled preview, pin the draft commit rather than presenting it as an approved release.
 
@@ -62,11 +64,11 @@ flowchart LR
         direction LR
         P["release/1.0.x<br/>Working version 1.0.2"] --> PR["Review and approve"] --> PT([Tag v1.0.2])
     end
-    subgraph MINOR["MINOR · compatible additions"]
+    subgraph MINOR["MINOR · assessment methods"]
         direction LR
         M["release/1.1<br/>Working version 1.1.0"] --> MR["Review and approve"] --> MT([Tag v1.1.0])
     end
-    subgraph MAJOR["MAJOR · breaking changes"]
+    subgraph MAJOR["MAJOR · criteria and objectives"]
         direction LR
         N["release/2.0<br/>Working version 2.0.0"] --> NR["Review and approve"] --> NT([Tag v2.0.0])
     end
