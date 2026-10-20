@@ -15,13 +15,13 @@ const readYaml = async (relativePath) =>
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);
 
-const model = await readYaml("model/pqcmm-model-1.0.1.yaml");
+const model = await readYaml("model/pqcmm-model.yaml");
 const profile = await readYaml(
-  "profiles/pqcmm-self-assessment-profile-1.0.0.yaml",
+  "profiles/pqcmm-self-assessment-profile.yaml",
 );
-const modelSchema = await readJson("schemas/pqcmm-model.schema-1.0.0.json");
+const modelSchema = await readJson("schemas/pqcmm-model.schema.json");
 const profileSchema = await readJson(
-  "schemas/assessment-profile.schema-1.0.0.json",
+  "schemas/assessment-profile.schema.json",
 );
 
 const validate = (schema, value, label) => {

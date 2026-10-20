@@ -36,5 +36,8 @@ jobs:
       - name: Validate model package
         run: pnpm run validate
 
+      - name: Test release snapshot safeguards
+        run: pnpm test
+
       - name: Check whitespace errors
         run: git diff --check

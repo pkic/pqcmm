@@ -11,7 +11,8 @@
 - Use `pnpm` for repository scripts and local binaries. Do not use `npm` or `npx`.
 - Treat a released `model/pqcmm-model-<version>.yaml` file as immutable. Publish substantive changes under a new semantic version.
 - Keep criterion, question, and evidence identifiers stable. Never reuse an identifier for a different meaning.
-- Advance assessment behavior independently through versioned files under `profiles/`; do not rewrite released normative model text to accommodate tooling.
+- Edit stable working paths and create immutable versioned snapshots only at release using `pnpm run release:snapshot`.
+- Advance assessment behavior independently through the working profile under `profiles/`; do not rewrite released normative model text to accommodate tooling.
 - Express assessment behavior through schemas and profile data. Do not add executable expressions or model-specific application logic to this repository.
 - Preserve CPE and pURL as separate properties and keep the PQCMM subject rule requiring at least one of them.
 - Keep browser assurance limited to self-assessment. Qualified third-party and PKI Consortium certification states require external workflows.
