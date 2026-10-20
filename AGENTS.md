@@ -10,6 +10,7 @@
 
 - Use `pnpm` for repository scripts and local binaries. Do not use `npm` or `npx`.
 - Treat a released `model/pqcmm-model-<version>.yaml` file as immutable. Publish substantive changes under a new semantic version.
+- Contribution PRs normally leave version fields unchanged. Maintainers assign release milestones and update affected versions in a release-preparation PR.
 - Keep criterion, question, and evidence identifiers stable. Never reuse an identifier for a different meaning.
 - Edit stable working paths and let the GitHub release workflow generate versioned assets from the tagged source.
 - Advance assessment behavior independently through the working profile under `profiles/`; do not rewrite released normative model text to accommodate tooling.
