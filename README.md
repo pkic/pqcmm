@@ -30,19 +30,49 @@ pnpm run validate
 
 ## Releases
 
-Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. When changing a released contract, advance its version before preparing a snapshot.
+Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. When changing a released contract, advance its version before tagging a release.
 
-For review, compare the same working path between `main` and the draft branch. Establish the working paths on `main` first, then merge that baseline into the draft branch. Keep feedback proposals linked to their issues (using the relevant feedback or tracking issues); merging draft work does not itself approve or publish a release.
+For review, compare the same working path between a draft branch and its intended base. Link proposed changes to the relevant feedback or tracking issues; merging draft work does not itself approve or publish a release.
+
+### Parallel release tracks
+
+Patch, minor, and major releases can be prepared in parallel on separate branches. Each branch edits the same stable filenames and carries its own intended internal versions. The example below starts from released `v1.0.1`; branch names are illustrative. Each track is reviewed and approved independently.
 
 ```mermaid
-flowchart TD
-    A[Edit stable working files] --> B[Pull request and review]
-    B --> C[Approve release and merge]
-    C --> D[Publish GitHub release with a version tag]
-    D --> E[Validate tagged source and version]
-    E --> F[Generate versioned files, archives, and checksums]
-    F --> G[Attach assets to GitHub release]
+flowchart LR
+    BASE([Released v1.0.1])
+
+    subgraph PATCH["PATCH · corrections"]
+        direction LR
+        P["release/1.0.x<br/>Working version 1.0.2"] --> PR["Review and approve"] --> PT([Tag v1.0.2])
+    end
+    subgraph MINOR["MINOR · compatible additions"]
+        direction LR
+        M["release/1.1<br/>Working version 1.1.0"] --> MR["Review and approve"] --> MT([Tag v1.1.0])
+    end
+    subgraph MAJOR["MAJOR · breaking changes"]
+        direction LR
+        N["release/2.0<br/>Working version 2.0.0"] --> NR["Review and approve"] --> NT([Tag v2.0.0])
+    end
+
+    BASE --> P
+    BASE --> M
+    BASE --> N
+    PT --> CI["GitHub Actions<br/>Validate each tagged source"]
+    MT --> CI
+    NT --> CI
+    CI --> ASSETS["Each release gets its own assets<br/>Versioned files · archives · checksums"]
+
+    style PATCH fill:#eaf5ee,stroke:#287a46,color:#183d26
+    style MINOR fill:#eaf2fb,stroke:#356da8,color:#193b60
+    style MAJOR fill:#fff3e6,stroke:#b96a19,color:#63390e
 ```
+
+Choose the version according to the change's compatibility impact, not the size of the edit. Carry applicable fixes forward to other active tracks through reviewed pull requests; this is not automatic. Avoid merging unfinished minor or major work into a patch branch. Keep model, profile, and schema versions consistent within each track, advancing their versions independently when their contracts change.
+
+Start a maintenance branch from the release tag it maintains. Tag the approved commit on that branch, even if `main` has moved on to a newer release line; a patch release does not need to include the latest `main`. Compare against that track's base when reviewing changes. Parallel tracks do not require separate working filenames or committed copies of future releases.
+
+### Publish a release
 
 After release approval, open **Releases → Draft a new release** in GitHub, choose the approved commit or branch, create a new `v<model-version>` tag (for example, `v1.1.0`), and publish the release. No local commands are required for release managers.
 
