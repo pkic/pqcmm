@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://pkic.org/assessment-profile.schema-1.0.0.json",
+  "$id": "https://pkic.org/assessment-profile.schema-1.1.0.json",
   "title": "Assessment runtime profile",
   "type": "object",
   "additionalProperties": false,
@@ -13,7 +13,7 @@
     "futureServices"
   ],
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "1.1.0" },
     "profile": {
       "type": "object",
       "additionalProperties": false,
@@ -40,7 +40,7 @@
     "runtime": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["experience", "methodology", "subjectFields"],
+      "required": ["experience", "methodology", "subjectFields", "questions"],
       "properties": {
         "experience": { "type": "string", "pattern": "^[a-z0-9-]+$" },
         "methodology": {
@@ -61,6 +61,33 @@
         "subjectRules": {
           "type": "array",
           "items": { "$ref": "#/$defs/subjectRule" }
+        },
+        "questions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["findings", "requiredForKinds", "defaults"],
+          "properties": {
+            "findings": {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/status" }
+            },
+            "requiredForKinds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "enum": ["assessment", "intake"] }
+            },
+            "defaults": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["assessment", "intake"],
+              "properties": {
+                "assessment": { "$ref": "#/$defs/defaultQuestionResponse" },
+                "intake": { "$ref": "#/$defs/defaultQuestionResponse" }
+              }
+            }
+          }
         },
         "criterion": {
           "type": "object",
@@ -190,7 +217,32 @@
         "required": { "type": "boolean" },
         "rows": { "type": "integer", "minimum": 1 },
         "hint": { "type": "string" },
-        "format": { "enum": ["cpe-2.3", "package-url", "uri"] }
+        "format": { "enum": ["cpe-2.3", "package-url", "uri"] },
+        "defaultFrom": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9]*$"
+        },
+        "suggestion": { "$ref": "#/$defs/subjectFieldSuggestion" }
+      }
+    },
+    "subjectFieldSuggestion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy", "vendorField", "productField", "versionField"],
+      "properties": {
+        "strategy": { "const": "cpe-2.3-application" },
+        "vendorField": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9]*$"
+        },
+        "productField": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9]*$"
+        },
+        "versionField": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9]*$"
+        }
       }
     },
     "subjectRule": {
@@ -215,6 +267,26 @@
       "properties": {
         "value": { "type": "string", "pattern": "^[a-z0-9-]+$" },
         "label": { "type": "string", "minLength": 1 }
+      }
+    },
+    "defaultQuestionResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fieldKey",
+        "fieldLabel",
+        "fieldType",
+        "required",
+        "evidenceLabel",
+        "evidenceDescription"
+      ],
+      "properties": {
+        "fieldKey": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$" },
+        "fieldLabel": { "type": "string", "minLength": 1 },
+        "fieldType": { "enum": ["text", "textarea"] },
+        "required": { "type": "boolean" },
+        "evidenceLabel": { "type": "string", "minLength": 1 },
+        "evidenceDescription": { "type": "string", "minLength": 1 }
       }
     },
     "assuranceProfile": {
