@@ -1,16 +1,37 @@
-## Summary
+## Suggested change
 
-Describe the model, profile, schema, or validation change.
+What could be better, and why? Link related feedback if available.
 
-## Versioning and compatibility
+## Type of change
 
-- Model versions affected:
-- Profile versions affected:
-- Stable identifiers added or changed:
-- Downstream compatibility considerations:
+Choose the closest description; maintainers make the final classification.
 
-## Validation
+- [ ] Correct wording or a broken link
+- [ ] Improve how something is checked, tested, or reported
+- [ ] Change what a product must achieve
+- [ ] Not sure
 
-- [ ] `pnpm run validate`
-- [ ] `git diff --check`
-- [ ] Released model files were not modified in place
+## Where you noticed it
+
+- Page link:
+- Version or draft you were reading (if known):
+- Release tag or draft commit (if known):
+- Criterion/question identifier or heading:
+- Original wording (if helpful):
+
+## Contributor checks
+
+- [ ] I kept existing criterion/question identifiers unless the proposed change explicitly requires review
+- [ ] I left release version numbers and released snapshots unchanged (unless this is a maintainer release-preparation PR)
+
+You do not need to choose a release version or run local commands to suggest a change. Automated checks validate the package; maintainers can help with failures.
+
+## Maintainer review
+
+- [ ] Confirm whether criteria/objectives stay unchanged
+- [ ] Classify the change and choose its release milestone
+- [ ] Check data/tooling compatibility and independently versioned contracts
+- [ ] Decide whether an older maintained release needs a backport and newer lines need the same fix
+- [ ] Run package validation and review stable identifiers before merging
+
+Several accepted contributions may be grouped into one release. Update versions in a separate release-preparation PR once the scope is agreed.
