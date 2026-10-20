@@ -17,14 +17,24 @@ runtime:
       baselineLevel: 0
       minimumLevel: 0
       maximumLevel: 5
-      passingStatuses: [ met ]
+      passingStatuses: [met]
       defaultBaselineStatus: met
       evidenceRequiredFromLevel: 1
-      passingQuestionFindings: [ supports ]
+      passingQuestionFindings: [supports]
   subjectFields:
     - { key: name, label: Assessment name, component: text, required: false }
-    - { key: productName, label: Product or service, component: text, required: true }
-    - { key: productVersion, label: Product version or release, component: text, required: true }
+    - {
+        key: productName,
+        label: Product or service,
+        component: text,
+        required: true,
+      }
+    - {
+        key: productVersion,
+        label: Product version or release,
+        component: text,
+        required: true,
+      }
     - { key: vendorName, label: Vendor, component: text, required: false }
     - key: cpe
       label: CPE 2.3 name
@@ -48,21 +58,43 @@ runtime:
       component: textarea
       rows: 3
       required: false
-    - { key: assessorName, label: Person completing the assessment, component: text, required: false }
-    - { key: assessorOrganization, label: Assessor organization, component: text, required: false, defaultFrom: vendorName }
-    - { key: assessmentDate, label: Assessment date, component: date, required: true }
+    - {
+        key: assessorName,
+        label: Person completing the assessment,
+        component: text,
+        required: false,
+      }
+    - {
+        key: assessorOrganization,
+        label: Assessor organization,
+        component: text,
+        required: false,
+        defaultFrom: vendorName,
+      }
+    - {
+        key: assessmentDate,
+        label: Assessment date,
+        component: date,
+        required: true,
+      }
   subjectRules:
     - kind: at-least-one
-      fields: [ cpe, purl ]
+      fields: [cpe, purl]
       message: Provide at least one canonical CPE 2.3 name or package URL (pURL) so the assessed solution can be matched in inventories.
   questions:
     findings:
       - { value: not-assessed, label: Not assessed }
       - { value: supports, label: Supports the assessment conclusion }
-      - { value: partially-supports, label: Partially supports the assessment conclusion }
-      - { value: does-not-support, label: Does not support the assessment conclusion }
+      - {
+          value: partially-supports,
+          label: Partially supports the assessment conclusion,
+        }
+      - {
+          value: does-not-support,
+          label: Does not support the assessment conclusion,
+        }
       - { value: not-applicable, label: Not applicable }
-    requiredForKinds: [ assessment ]
+    requiredForKinds: [assessment]
     defaults:
       assessment:
         fieldKey: details
@@ -85,14 +117,14 @@ runtime:
       - { value: partial, label: Partial }
       - { value: not-met, label: Not met }
     evidence:
-      requiredForStatuses: [ met ]
+      requiredForStatuses: [met]
       requiredFromLevel: 1
       statementLabel: Evidence statement or references
       statementHint: Required when marked Met. Cite URLs, document references, test results, and the assessed product version.
       maxFileBytes: 26214400
       maxPackageBytes: 104857600
-      acceptedMediaTypes: [ "*/*" ]
-      validators: [ sha256-integrity, reference-presence ]
+      acceptedMediaTypes: ["*/*"]
+      validators: [sha256-integrity, reference-presence]
 assurance:
   defaultProfile: self
   profiles:
@@ -115,7 +147,16 @@ assurance:
       availability: external-workflow
       independentVerification: true
       certification: false
-      requiredFacets: [ identity, organization-binding, role-authority, document-signature, trusted-time, evidence-review, assessor-qualification ]
+      requiredFacets:
+        [
+          identity,
+          organization-binding,
+          role-authority,
+          document-signature,
+          trusted-time,
+          evidence-review,
+          assessor-qualification,
+        ]
       notice: Qualification and assessor signature must be verified by the PKI Consortium service before this assurance label can be issued.
       attestation:
         enabled: true
@@ -128,7 +169,17 @@ assurance:
       availability: external-workflow
       independentVerification: true
       certification: true
-      requiredFacets: [ identity, organization-binding, role-authority, document-signature, trusted-time, evidence-review, assessor-qualification, certification-issuance ]
+      requiredFacets:
+        [
+          identity,
+          organization-binding,
+          role-authority,
+          document-signature,
+          trusted-time,
+          evidence-review,
+          assessor-qualification,
+          certification-issuance,
+        ]
       notice: This status can only be issued by the future PKI Consortium review, signing, publication, and status service.
 report:
   title: PQCMM Self-Assessment Report
@@ -151,7 +202,8 @@ report:
     allowAdditionalSignatures: true
     targetLevel: B-LTA
     trustedTime: signature-or-document-timestamp
-    acceptedAuthorityEvidence: [ vlei-oor, vlei-ecr, eudi-wallet-credential, manually-verified-authority ]
+    acceptedAuthorityEvidence:
+      [vlei-oor, vlei-ecr, eudi-wallet-credential, manually-verified-authority]
 futureServices:
   pkicSubmission:
     implemented: false
