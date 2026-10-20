@@ -6,7 +6,6 @@
   "packageManager": "pnpm@11.5.1",
   "scripts": {
     "validate": "node scripts/validate.mjs",
-    "release:snapshot": "pnpm run validate && node scripts/release-snapshot.mjs",
     "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
