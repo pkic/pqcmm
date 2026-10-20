@@ -41,10 +41,12 @@ Versions follow `MAJOR.MINOR.PATCH`, for example `1.2.3`. For the model, disting
 | Increment | Meaning | Example |
 | --- | --- | --- |
 | **Patch** (`1.0.1 → 1.0.2`) | Corrections that preserve criteria, objectives, and assessment behavior. | Correct a typo or replace an obsolete documentation link without changing its meaning. |
-| **Minor** (`1.0.1 → 1.1.0`) | Criteria and objectives remain unchanged; how they are checked, tested, evidenced, or reported may change. | Revise assessment questions, test procedures, evidence guidance, or report structure to assess the same objectives. |
-| **Major** (`1.0.1 → 2.0.0`) | Criteria or objectives may change, including what is required to achieve a maturity level. | Add, remove, or change a criterion, or change the objective a product must meet. |
+| **Minor** (`1.0.1 → 1.1.0`) | Substantive criteria and objectives remain unchanged; their wording may be clarified and how they are checked, tested, evidenced, or reported may change. | Revise assessment questions, test procedures, evidence guidance, or report structure to assess the same objectives. |
+| **Major** (`1.0.1 → 2.0.0`) | Substantive criteria or objectives may change, including the required capabilities, scope, or meaning of a maturity level. | Add, remove, or change a criterion, or change the objective a product must meet. |
 
-A minor release can change how an assessor establishes and reports that a criterion is met; it must not change the criterion or objective itself. A wording edit that changes the objective requires a major release, even if the edit is small. Working-group agreement is still required for requirement changes.
+“Unchanged criteria” means unchanged substantive objectives, not identical sentences. A minor release can clarify a criterion and change how an assessor establishes and reports that it is met. Additional checks may expose an existing nonconformance without creating a new obligation; that alone does not require a major release. Patch corrections preserve both meaning and assessment behavior.
+
+Use a major release when the change introduces or removes a substantive obligation, changes the intended scope of an objective, or changes the meaning of a maturity level. For a disputed clarification, record the old and proposed interpretation, existing supporting requirements, an example product or assessment affected, and whether the difference is a new obligation or improved evidence of an existing one. Maintainers and the working group decide the classification; a textual diff alone does not decide it. Working-group agreement is still required for requirement changes.
 
 The model, assessment profile, and schemas have independent versions. Model versions follow the criteria-versus-assessment distinction above. Profile and schema versions also account for their own consumer and data compatibility: incompatible contract changes require a major version of the affected profile or schema, even when the model's objectives remain unchanged and its release is minor. Document any effects on existing assessment data and tooling, and update references so the package remains consistent.
 
