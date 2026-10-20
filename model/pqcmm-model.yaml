@@ -3,7 +3,7 @@ model:
   id: pqcmm
   name: PQC Maturity Model
   abbreviation: PQCMM
-  version: 2.0.0
+  version: 1.1.0
   scope: product-or-service
   subjectLabel: Product or service
   description: A product- and service-centric model for evaluating post-quantum cryptography readiness.

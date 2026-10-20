@@ -1,11 +1,11 @@
 schemaVersion: 1.1.0
 profile:
   id: pqcmm-self-assessment
-  version: 1.2.0
+  version: 1.1.0
   family: maturity
   model:
     id: pqcmm
-    version: 2.0.0
+    version: 1.1.0
   title: PQCMM Assessment
   description: Product and service evidence assessment. Data never leaves this browser unless the user exports it.
 runtime:
