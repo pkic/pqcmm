@@ -34,6 +34,22 @@ Edit the stable working paths above in pull requests so GitHub shows changes to 
 
 For review, compare the same working path between a draft branch and its intended base. Link proposed changes to the relevant feedback or tracking issues; merging draft work does not itself approve or publish a release.
 
+### Semantic versioning
+
+Versions follow `MAJOR.MINOR.PATCH`, for example `1.2.3`. Choose the increment by its effect on existing consumers and assessments:
+
+| Increment | Meaning | Example |
+| --- | --- | --- |
+| **Patch** (`1.0.1 → 1.0.2`) | Backward-compatible corrections that preserve requirements, pass conditions, and data contracts. | Correct a typo or replace an obsolete documentation link without changing the obligation. |
+| **Minor** (`1.0.1 → 1.1.0`) | Backward-compatible additions; existing valid data and supported behavior continue to work. | Add optional guidance or an optional field that existing consumers can safely ignore. |
+| **Major** (`1.0.1 → 2.0.0`) | Incompatible changes to meaning, requirements, or data contracts. | Change a pass condition, remove or repurpose a question, or introduce a required field that makes existing data invalid. |
+
+A small wording edit can be a breaking change if it changes what must be demonstrated. Adding a mandatory criterion is not automatically a minor change. Review both the assessment meaning and machine-readable compatibility; an added field is only compatible if the applicable schema and consumers permit it. Working-group agreement is still required for requirement changes, regardless of the chosen version.
+
+The model, assessment profile, and schemas have independent versions. Advance each affected contract according to its own compatibility impact, and update references so the package remains consistent. The GitHub release tag follows the **model version**; generated profile and schema filenames use their own versions. For example, a model patch can retain an unchanged profile and schema version.
+
+Drafts may carry their intended release version while they are under review; a branch's internal version alone does not make it a release. Published tags and assets are immutable. For an explicitly labeled preview, pin the draft commit rather than presenting it as an approved release.
+
 ### Parallel release tracks
 
 Patch, minor, and major releases can be prepared in parallel on separate branches. Each branch edits the same stable filenames and carries its own intended internal versions. The example below starts from released `v1.0.1`; branch names are illustrative. Each track is reviewed and approved independently.
