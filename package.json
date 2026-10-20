@@ -5,7 +5,8 @@
   "type": "module",
   "packageManager": "pnpm@11.5.1",
   "scripts": {
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
