@@ -23,12 +23,11 @@ function reviewItems(model) {
     const header = clone(level);
     const criteria = header.criteria?.items ?? [];
     const groups = header.assessment?.groups ?? [];
-    const evidence = Array.isArray(header.evidence) ? header.evidence : header.evidence?.items;
+    const evidence = header.evidenceChecklist?.items;
     if (header.criteria) header.criteria.items = criteria.map((item) => item.id);
     if (header.assessment) header.assessment.groups = groups.map((group) => group.id);
     if (Array.isArray(evidence)) {
-      if (Array.isArray(header.evidence)) header.evidence = evidence.map((item) => item.id);
-      else header.evidence.items = evidence.map((item) => item.id);
+      header.evidenceChecklist.items = evidence.map((item) => item.id);
       for (const item of evidence) add(`evidence:${item.id}`, `Evidence ${item.id}`, { level: level.number, ...item });
     }
     add(`level:${level.number}`, `Level ${level.number}`, header);
