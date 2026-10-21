@@ -3,7 +3,7 @@ model:
   id: pqcmm
   name: PQC Maturity Model
   abbreviation: PQCMM
-  version: 1.0.1
+  version: 1.1.0
   scope: product-or-service
   subjectLabel: Product or service
   description: A product- and service-centric model for evaluating post-quantum cryptography readiness.
@@ -136,6 +136,8 @@ levels:
             - 1.4.2
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **Evidence method** — documentation review, functional reproduction, or both.
@@ -336,7 +338,7 @@ levels:
           questions:
             - id: 1.5.1
               question: Does the product implement quantum-safe algorithms via a third-party cryptographic library, or through a custom in-house implementation? If a library is used, which library and exact version?
-              guidance: "Most products rely on a well-known cryptographic library rather than writing cryptographic primitives from scratch — implementing cryptography in-house is strongly discouraged and rare in commercial products. Common libraries include OpenSSL (with or without oqs-provider), wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, and Crypto++. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** the URL from the library's own official release notes, changelog, or PQC documentation page confirming that the identified version supports the specific claimed quantum-safe algorithm — the assessor must verify this independently, not accept the vendor's assertion alone; **(c)** whether the library version is currently maintained and eligible for security patches (record the library's support policy URL). If the vendor claims a custom implementation, record the justification and apply heightened scrutiny to question 1.5.2."
+              guidance: "Most products rely on a well-known cryptographic library rather than writing cryptographic primitives from scratch — implementing cryptography in-house is strongly discouraged and rare in commercial products. Common libraries include OpenSSL, wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, Crypto++, LibOQS, and PQ Code Package. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** the URL from the library's own official release notes, changelog, or PQC documentation page confirming that the identified version supports the specific claimed quantum-safe algorithm — the assessor must verify this independently, not accept the vendor's assertion alone; **(c)** whether the library version is currently maintained and eligible for security patches (record the library's support policy URL). If the vendor claims a custom implementation, record the justification and apply heightened scrutiny to question 1.5.2."
             - id: 1.5.2
               question: Can the vendor provide an artefact confirming the implementation — such as test vectors, NIST Known Answer Test (KAT) results, an interoperability report, or a lab result?
               guidance: "**If the product uses a third-party cryptographic library (see question 1.5.1):** the library's own validation records are the primary artefact — record the library name, version, and any NIST CAVP/CMVP validation certificate for that library. Verify independently that the assessed library version is within the validated module boundary. **If the product uses a custom implementation:** require stronger artefacts. Artefacts in descending order of evidential weight: **(a)** NIST CAVP/ACVTS validation results (https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program) — record the algorithm, validation URL, and result identifier; **(b)** KAT result file against NIST reference vectors — record the file URL or repository URL with commit hash; **(c)** interoperability test report naming the tested implementation, version, protocol, and outcome; **(d)** publicly accessible open-source repository — record the URL and commit hash, and note whether the assessor reviewed or tested the code. A vendor white paper without underlying test data is weaker evidence — record it and flag its limitations."
@@ -429,6 +431,8 @@ levels:
             - 2.4.2
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **Evidence method** — documentation review, CMVP/CAVP database verification, interoperability testing, hands-on configuration, or a combination.
@@ -480,7 +484,7 @@ levels:
                     hint: One row per component with algorithm, parameter set, and usage context.
             - id: 2.2.3
               question: Does the product implement quantum-safe algorithms via a third-party cryptographic library, or through a custom in-house implementation? If a library is used, which library and exact version?
-              guidance: "Most products rely on a well-known cryptographic library rather than writing cryptographic primitives from scratch. Common libraries include OpenSSL (with or without oqs-provider), wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, and Crypto++. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** the URL from the library's own official release notes or PQC documentation page confirming that the identified version supports the claimed quantum-safe algorithm in production (not only in a beta or preview build) — the assessor must verify this independently against the library's official sources; **(c)** whether the library version is currently maintained and eligible for security patches (record the library's support policy URL). If the vendor claims a custom in-house implementation, record the justification and apply heightened scrutiny to standards conformance questions."
+              guidance: "Most products rely on a well-known cryptographic library rather than writing cryptographic primitives from scratch. Common libraries include OpenSSL, wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, Crypto++, LibOQS, and PQ Code Package. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** the URL from the library's own official release notes or PQC documentation page confirming that the identified version supports the claimed quantum-safe algorithm in production (not only in a beta or preview build) — the assessor must verify this independently against the library's official sources; **(c)** whether the library version is currently maintained and eligible for security patches (record the library's support policy URL). If the vendor claims a custom in-house implementation, record the justification and apply heightened scrutiny to standards conformance questions."
             - id: 2.2.4
               question: Is the feature supported under the vendor's standard support and maintenance terms, including security patch coverage?
               guidance: Request the support policy document or URL. Record the specific policy clause or page that confirms the quantum-safe feature is included in standard support. A verbal assurance without a written policy reference is recorded as "vendor-stated, not contractually confirmed".
@@ -605,7 +609,7 @@ levels:
                   maxFiles: 3
             - id: 2.3.3
               question: Has the implementation been tested for interoperability with at least one other conformant implementation? Which implementation, which version, which protocol?
-              guidance: "Record: the implementation tested against (name and version), the protocol (e.g., TLS 1.3 with ML-KEM-768 key exchange), the test suite used — e.g., NIST ACVTS (https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program) or OQS interop test harness (https://github.com/open-quantum-safe/oqs-interop-test) — and the test result (pass/fail). A self-reported interop claim without a named test suite and result is weaker evidence — flag it accordingly."
+              guidance: "Record: the implementation tested against (name and version), the protocol (e.g., TLS 1.3 with ML-KEM-768 key exchange), the test suite used — e.g., NIST ACVTS (https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program) — and the test result (pass/fail). A self-reported interop claim without a named test suite and result is weaker evidence — flag it accordingly."
               response:
                 fields:
                   - key: implementation
@@ -770,11 +774,13 @@ levels:
             - 3.5.2
             - 3.5.3
         - id: 3.1.5
-          text: A documented **HNDL exposure register** identifies which data flows handled by the product carry a Harvest-Now-Decrypt-Later risk (long-lived confidentiality requirement), and which algorithm protects each.
+          text: "A documented **long-lived exposure register** identifies which data flows handled by the product carry a long-lived protection requirement, and which algorithm protects each. The register must cover both exposure classes: **Harvest-Now-Decrypt-Later (HNDL)**, where confidentiality must survive future decryption, and **long-lived integrity and authenticity**, including Trust Now, Forge Later (TNFL), where signed artifacts and trust relationships must remain trustworthy against future signature forgery throughout their required lifetime."
           assessmentQuestionIds:
             - 3.7.1
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **SBOM analysis** — tool name and version (e.g., Syft, cdxgen, Dependency-Track, Microsoft sbom-tool), and date run.
@@ -1030,7 +1036,7 @@ levels:
                   maxFiles: 1
             - id: 3.4.2
               question: Does the SBOM include cryptographic library dependencies with version numbers?
-              guidance: Check that all cryptographic libraries appear in the SBOM with explicit version numbers — a library entry without a version cannot be assessed. Common libraries to look for include OpenSSL (with or without oqs-provider), wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, and Crypto++. For each library, the assessor must independently verify — from the library's own official release notes or PQC documentation page — whether the listed version supports the vendor's claimed quantum-safe algorithms. A library version that does not support the claimed algorithm is a finding; record the library name, listed version, and the vendor's explanation. Record any library whose version number is absent.
+              guidance: Check that all cryptographic libraries appear in the SBOM with explicit version numbers — a library entry without a version cannot be assessed. Common libraries to look for include OpenSSL, wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, Crypto++, LibOQS, and PQ Code Package. For each library, the assessor must independently verify — from the library's own official release notes or PQC documentation page — whether the listed version supports the vendor's claimed quantum-safe algorithms. A library version that does not support the claimed algorithm is a finding; record the library name, listed version, and the vendor's explanation. Record any library whose version number is absent.
               response:
                 fields:
                   - key: allLibrariesVersioned
@@ -1200,35 +1206,46 @@ levels:
               guidance: "Cryptographic agility for traffic algorithms is undermined if the keys protecting them are wrapped with classical algorithms vulnerable to a future quantum attacker. Record each KEK / key-wrapping role with: algorithm, parameter set, key size, and whether it is classical or quantum-safe. A product that exchanges traffic with ML-KEM but wraps long-lived keys with RSA-2048 must document this explicitly — it is a finding for any data with long confidentiality requirements."
             - id: 3.6.2
               question: Does the product use random number generation appropriate for cryptographic key material?
-              guidance: Record the DRBG / PRNG used (name, source, e.g., NIST SP 800-90A AES-CTR-DRBG, OS-provided `getrandom`/`/dev/urandom`, hardware RNG), the seed length, and the source of entropy. Modern DRBGs with 256-bit seeds are considered quantum-resistant for symmetric key generation; record the configured seed strength. A product that derives PQ key material from a DRBG seeded with fewer than 256 bits is a finding.
+              guidance: Record the random bit generator, implementation and version, entropy source, instantiation and reseeding process, and the security strength required by each supported algorithm and parameter set. Check the applicable algorithm specification and random bit generation requirements. Distinguish seed length from entropy and security strength; do not apply a universal 256-bit seed threshold. Record unsupported assumptions, insufficient entropy, or failure to meet the applicable requirements as findings. For ML-KEM, consult FIPS 203 section 3.3 and Table 2.
             - id: 3.6.3
               question: Has the vendor published an algorithm deprecation policy describing how it responds to a vulnerability or parameter-set deprecation in an algorithm the product depends on?
               guidance: "Record the policy document URL, version, and date. The policy should state: how the vendor monitors algorithm developments; the maximum time between a credible deprecation event and a vendor advisory; and the mechanism used to remove or disable the affected algorithm. Absence of any published policy is a finding. The detail need not match a security-incident response process but must be a written commitment."
         - id: "3.7"
-          name: Harvest-Now-Decrypt-Later (HNDL) Exposure Register
+          name: Long-Lived Exposure Register (including HNDL and TNFL)
           kind: assessment
           questions:
             - id: 3.7.1
-              question: Does the vendor maintain a written HNDL exposure register identifying data flows handled by the product that carry long-lived confidentiality requirements?
-              guidance: "Request the register. Record document title, version, and date. Each entry should identify: the data class (e.g., \"customer-uploaded documents\", \"signed audit logs\"), the expected confidentiality lifetime (years), the algorithm currently protecting it, and whether it is quantum-safe. A register that lists no HNDL-exposed data despite the product handling long-lived data is a finding — record the gap and the vendor's justification."
+              question: Does the vendor maintain a written long-lived exposure register covering confidentiality, integrity, and authenticity requirements for data, signed artifacts, and trust dependencies handled by the product?
+              guidance: "Request the register and record its title, version, and date. For each applicable data class, signed artifact, or trust dependency, identify the exposure class, required protection or reliance lifetime, algorithms and parameter sets, affected components or relying parties, and planned protection or migration measures. Long-lived confidentiality includes Harvest Now, Decrypt Later (HNDL): re-encryption can protect retained copies, but cannot protect ciphertext already captured by an adversary. Long-lived integrity and authenticity include Trust Now, Forge Later (TNFL): future compromise of a signature algorithm can permit forged artifacts or impersonation while the corresponding keys or trust anchors remain accepted. Consider signed documents, seals, timestamps, audit records, certificates, software and firmware updates, and authentication trust dependencies where applicable. Record both preservation of authentic existing evidence and replacement or retirement of vulnerable signing and verification dependencies before compromise. Mathematical signature verification alone is insufficient to establish authenticity after forgery becomes feasible. Identify the timing and limitations of archive timestamp renewal, evidence renewal, or other preservation measures; do not imply that re-signing recreates the original event. HNDL and TNFL are descriptive risk labels, not additional maturity levels. If either exposure class is omitted despite an applicable product use, record a finding; justify any not-applicable conclusion."
               response:
                 fields:
                   - key: registerVersion
-                    label: HNDL exposure register version
+                    label: Long-lived exposure register version
                     type: text
                     required: true
                   - key: lastUpdated
                     label: Register last updated
                     type: date
                     required: true
+                  - key: exposureClassesCovered
+                    label: Exposure classes covered by the register
+                    type: multiselect
+                    required: true
+                    options:
+                      - value: hndl-confidentiality
+                        label: Long-lived confidentiality (including HNDL)
+                      - value: long-lived-verifiability
+                        label: Long-lived integrity and authenticity (including TNFL)
+                      - value: none-applicable
+                        label: Neither class applies, justification recorded
                   - key: dataFlowCoverage
-                    label: Data classes, confidentiality lifetimes, and protecting algorithms
+                    label: Data, signed artifacts, trust dependencies, lifetimes, algorithms, and protection measures
                     type: textarea
                     rows: 6
                     required: true
                 evidence:
-                  label: HNDL exposure register
-                  description: Attach the register covering the data classes, confidentiality lifetimes, and algorithms summarized above.
+                  label: Long-lived exposure register
+                  description: Attach the register covering the data, signed artifacts, trust dependencies, exposure classes, lifetimes, algorithms, and protection measures summarized above.
                   required: true
                   acceptedMediaTypes:
                     - application/pdf
@@ -1257,11 +1274,32 @@ levels:
         - id: 3.e.5
           text: Algorithm deprecation policy.
         - id: 3.e.6
-          text: HNDL exposure register.
+          text: Long-lived exposure register covering confidentiality (including HNDL), integrity and authenticity (including TNFL), required lifetimes, affected trust dependencies, and protection or migration measures.
         - id: 3.e.7
           text: Identification of the DRBG / RNG used for cryptographic key material and its seed strength.
         - id: 3.e.8
           text: A production-representative test or deployment record demonstrating the quantum-safe configuration operating under realistic load.
+    sections:
+      - id: 3.s.1
+        title: Cryptographic Inventory Taxonomy
+        placement: after-criteria
+        body: |-
+          A Level 3 cryptographic inventory must cover, at minimum, the following categories. For each category, list the algorithms, parameter sets, and components used — or mark the category *not applicable* with a justification:
+
+          - Data in transit (e.g., TLS, VPN, application protocols)
+          - Data at rest (e.g., disk, database, object storage encryption)
+          - Identity, authentication, and certificates
+          - Code, firmware, and update signing
+          - Key wrapping and key-encryption keys (KEKs)
+          - Random number generation and entropy sources
+          - Telemetry, logging, and audit-trail integrity
+          - Build, CI/CD, and supply-chain signing (where part of the product)
+          - Attestation and remote-attestation (where applicable)
+          - Backup, archival, and long-term storage
+          - Long-term validation of existing evidence (verification of previously created signatures, seals, and timestamps; archive timestamp renewal; hash and signature agility for already-signed records)
+
+          > The final category concerns evidence that has **already been created**. Re-encryption can protect retained copies and reduce future confidentiality exposure, but cannot protect ciphertext already captured by an adversary. For signatures, seals, and timestamps, continued mathematical verification alone does not establish authenticity once forgery becomes feasible. Products that create, validate, or preserve such evidence must identify how its integrity and authenticity are preserved, for example through timely archive timestamp or evidence renewal before the existing protection becomes vulnerable. Simply replacing a signature does not recreate the original signing event. Products that hold no such evidence mark the category *not applicable* with a justification.
+          {.callout-info}
   - number: 4
     name: Managed
     title: Level 4 (Managed) - PQC Maturity Model (PQCMM)
@@ -1286,7 +1324,7 @@ levels:
             - 4.3.2
             - 4.3.3
         - id: 4.1.3
-          text: Symmetric and hash algorithms used to protect data with long-lived confidentiality or integrity requirements meet the parameter strengths recommended by NIST (or an equivalent national authority) for use beyond the anticipated availability of cryptographically relevant quantum computers.
+          text: Symmetric and hash algorithms used to protect data with long-lived confidentiality or integrity requirements, for every exposure class recorded in the Level 3 long-lived exposure register, meet the parameter strengths recommended by NIST (or an equivalent national authority) for use beyond the anticipated availability of cryptographically relevant quantum computers.
           assessmentQuestionIds:
             - 4.4.1
         - id: 4.1.4
@@ -1297,6 +1335,8 @@ levels:
             - 4.5.3
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **CBOM analysis** — whether vendor-provided or assessor-generated; tool name and version; generation method (automated CI pipeline / manual export / hybrid); date generated; product version covered.
@@ -1502,7 +1542,7 @@ levels:
                         label: Not tested
             - id: 4.3.2
               question: When configured in zero-legacy mode, does the product remain fully functional with a quantum-safe client?
-              guidance: "Test with a representative quantum-safe workload. Record: test environment details, product version, zero-legacy configuration applied, quantum-safe client tool and version (e.g., OQS-OpenSSL, a TLS client with ML-KEM support), test procedure, and outcome. Document any feature that fails or degrades in zero-legacy mode — each exception must be named, scoped, and risk-assessed."
+              guidance: "Test with a representative quantum-safe workload. Record: test environment details, product version, zero-legacy configuration applied, quantum-safe client tool and version (e.g., OpenSSL, a TLS client with ML-KEM support), test procedure, and outcome. Document any feature that fails or degrades in zero-legacy mode — each exception must be named, scoped, and risk-assessed."
               response:
                 fields:
                   - key: quantumSafeClient
@@ -1560,12 +1600,23 @@ levels:
           kind: assessment
           questions:
             - id: 4.4.1
-              question: For data with long-lived confidentiality or integrity requirements (as identified in the HNDL exposure register at Level 3), do the symmetric and hash algorithms used meet the strengths recommended by NIST or an equivalent national authority for use beyond the anticipated availability of cryptographically relevant quantum computers?
-              guidance: "Record, for each long-lived data class identified in the HNDL register: the symmetric algorithm and key length, the hash algorithm and output length, and the NIST or national-authority guidance referenced (e.g., NIST SP 800-131A, BSI TR-02102, ANSSI cryptographic recommendations). A long-lived data class protected with symmetric or hash strengths below the referenced guidance is a finding."
+              question: For data with long-lived confidentiality or integrity requirements (as identified in the long-lived exposure register at Level 3), do the symmetric and hash algorithms used meet the strengths recommended by NIST or an equivalent national authority for use beyond the anticipated availability of cryptographically relevant quantum computers?
+              guidance: "Record, for each long-lived data class identified in the register: the exposure class, the symmetric algorithm and key length, the hash algorithm and output length, and the NIST or national-authority guidance referenced (e.g., NIST SP 800-131A, BSI TR-02102, ANSSI cryptographic recommendations). Both exposure classes must be covered. For harvest-now-decrypt-later classes, assess the strengths protecting confidentiality. For long-lived integrity and authenticity classes, including TNFL exposure, assess the hash and signature strengths that the existing evidence depends on, including the timing and protection of any archive timestamp or evidence-renewal mechanism the product applies. Cross-reference the signing, verification, and trust-dependency migration recorded in 3.7.1; adequate hash strength alone does not establish resistance to signature forgery. A long-lived data class protected with symmetric or hash strengths below the referenced guidance is a finding. A register entry with no corresponding assessment here is also a finding."
               response:
                 fields:
+                  - key: exposureClassesAssessed
+                    label: Exposure classes assessed
+                    type: multiselect
+                    required: true
+                    options:
+                      - value: hndl-confidentiality
+                        label: Long-lived confidentiality (including HNDL)
+                      - value: long-lived-verifiability
+                        label: Long-lived integrity and authenticity (including TNFL)
+                      - value: none-applicable
+                        label: Neither class applies, justification recorded
                   - key: dataClassStrengths
-                    label: Data classes, symmetric algorithms and key lengths, and hash algorithms and output lengths
+                    label: Data classes with exposure class, symmetric algorithm and key length, and hash algorithm and output length
                     type: textarea
                     rows: 6
                     required: true
@@ -1580,7 +1631,7 @@ levels:
           questions:
             - id: 4.5.1
               question: Does the product support hybrid key exchange or hybrid authentication? If yes, which specific hybrid schemes, and which standard or draft?
-              guidance: "Record scheme-level specifics: e.g., X25519+ML-KEM-768 per draft-ietf-tls-hybrid-design (record the draft version number — implementations based on superseded drafts may not interoperate with current versions). \"We support hybrid\" without naming the scheme and draft version is not assessable. Where possible, test interoperability with a reference implementation (e.g., OQS-OpenSSL configured for the same scheme) and record: tool name and version, test command, and outcome."
+              guidance: "Record scheme-level specifics: e.g., X25519+ML-KEM-768 per draft-ietf-tls-hybrid-design (record the draft version number — implementations based on superseded drafts may not interoperate with current versions). \"We support hybrid\" without naming the scheme and draft version is not assessable. Where possible, test interoperability with a reference implementation (e.g., OpenSSL configured for the same scheme) and record: tool name and version, test command, and outcome."
               response:
                 fields:
                   - key: hybridSupported
@@ -1696,6 +1747,8 @@ levels:
             - 5.5.4
     assessment:
       methodology: |-
+        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+
         The assessment report must record:
 
         - **Default configuration** — whether the assessor performed a fresh installation test (product version, installation method, environment, and configuration captured) or relied on documentation only (flag as *"documentation review only, not independently reproduced"*).
@@ -1817,7 +1870,7 @@ levels:
           questions:
             - id: 5.3.1
               question: Has the vendor benchmarked the product in its default quantum-safe configuration? Request the benchmark report.
-              guidance: "Record all of the following methodology fields from the report: hardware (CPU model, core count, RAM, whether results are from cloud instances or bare metal), operating system and version, runtime/JVM version if applicable, test tool name and version (e.g., wrk 4.x, JMeter 5.x, vendor-specific harness — record tool and version), algorithm and parameter set tested, load profile (requests/second or key operations/second), test duration, warm-up period, and classical comparison baseline (algorithm and parameter set). A benchmark that does not specify hardware and test tool cannot be reproduced by an independent party — flag it as non-reproducible."
+              guidance: "Record all of the following methodology fields from the report: hardware (CPU model, core count, RAM, whether results are from cloud instances or bare metal), operating system and version, runtime/JVM version if applicable, test tool name and version (e.g., wrk 4.x, JMeter 5.x, vendor-specific harness , record tool and version), algorithm and parameter set tested, load profile (requests/second or key operations/second), test duration, warm-up period, and classical comparison baseline (algorithm and parameter set). A benchmark that does not specify hardware and test tool cannot be reproduced by an independent party , flag it as non-reproducible. Existing benchmark evidence from an earlier assessment stage may be reused when it covers the assessed version, default quantum-safe configuration, workload, and target environment. A slowdown against the classical baseline must be disclosed; it is not by itself a failure where the stated operational requirements are met."
               response:
                 fields:
                   - key: benchmarkDate
@@ -2072,7 +2125,7 @@ levels:
                   maxFiles: 2
             - id: 5.5.3
               question: Which cryptographic library implements the quantum-safe algorithms?
-              guidance: "Common libraries include OpenSSL (with or without oqs-provider), wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, and Crypto++. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** for open-source libraries: the repository URL and the specific commit hash or release tag; **(c)** verify independently — from the library's own official release notes or PQC documentation page — that the identified version supports the claimed quantum-safe algorithms; **(d)** check for NIST CAVP validation for the library (https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program) — record the validation URL and certificate scope if available; **(e)** for proprietary implementations: whether a published security analysis exists, the analysis firm name, and the analysis URL or reference."
+              guidance: "Common libraries include OpenSSL, wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, Crypto++, LibOQS, and PQ Code Package. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** for open-source libraries: the repository URL and the specific commit hash or release tag; **(c)** verify independently — from the library's own official release notes or PQC documentation page — that the identified version supports the claimed quantum-safe algorithms; **(d)** check for NIST CAVP validation for the library (https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program) — record the validation URL and certificate scope if available; **(e)** for proprietary implementations: whether a published security analysis exists, the analysis firm name, and the analysis URL or reference."
               response:
                 fields:
                   - key: libraryName
