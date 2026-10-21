@@ -37,3 +37,32 @@ For local development, use `pnpm install --frozen-lockfile`, `pnpm run validate`
 - `scripts/validate.mjs` validates schemas and cross-file invariants.
 
 The website and assessment tooling consume pinned releases of these files. A pull request must not silently change the meaning of an existing release.
+
+## Review feedback and draft changes
+
+Keep each issue concise. Use the issue form for new feedback; maintainers summarize older discussions in the issue body without replacing contributors' comments. Record:
+
+- **Item and source:** criterion, question or evidence identifier; model version; page and source link. Use “General” when no item applies.
+- **Current wording:** an exact block quote from that source. Distinguish the released model from a draft and the workbook from the model.
+- **Problem:** one or two bullets explaining the observed ambiguity or defect.
+- **Proposed wording:** a quoted replacement. If no replacement is agreed, write “Decision needed” and state the question or alternatives.
+- **Impact and decision:** editorial, assessment-method, criteria/objectives, or tooling; proposed, agreed, incorporated into draft, deferred, declined, or clarification only. Link the human decision; a proposal in YAML is not approval.
+- **Implementation:** the focused PR, or the relevant file/line or review thread in a combined PR. A pinned source permalink records the text reviewed; it does not replace the PR link.
+
+Preserve longer rationale under a collapsed “Background” section where useful. Split independently decidable changes into focused issues; keep their parent as an index. Reuse existing issues instead of duplicating them. Do not publish private attachments, email addresses, mailbox links, or internal correspondence in issues or PRs. Refer to public discussions or summarize feedback already authorized for publication.
+
+### Shared draft and contribution PRs
+
+The [PQCMM 1.1.0 draft](https://github.com/pkic/pqcmm/pull/37) uses `agent/pqcmm-1.1.0-draft`. The [feedback index](https://github.com/pkic/pqcmm/issues/26) records decisions and implementation links. Target this branch for 1.1.0 model contributions; confirm the current branch and registry before using these links for a later release. Tooling and contribution-process changes can target main independently. Main retains released model content until release preparation is approved.
+
+Prefer one decision per PR, grouping changes only when they must be reviewed together. Link the issue in the PR and the PR in the issue. Record whether a change is merely proposed in the shared draft or has been reviewed and accepted. Contributions do not bump versions or edit released snapshots.
+
+GitHub's closing keywords apply to PRs targeting the default branch, not the shared draft branch. Do not rely on `Fixes #…` to update draft contribution status. Explicitly record “incorporated into draft” after a reviewed merge, and distinguish that from release publication. Request the reporter's review when the wording or interpretation needs their confirmation and the user has authorized that notification. No response is not agreement.
+
+### Read changes without reading YAML
+
+Run `pnpm review:changes --base <base-ref> --head <head-ref>` to see added, removed, and changed criteria, questions, evidence, and supporting model content with before/after wording. The PR validation workflow publishes the same report in its job summary. This is a structural comparison, not a verdict on semantic versioning, technical correctness, or approval.
+
+Review linked criteria, questions, response contracts, evidence, checklists, and consumers together. State whether obligations, thresholds, applicability, required evidence, or pass conditions change. Follow README.md for semantic versioning; a maintainer decides the release scope. Preserve the accessible self-assessment route and distinguish migration maturity from additional verification depth.
+
+Repository agent workflows: `.agents/skills/review-model-change/SKILL.md` and `.agents/skills/resolve-model-feedback/SKILL.md`.

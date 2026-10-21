@@ -44,11 +44,21 @@ body:
   - type: textarea
     id: suggestion
     attributes:
-      label: What could be better?
-      description: Explain the problem. Suggest replacement wording if you have it, but it is not required.
+      label: Problem
+      description: One or two bullets explaining what is unclear, missing, or incorrect.
     validations:
       required: true
   - type: markdown
     attributes:
       value: |
         Feedback about an older release is welcome. Maintainers decide which maintained release lines need the correction and whether to carry it forward. Submitting feedback does not change an approved model.
+  - type: textarea
+    id: proposed-wording
+    attributes:
+      label: Proposed wording or decision needed
+      description: Quote replacement text if you have it, or state what needs to be discussed. A proposal is not approval.
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Related issue or pull request
+      description: Link existing discussions or a focused PR if available. You do not need to create a PR to give feedback.
