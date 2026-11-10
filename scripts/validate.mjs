@@ -72,18 +72,21 @@ if (
   );
 }
 
-// A released version is immutable: while the working model carries it, it must match the snapshot.
-const releasedSnapshot = await readYaml(
-  `model/pqcmm-model-${model.model.version}.yaml`,
-).catch((error) => {
+// A released version is immutable: while the working model carries it, the file must match the
+// snapshot byte for byte, comments and spacing included.
+const releasedPath = `model/pqcmm-model-${model.model.version}.yaml`;
+const releasedText = await readFile(join(root, releasedPath), "utf8").catch((error) => {
   if (error.code === "ENOENT") return undefined;
   throw error;
 });
-if (releasedSnapshot) {
-  const changed = releasedContentChanges(releasedSnapshot, model);
-  if (changed.length) {
+if (releasedText !== undefined) {
+  const workingText = await readFile(join(root, "model/pqcmm-model.yaml"), "utf8");
+  if (workingText !== releasedText) {
+    const changed = releasedContentChanges(YAML.parse(releasedText), model);
     throw new Error(
-      `PQCMM ${model.model.version} is released and cannot change. Advance the model version (a patch release at minimum) or restore: ${changed.join(", ")}`,
+      `PQCMM ${model.model.version} is released and cannot change. Advance the model version (a patch release at minimum) or restore ${
+        changed.length ? changed.join(", ") : "its comments and formatting"
+      }.`,
     );
   }
 }
