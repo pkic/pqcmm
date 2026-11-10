@@ -7,24 +7,21 @@ const released = {
   levels: [{ number: 1, criteria: { items: [{ id: "1.1.1", text: "Available in a released build." }] } }],
 };
 
-test("allows additions and a newer representation", () => {
-  const working = structuredClone(released);
-  working.schemaVersion = "1.1.0";
-  working.levels[0].sections = [{ id: "1.s.1", title: "What Level 1 Means", body: "Guidance." }];
-  working.levels[0].criteria.items[0].assessmentQuestionIds = ["1.2.1"];
-  assert.deepEqual(releasedContentChanges(released, working), []);
+test("accepts the released content unchanged", () => {
+  assert.deepEqual(releasedContentChanges(released, structuredClone(released)), []);
 });
 
-test("reports edited, removed and reordered released content", () => {
+test("reports any change, addition, or removal", () => {
   const edited = structuredClone(released);
   edited.levels[0].criteria.items[0].text = "Available in any build.";
   assert.deepEqual(releasedContentChanges(released, edited), [".levels[0].criteria.items[0].text"]);
 
-  const removed = structuredClone(released);
-  delete removed.levels[0].criteria.items[0].text;
-  assert.deepEqual(releasedContentChanges(released, removed), [".levels[0].criteria.items[0].text"]);
-
   const added = structuredClone(released);
-  added.levels[0].criteria.items.push({ id: "1.1.2", text: "New obligation." });
-  assert.deepEqual(releasedContentChanges(released, added), [".levels[0].criteria.items"]);
+  added.schemaVersion = "1.1.0";
+  added.levels[0].sections = [{ id: "1.s.1", title: "What Level 1 Means", body: "Guidance." }];
+  assert.deepEqual(releasedContentChanges(released, added), [".schemaVersion", ".levels[0].sections"]);
+
+  const removed = structuredClone(released);
+  removed.levels[0].criteria.items.pop();
+  assert.deepEqual(releasedContentChanges(released, removed), [".levels[0].criteria.items"]);
 });

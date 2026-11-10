@@ -72,7 +72,7 @@ if (
   );
 }
 
-// While the working model still carries a released version, it may only add to that release.
+// A released version is immutable: while the working model carries it, it must match the snapshot.
 const releasedSnapshot = await readYaml(
   `model/pqcmm-model-${model.model.version}.yaml`,
 ).catch((error) => {
@@ -83,7 +83,7 @@ if (releasedSnapshot) {
   const changed = releasedContentChanges(releasedSnapshot, model);
   if (changed.length) {
     throw new Error(
-      `PQCMM ${model.model.version} is released; its content can be added to but not changed. Advance the model version or restore: ${changed.join(", ")}`,
+      `PQCMM ${model.model.version} is released and cannot change. Advance the model version (a patch release at minimum) or restore: ${changed.join(", ")}`,
     );
   }
 }

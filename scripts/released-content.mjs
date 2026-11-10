@@ -1,15 +1,12 @@
 /**
- * Paths where a working model no longer carries a released snapshot's content unchanged.
+ * Paths where a working model differs from a released snapshot.
  *
- * Released content may be added to (typed responses, cross-references, guidance already
- * published for that release) but never edited or removed without a new model version.
- * `schemaVersion` describes the representation, not the content, so it may advance.
+ * A released version is immutable: any change, including additions and a newer `schemaVersion`,
+ * needs a new model version (a patch release at minimum).
  */
 export function releasedContentChanges(released, working, path = "") {
-  if (path === ".schemaVersion") return [];
   if (Array.isArray(released)) {
-    if (!Array.isArray(working)) return [path];
-    if (working.length !== released.length) return [path];
+    if (!Array.isArray(working) || working.length !== released.length) return [path];
     return released.flatMap((item, index) =>
       releasedContentChanges(item, working[index], `${path}[${index}]`),
     );
@@ -18,8 +15,9 @@ export function releasedContentChanges(released, working, path = "") {
     if (!working || typeof working !== "object" || Array.isArray(working)) {
       return [path];
     }
-    return Object.keys(released).flatMap((key) =>
-      key in working
+    const keys = new Set([...Object.keys(released), ...Object.keys(working)]);
+    return [...keys].flatMap((key) =>
+      key in released && key in working
         ? releasedContentChanges(released[key], working[key], `${path}.${key}`)
         : [`${path}.${key}`],
     );
