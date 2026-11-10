@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import YAML from "yaml";
+import { releasedContentChanges } from "./released-content.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = async (relativePath) =>
@@ -69,6 +70,22 @@ if (
   throw new Error(
     "Assessment profile model reference does not match the model release.",
   );
+}
+
+// While the working model still carries a released version, it may only add to that release.
+const releasedSnapshot = await readYaml(
+  `model/pqcmm-model-${model.model.version}.yaml`,
+).catch((error) => {
+  if (error.code === "ENOENT") return undefined;
+  throw error;
+});
+if (releasedSnapshot) {
+  const changed = releasedContentChanges(releasedSnapshot, model);
+  if (changed.length) {
+    throw new Error(
+      `PQCMM ${model.model.version} is released; its content can be added to but not changed. Advance the model version or restore: ${changed.join(", ")}`,
+    );
+  }
 }
 
 const ids = model.levels.flatMap((level) => [
