@@ -8,7 +8,11 @@
 #   model      Name, version, and scope of the model.
 #   scoring    How the achieved level follows from the criteria.
 #   levels     Levels 0 to 5. Each level has:
-#                sections           Guidance: what the level means and how to assess it.
+#                sections           Guidance: what the level means, how to assess it, and
+#                                   procurement advice. "placement" decides where a section
+#                                   appears on the level page: before-criteria, after-criteria,
+#                                   before-assessment, after-assessment, or
+#                                   after-evidence-checklist. Its title becomes its heading.
 #                criteria           What a product or service must achieve for the level.
 #                assessment         How an assessor checks the criteria: the record to
 #                                   keep (methodology) and the questions to ask.
@@ -75,7 +79,7 @@ levels:
     summary: Level 0 means no quantum-safe capabilities are available yet. Discovery and preparation may be underway, but this is the baseline entry point for supply-chain questionnaires.
     sourcePage: /wg/pqc/pqcmm/levels/0-none/
 
-    # Guidance sections. "placement" says where each one belongs on the level page.
+    # Guidance sections, shown on the level page where "placement" says.
     sections:
       - id: 0.s.1
         title: What Level 0 Means
@@ -93,7 +97,7 @@ levels:
           > Level 0 is the **starting point of the journey**, not a disqualifying condition. Its value lies in visibility: organisations can only manage what they can measure.
 
       - id: 0.s.2
-        title: Criteria notes
+        title: Scope
         placement: after-criteria
         body: |-
           Note: Possessing an SBOM, CBOM, or an internal PQC risk assessment does not elevate a product beyond Level 0 on its own. While these artifacts are highly valuable for planning, a vendor can have all of them and still be in the very early stages of their quantum readiness journey with no actual quantum-safe implementation. Their presence or absence is recorded as separate risk indicators in the [Supplier Intake Questions](#supplier-intake-questions) below.
@@ -106,6 +110,15 @@ levels:
           > Level 0 is a **self-declared starting point**, not an assessed state. There is nothing to verify — if a product has no PQC implemented, no evidence collection is needed to establish that fact. A vendor can legitimately self-declare Level 0 without any formal assessment process.
 
           A formal assessment only begins when a vendor claims to have reached Level 1 or higher. At that point, the questions on the [Level 1 page](/wg/pqc/pqcmm/levels/1-initial/) apply.
+
+      - id: 0.s.4
+        title: Suggested Procurement Actions
+        placement: after-evidence-checklist
+        body: |-
+          - Request a vendor roadmap commitment: by what date will Level 1 be achieved?
+          - Evaluate whether compensating controls (network-layer PQC, hybrid protocols) can bridge the gap.
+          - Consider product lifespan against harvest-now-decrypt-later timelines.
+          - Flag in your cryptographic risk register; assign a review cadence.
 
     # Criteria. A product reaches this level only when every criterion is met.
     criteria:
@@ -218,7 +231,7 @@ levels:
     summary: Level 1 means PQC is available for testing and evaluation. The vendor has started the journey — integration teams can begin compatibility assessments.
     sourcePage: /wg/pqc/pqcmm/levels/1-initial/
 
-    # Guidance sections. "placement" says where each one belongs on the level page.
+    # Guidance sections, shown on the level page where "placement" says.
     sections:
       - id: 1.s.1
         title: What Level 1 Means
@@ -232,16 +245,24 @@ levels:
           > Level 1 is the **first evidence** that a vendor is actively engaging with PQC. Organizations can begin technical evaluation and build integration knowledge while awaiting production readiness.
 
       - id: 1.s.2
-        title: Criteria notes
+        title: Scope
         placement: after-criteria
         body: |-
           Level 1 does **not** require the feature to be production-ready, standards-compliant, or enabled by default. Level 1 is intentionally permissive: any post-quantum algorithm available in a released build qualifies. Standards conformance is introduced at [Level 2](/wg/pqc/pqcmm/levels/2-foundational/).
 
       - id: 1.s.3
-        title: Assessment approach
+        title: How to assess
         placement: before-assessment
         body: |-
           For each question, require the vendor to provide specifics. A general "yes" is not sufficient — look for algorithm names, parameter sets, component names, and documentation references. A response that cannot name the algorithm or provide a URL is not assessable.
+
+      - id: 1.s.4
+        title: Suggested Procurement Actions
+        placement: after-evidence-checklist
+        body: |-
+          - Obtain the release notes and configuration guide; perform a technical proof-of-concept.
+          - Assess the gap to Level 2 and negotiate a roadmap commitment.
+          - Include Level 2 attainment as a contract milestone or renewal condition where the product is on a critical path.
 
     # Criteria. A product reaches this level only when every criterion is met.
     criteria:
@@ -565,7 +586,7 @@ levels:
     summary: Level 2 means PQC is production-ready and standards-compliant. This is the minimum threshold for new production deployments.
     sourcePage: /wg/pqc/pqcmm/levels/2-foundational/
 
-    # Guidance sections. "placement" says where each one belongs on the level page.
+    # Guidance sections, shown on the level page where "placement" says.
     sections:
       - id: 2.s.1
         title: What Level 2 Means
@@ -579,7 +600,7 @@ levels:
           > Level 2 is the **production floor**. Any new procurement for a system with a long lifespan should require at minimum Level 2 from the vendor.
 
       - id: 2.s.2
-        title: Criteria notes
+        title: Scope
         placement: after-criteria
         body: |-
           Level 2 does **not** require full cryptographic inventory, crypto agility, or the feature to be enabled by default.
@@ -594,10 +615,18 @@ levels:
           > Buyers in regulated industries, or where supply-chain visibility is itself a procurement requirement (e.g., banking, healthcare, critical infrastructure, identity and trust services), should set the **minimum acceptable** procurement floor at Level 3, not Level 2 — see the [Setting Minimum Requirements](/wg/pqc/pqcmm/adoption/procurement/#setting-minimum-requirements) table. Level 2 remains useful as an entry signal but is not, by itself, a sufficient basis for crypto-asset visibility.
 
       - id: 2.s.3
-        title: Assessment approach
+        title: How to assess
         placement: before-assessment
         body: |-
           At Level 2, generic claims are not sufficient — the assessor must verify specific algorithm names, parameter sets, standards references, and production documentation. At least one claim must be verified through an independent public source (e.g., NIST CMVP database) or a reproducible hands-on test. **A complete Level 2 assessment must also work through all [Level 1 questions](/wg/pqc/pqcmm/levels/1-initial/#assessment-questions).**
+
+      - id: 2.s.4
+        title: Suggested Procurement Actions
+        placement: after-evidence-checklist
+        body: |-
+          - Require Level 2 as a minimum for any new production procurement on systems with a service life beyond 5–7 years.
+          - Verify standard conformance claims against publicly available test results.
+          - Evaluate the gap to Level 3 for systems where ongoing cryptographic visibility and agility are required.
 
     # Criteria. A product reaches this level only when every criterion is met.
     criteria:
@@ -1559,7 +1588,7 @@ levels:
         - id: 3.e.8
           text: A production-representative test or deployment record demonstrating the quantum-safe configuration operating under realistic load.
 
-    # Guidance sections. "placement" says where each one belongs on the level page.
+    # Guidance sections, shown on the level page where "placement" says.
     sections:
       - id: 3.s.1
         title: Cryptographic Inventory Taxonomy
@@ -1594,10 +1623,19 @@ levels:
           > Level 3 gives organizations the **visibility to plan** and the **agility to execute** a controlled cryptographic migration.
 
       - id: 3.s.3
-        title: Assessment approach
+        title: How to assess
         placement: before-assessment
         body: |-
           At Level 3, the assessor must validate inventory completeness and SBOM accuracy using tooling, not just documentation review. The most significant findings at this level are gaps between what tools report and what the vendor discloses. **A complete Level 3 assessment must also work through all [Level 1](/wg/pqc/pqcmm/levels/1-initial/#assessment-questions) and [Level 2](/wg/pqc/pqcmm/levels/2-foundational/#assessment-questions) questions.**
+
+      - id: 3.s.4
+        title: Suggested Procurement Actions
+        placement: after-evidence-checklist
+        body: |-
+          - Request the SBOM and verify cryptographic library versions against known vulnerabilities.
+          - Assess whether crypto-agility mechanisms cover the use cases most relevant to your integration.
+          - Use the non-quantum-safe feature register as input into your own cryptographic risk register.
+          - Consider requiring Level 3 for any system involved in long-term data archival, identity issuance, or critical infrastructure.
 
 # ============================================================================
 # Level 4 · Managed
@@ -1609,7 +1647,7 @@ levels:
     summary: Level 4 adds a CBOM, zero-legacy capability, and explicit hybrid/composite support. Suitable for high-assurance and regulated environments.
     sourcePage: /wg/pqc/pqcmm/levels/4-managed/
 
-    # Guidance sections. "placement" says where each one belongs on the level page.
+    # Guidance sections, shown on the level page where "placement" says.
     sections:
       - id: 4.s.1
         title: What Level 4 Means
@@ -1621,10 +1659,19 @@ levels:
           > Level 4 is the benchmark for **high-assurance deployments**. It provides both the documentation precision needed for compliance and the operational capability to enforce a fully quantum-safe configuration.
 
       - id: 4.s.2
-        title: Assessment approach
+        title: How to assess
         placement: before-assessment
         body: |-
           At Level 4, assessors must request and validate the CBOM directly — not just accept that one exists. The assessment must document how the CBOM was generated, how it was validated, and whether the assessor independently cross-checked it. Claims made solely on the basis of vendor documentation without any independent check must be flagged. **A complete Level 4 assessment must also work through all [Level 1](/wg/pqc/pqcmm/levels/1-initial/#assessment-questions), [Level 2](/wg/pqc/pqcmm/levels/2-foundational/#assessment-questions), and [Level 3](/wg/pqc/pqcmm/levels/3-advanced/#assessment-questions) questions.**
+
+      - id: 4.s.3
+        title: Suggested Procurement Actions
+        placement: after-evidence-checklist
+        body: |-
+          - Request the CBOM and validate it against your organisation's cryptographic policy.
+          - Confirm zero-legacy capability covers the specific features and protocols in your deployment scenario.
+          - Clarify hybrid/composite support before designing a hybrid migration architecture.
+          - Consider requiring Level 4 for certificate authorities, HSMs, identity providers, and other cryptographic root services.
 
     # Criteria. A product reaches this level only when every criterion is met.
     criteria:
@@ -2078,7 +2125,7 @@ levels:
     summary: Level 5 is the gold standard — PQC is the default, performance is benchmarked, implementations are independently verified. The product is fully optimised for a post-quantum world.
     sourcePage: /wg/pqc/pqcmm/levels/5-optimized/
 
-    # Guidance sections. "placement" says where each one belongs on the level page.
+    # Guidance sections, shown on the level page where "placement" says.
     sections:
       - id: 5.s.1
         title: What Level 5 Means
@@ -2092,10 +2139,19 @@ levels:
           > Level 5 is the **end state** of the PQC readiness journey. It signals that a vendor has not merely added quantum-safe support — they have achieved a state of Cryptographic Agility and Cryptographic Resilience.
 
       - id: 5.s.2
-        title: Assessment approach
+        title: How to assess
         placement: before-assessment
         body: |-
           At Level 5, claims must be verified directly — not accepted on the vendor's word. Every significant claim requires either an independent public database check (CMVP, CAVP) or an assessor-performed test with a recorded outcome. **A complete Level 5 assessment must also work through all [Level 1](/wg/pqc/pqcmm/levels/1-initial/#assessment-questions), [Level 2](/wg/pqc/pqcmm/levels/2-foundational/#assessment-questions), [Level 3](/wg/pqc/pqcmm/levels/3-advanced/#assessment-questions), and [Level 4](/wg/pqc/pqcmm/levels/4-managed/#assessment-questions) questions.**
+
+      - id: 5.s.3
+        title: Suggested Procurement Actions
+        placement: after-evidence-checklist
+        body: |-
+          - Verify FIPS 140-3 validation certificates directly with the vendor and via the CMVP database.
+          - Review benchmark results against your organisation's SLA requirements.
+          - Confirm that the "quantum-safe default" covers all use cases relevant to your deployment — some products default to quantum-safe for new sessions but retain classical for legacy connections.
+          - Use Level 5 as the benchmark for all new procurement in critical trust infrastructure roles.
 
     # Criteria. A product reaches this level only when every criterion is met.
     criteria:
