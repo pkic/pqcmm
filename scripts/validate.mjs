@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import YAML from "yaml";
+import { releasedContentChanges } from "./released-content.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = async (relativePath) =>
@@ -69,6 +70,25 @@ if (
   throw new Error(
     "Assessment profile model reference does not match the model release.",
   );
+}
+
+// A released version is immutable: while the working model carries it, the file must match the
+// snapshot byte for byte, comments and spacing included.
+const releasedPath = `model/pqcmm-model-${model.model.version}.yaml`;
+const releasedText = await readFile(join(root, releasedPath), "utf8").catch((error) => {
+  if (error.code === "ENOENT") return undefined;
+  throw error;
+});
+if (releasedText !== undefined) {
+  const workingText = await readFile(join(root, "model/pqcmm-model.yaml"), "utf8");
+  if (workingText !== releasedText) {
+    const changed = releasedContentChanges(YAML.parse(releasedText), model);
+    throw new Error(
+      `PQCMM ${model.model.version} is released and cannot change. Advance the model version (a patch release at minimum) or restore ${
+        changed.length ? changed.join(", ") : "its comments and formatting"
+      }.`,
+    );
+  }
 }
 
 const ids = model.levels.flatMap((level) => [
