@@ -423,7 +423,7 @@ levels:
 
             - id: 1.2.3
               question: Is the feature available to all customers or only to a subset?
-              guidance: Record the access model as stated in the vendor's written documentation or announcement — quote the relevant text with the source URL. Any restriction must be sourced from a written document, not paraphrased from a verbal claim.
+              guidance: Record the access model as stated in the vendor's written documentation or announcement — quote the relevant text with the source URL. A documented statement that the feature is available to all customers is a complete answer; any restriction must come from a written source.
 
             - id: 1.2.4
               question: Is the quantum-safe feature accessible without custom builds or source-code modification?
@@ -481,7 +481,7 @@ levels:
 
             - id: 1.3.3
               question: Are there product components where quantum-safe support is explicitly not planned at this stage?
-              guidance: Record each out-of-scope component, the classical algorithm currently in use, and the vendor's stated reason — with a document reference if available. "Not yet planned" as a general disclaimer without naming specific components is not sufficient.
+              guidance: Record each component or feature excluded from the PQC plan, the classical algorithm currently in use, and the vendor's stated reason — with a document reference if available. "No exclusions" is a valid answer. "Not yet planned" as a general disclaimer without naming specific components is not sufficient. Distinguish planned coverage from implemented capability.
 
         - id: "1.4"
           name: Configuration & Enablement
@@ -983,7 +983,7 @@ levels:
           questions:
             - id: 2.4.1
               question: Where is the production deployment documentation? Provide a URL or document reference covering configuration, key management, and upgrade paths.
-              guidance: "Record the documentation URL and confirm it is accessible for the assessed product version. Check that it covers at minimum: (a) configuration steps with specific parameter names; (b) key management lifecycle (generation, storage, rotation); (c) upgrade / migration path for existing deployments. Record which of these three areas are and are not covered — partial documentation is itself a finding."
+              guidance: "Record the documentation URL and confirm it is accessible for the assessed product version. Check that it covers at minimum: (a) configuration steps with specific parameter names; (b) key management lifecycle (generation, storage, rotation); (c) how to adopt the capability in existing deployments (enablement, coexistence, key or certificate changes, cutover). Record which of these three areas are and are not covered — partial documentation is itself a finding."
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -1208,7 +1208,7 @@ levels:
 
             - id: 3.2.3
               question: How frequently is the inventory reviewed and updated?
-              guidance: Request the inventory for the current and one previous product release. Compare entries. Record the version and last-updated date for each document. An inventory with no changes between major releases that included PQC updates is not actively maintained — record this as a process gap.
+              guidance: Request the inventory for the current and one previous product release. Record its version and last review date, and compare it with relevant product changes. An unchanged inventory is fine when the review confirms it; unexplained omissions or outdated entries are a process gap.
               # Answer form shown by the assessment tool.
               response:
                 fields:
