@@ -481,7 +481,7 @@ levels:
 
             - id: 1.3.3
               question: Are there product components where quantum-safe support is explicitly not planned at this stage?
-              guidance: Record each out-of-scope component, the classical algorithm currently in use, and the vendor's stated reason — with a document reference if available. "Not yet planned" as a general disclaimer without naming specific components is not sufficient.
+              guidance: Record each component or feature excluded from the PQC plan, the classical algorithm currently in use, and the vendor's stated reason — with a document reference if available. If none are excluded, record that explicitly; "no exclusions" is a valid answer. "Not yet planned" as a general disclaimer without naming specific components is not sufficient. Distinguish planned coverage from implemented capability.
 
         - id: "1.4"
           name: Configuration & Enablement
