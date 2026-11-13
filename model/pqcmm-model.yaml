@@ -1596,7 +1596,7 @@ levels:
           questions:
             - id: 3.7.1
               question: Does the vendor maintain a written long-lived exposure register covering confidentiality, integrity, and authenticity requirements for data, signed artifacts, and trust dependencies handled by the product?
-              guidance: "Request the register and record its title, version, and date. For each applicable data class, signed artifact, or trust dependency, identify the exposure class, required protection or reliance lifetime, algorithms and parameter sets, affected components or relying parties, and planned protection or migration measures. Long-lived confidentiality includes Harvest Now, Decrypt Later (HNDL): re-encryption can protect retained copies, but cannot protect ciphertext already captured by an adversary. Long-lived integrity and authenticity include Trust Now, Forge Later (TNFL): future compromise of a signature algorithm can permit forged artifacts or impersonation while the corresponding keys or trust anchors remain accepted. Consider signed documents, seals, timestamps, audit records, certificates, software and firmware updates, and authentication trust dependencies where applicable. Record both preservation of authentic existing evidence and replacement or retirement of vulnerable signing and verification dependencies before compromise. Mathematical signature verification alone is insufficient to establish authenticity after forgery becomes feasible. Identify the timing and limitations of archive timestamp renewal, evidence renewal, or other preservation measures; do not imply that re-signing recreates the original event. HNDL and TNFL are descriptive risk labels, not additional maturity levels. If either exposure class is omitted despite an applicable product use, record a finding; justify any not-applicable conclusion."
+              guidance: "Request the register and record its title, version, and date. For each applicable data class, signed artifact, or trust dependency, identify the exposure class, required protection or reliance lifetime, algorithms and parameter sets, affected components or relying parties, and planned protection or migration measures. Long-lived confidentiality includes Harvest Now, Decrypt Later (HNDL): re-encryption can protect retained copies, but cannot protect ciphertext already captured by an adversary. Long-lived integrity and authenticity include Trust Now, Forge Later (TNFL): future compromise of a signature algorithm can permit forged artifacts or impersonation while the corresponding keys or trust anchors remain accepted. Consider signed documents, seals, timestamps, audit records, certificates, software and firmware updates, and authentication trust dependencies where applicable. Record both preservation of authentic existing evidence and replacement or retirement of vulnerable signing and verification dependencies before compromise. Mathematical signature verification alone is insufficient to establish authenticity after forgery becomes feasible. Identify the timing and limitations of archive timestamp renewal, evidence renewal, or other preservation measures; do not imply that re-signing recreates the original event. Re-encryption cannot fix prior capture and is not a remediation for it: every re-encryption, key rotation, or algorithm migration must report protection of retained copies and future exposure separately from ciphertext an adversary may already have captured, and record the exposure period, the remediation limits, and the owner of the residual risk. Data sent before the new protection was applied stays exposed. HNDL and TNFL are descriptive risk labels, not additional maturity levels. If either exposure class is omitted despite an applicable product use, record a finding; justify any not-applicable conclusion."
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -1619,6 +1619,33 @@ levels:
                         label: Long-lived integrity and authenticity (including TNFL)
                       - value: none-applicable
                         label: Neither class applies, justification recorded
+                  - key: lifetimeYears
+                    label: Longest required protection lifetime (years)
+                    type: number
+                    min: 0
+                    step: 1
+                    required: false
+                    hint: The longest confidentiality, integrity, or authenticity lifetime in the register. Leave empty only when neither exposure class applies.
+                  - key: lifetimeBasis
+                    label: Basis for that lifetime
+                    type: select
+                    required: false
+                    options:
+                      - value: legal-or-regulatory
+                        label: Legal or regulatory retention requirement
+                      - value: contractual
+                        label: Contractual or customer requirement
+                      - value: standard-or-guidance
+                        label: Published standard or guidance
+                      - value: vendor-estimate
+                        label: Vendor estimate of data or artifact lifetime
+                      - value: other
+                        label: Other, recorded in the register
+                  - key: newProtectionDate
+                    label: Date the new protection was applied
+                    type: date
+                    required: false
+                    hint: When quantum-safe protection was first applied to these data flows. Data protected before this date remains exposed to prior capture.
                   - key: dataFlowCoverage
                     label: Data, signed artifacts, trust dependencies, lifetimes, algorithms, and protection measures
                     type: textarea
