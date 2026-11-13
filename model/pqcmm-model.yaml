@@ -983,7 +983,7 @@ levels:
           questions:
             - id: 2.4.1
               question: Where is the production deployment documentation? Provide a URL or document reference covering configuration, key management, and upgrade paths.
-              guidance: "Record the documentation URL and confirm it is accessible for the assessed product version. Check that it covers at minimum: (a) configuration steps with specific parameter names; (b) key management lifecycle (generation, storage, rotation); (c) upgrade / migration path for existing deployments. Record which of these three areas are and are not covered — partial documentation is itself a finding."
+              guidance: "Record the documentation URL and confirm it is accessible for the assessed product version. Check that it covers at minimum: (a) configuration steps with specific parameter names; (b) key management lifecycle (generation, storage, rotation); (c) the applicable steps for adopting the PQC capability in existing deployments, such as enablement, coexistence, key or certificate changes, cutover, and dependencies. Distinguish vendor instructions from customer deployment responsibilities; examples here do not add requirements beyond the criterion. Record which of these three areas are and are not covered — partial documentation is itself a finding."
               # Answer form shown by the assessment tool.
               response:
                 fields:
