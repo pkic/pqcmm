@@ -685,7 +685,7 @@ levels:
             - 2.3.1
 
         - id: 2.1.3
-          text: "The vendor or its assessor has performed, and can produce evidence of, hands-on validation of the quantum-safe implementation covering at least: **standards-conformance testing** (e.g., NIST CAVP/ACVTS results or equivalent), **interoperability testing** against at least one independent conformant implementation, **functional security testing** of the feature as configured for production, and a **smoke performance test** sufficient to confirm the feature operates under representative production load. Deeper performance characterisation is required at [Level 5](/wg/pqc/pqcmm/levels/5-optimized/)."
+          text: "The vendor or its assessor has performed, and can produce evidence of, hands-on validation of the quantum-safe implementation covering at least: **standards-conformance testing** (e.g., NIST CAVP/ACVTS results or equivalent), **interoperability testing** against at least one independent conformant implementation (one that implements the post-quantum algorithm, and the protocol or format that carries it, from a different code base than the assessed product; where no independent peer exists yet at the application layer, interoperability at the layer that carries the post-quantum algorithm is accepted, recorded with the reason, and repeated at the application layer once a peer exists), **functional security testing** of the feature as configured for production, and a **smoke performance test** sufficient to confirm the feature operates under the product's stated post-quantum workload. Deeper performance characterisation is required at [Level 5](/wg/pqc/pqcmm/levels/5-optimized/)."
           assessmentQuestionIds:
             - 2.3.2
             - 2.3.3
@@ -935,7 +935,7 @@ levels:
 
             - id: 2.3.3
               question: Has the implementation been tested for interoperability with at least one other conformant implementation? Which implementation, which version, which protocol?
-              guidance: "Record: the implementation tested against (name and version), the protocol (e.g., TLS 1.3 with ML-KEM-768 key exchange), the test suite used — e.g., NIST ACVTS (https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program) — and the test result (pass/fail). A self-reported interop claim without a named test suite and result is weaker evidence — flag it accordingly."
+              guidance: "Record: the implementation tested against (name and version), the protocol (e.g., TLS 1.3 with ML-KEM-768 key exchange), the test procedure or suite used, and the test result (pass/fail). Record which kind of evidence it is: (1) shared-vector algorithm testing, which is conformance evidence such as NIST ACVTS and belongs with 2.3.1 to 2.3.2, not here; (2) cross-implementation cryptographic operations, such as one implementation verifying another's signatures; or (3) protocol- or application-level interoperability. Only (2) and (3) are interoperability evidence. The peer is independent when it implements the algorithm and the carrying protocol or format from a different code base; two applications sharing the same cryptographic library are not independent for this purpose. Where no independent peer exists at the application layer, record that limitation and any lower-layer interoperability evidence, without presenting it as an application-level pass. A self-reported interop claim without a named test procedure and result is weaker evidence — flag it accordingly."
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -1641,7 +1641,7 @@ levels:
           questions:
             - id: 3.8.1
               question: Has the quantum-safe implementation been exercised at a scale and in an environment representative of real production use — not only in a developer or lab setting?
-              guidance: "Request the test report. Record: test environment (cloud region, instance class, network topology, peer implementations), workload profile (request rate, concurrent sessions, key-operation rate, payload sizes), duration, and the algorithm/parameter sets exercised. The test must simulate conditions the product is expected to encounter in production — a single-instance lab measurement, a unit test, or a notebook-scale benchmark is **not sufficient evidence** for this question. Record any production deployment where the configuration has been run in earnest. Absence of any representative test is a finding; deeper benchmarking and SLA correlation is required at [Level 5](/wg/pqc/pqcmm/levels/5-optimized/)."
+              guidance: "Request the test report. Record: test environment (cloud region, instance class, network topology, peer implementations), workload profile (request rate, concurrent sessions, key-operation rate, payload sizes), duration, and the algorithm/parameter sets exercised. Representative means the product's stated post-quantum workload, which differs by service: a web server needs many concurrent post-quantum handshakes, while a time server or timestamping service has far lower and differently shaped demand. The test must simulate conditions the product is expected to encounter in production — a single-instance lab measurement, a unit test, or a notebook-scale benchmark is **not sufficient evidence** for this question. Record any production deployment where the configuration has been run in earnest. Absence of any representative test is a finding; deeper benchmarking and SLA correlation is required at [Level 5](/wg/pqc/pqcmm/levels/5-optimized/)."
 
     # Evidence checklist. A request list for assessors and a reference for vendors.
     evidenceChecklist:
@@ -2472,8 +2472,8 @@ levels:
                     required: false
 
             - id: 5.3.3
-              question: Have algorithm implementations been optimised for the product's target hardware?
-              guidance: "Ask which optimisation paths are enabled: AVX2, AVX-512, ARMv8 crypto extensions, hardware accelerator offload. Record each optimisation with: whether it is enabled by default (yes/no), the documentation URL confirming it, and whether the assessor verified it is active (e.g., by checking CPU feature flag usage in a running process, reviewing build flags in the binary, or consulting the documentation). An unoptimised software reference implementation in a performance-sensitive production deployment is a risk signal — record the optimisation status explicitly."
+              question: What tuning or hardware support, if any, is needed for the assessed quantum-safe configuration to meet the stated operational requirements?
+              guidance: "Ask which optimisation paths are enabled: AVX2, AVX-512, ARMv8 crypto extensions, hardware accelerator offload. Record each optimisation with: whether it is enabled by default (yes/no), the documentation URL confirming it, and whether the assessor verified it is active (e.g., by checking CPU feature flag usage in a running process, reviewing build flags in the binary, or consulting the documentation). An unoptimised software reference implementation in a performance-sensitive production deployment is a risk signal — record the optimisation status explicitly. \"None required\" is a valid answer when the evidence at 5.3.1 shows the configuration meets the stated requirements without it; no universal acceleration or percentage threshold applies."
               # Answer form shown by the assessment tool.
               response:
                 fields:
