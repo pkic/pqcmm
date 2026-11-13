@@ -1261,7 +1261,7 @@ levels:
           questions:
             - id: 3.3.1
               question: Does the product contain any features that still use non-quantum-safe algorithms? If yes, list them by component and algorithm.
-              guidance: "Cross-reference the vendor's disclosure against SBOM analysis: run the SBOM through a quantum-safety checking tool (e.g., a CycloneDX crypto analyser or a script that checks library versions against a known PQC-capable threshold). Record: tool name and version, date run, and any gap between tool findings and vendor disclosure. Each gap is a finding and must be individually recorded with the component name, algorithm, and the vendor's explanation (or its absence). Ask explicitly: \"What features in this product cannot currently operate with quantum-safe algorithms only?\""
+              guidance: "Cross-reference the vendor's disclosure against SBOM analysis: run the SBOM through a quantum-safety checking tool (e.g., a CycloneDX crypto analyser or a script that checks library versions against a known PQC-capable threshold). Record: tool name and version, date run, and any gap between tool findings and vendor disclosure. Each gap is a finding and must be individually recorded with the component name, algorithm, and the vendor's explanation (or its absence). Ask explicitly: \"What features in this product cannot currently operate with quantum-safe algorithms only?\" Report non-quantum-safe algorithms in components that are present but not invoked in the assessed configuration separately from those in use; presence in the SBOM alone is not use."
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -1677,7 +1677,15 @@ levels:
         title: Cryptographic Inventory Taxonomy
         placement: after-criteria
         body: |-
-          A Level 3 cryptographic inventory must cover, at minimum, the following categories. For each category, list the algorithms, parameter sets, and components used — or mark the category *not applicable* with a justification:
+          A Level 3 cryptographic inventory must cover, at minimum, the following categories. For each category, list the algorithms, parameter sets, and components used — or mark the category *not applicable* with a justification.
+
+          Record every in-scope component in one of three states. An in-scope component is a separately identifiable part of the assessed product version (module, service, interface, plugin, or bundled library) that performs, invokes, or depends on a cryptographic operation, whether or not it is enabled in the assessed configuration.
+
+          1. **Used** in the assessed configuration.
+          2. **Present but not invoked** in the assessed configuration, with the enablement or configuration evidence that shows it.
+          3. **Not applicable**, with a justification, where it is absent from the assessed version.
+
+          Configuration decides how a component is recorded, never whether it is recorded. Being in scope means a component is recorded; which components a criterion applies to is set by that criterion. The categories are:
 
           - Data in transit (e.g., TLS, VPN, application protocols)
           - Data at rest (e.g., disk, database, object storage encryption)
@@ -1811,7 +1819,7 @@ levels:
           questions:
             - id: 4.2.1
               question: Does the vendor produce a CBOM for this product? Request it in machine-readable format (CycloneDX with `cryptoProperties` extension, or equivalent).
-              guidance: "Record: format and schema version (CycloneDX 1.6+ supports full `cryptoProperties`), generation tool name and version (e.g., IBM Sonar crypto-analyzer, cdxgen with crypto extension, CycloneDX Maven/Gradle plugin), generation method (automated CI pipeline / manual export / hybrid), date generated, and product version covered. Perform an SBOM-to-CBOM cross-check: for each cryptographic library listed in the SBOM, verify that at least one algorithm entry appears in the CBOM. Record any library that is present in the SBOM but has no corresponding CBOM entry — each is a coverage gap."
+              guidance: "Record: format and schema version (CycloneDX 1.6+ supports full `cryptoProperties`), generation tool name and version (e.g., IBM Sonar crypto-analyzer, cdxgen with crypto extension, CycloneDX Maven/Gradle plugin), generation method (automated CI pipeline / manual export / hybrid), date generated, and product version covered. Perform an SBOM-to-CBOM cross-check: every cryptographic library or module in the SBOM either maps to at least one cryptographic asset in the CBOM, or is recorded in the Level 3 inventory as present but not invoked, with the enablement or configuration evidence. A library that does neither is an unexplained discrepancy and is recorded as a gap. A matching library name alone proves neither completeness nor quantum-safe operation."
               # Answer form shown by the assessment tool.
               response:
                 fields:
