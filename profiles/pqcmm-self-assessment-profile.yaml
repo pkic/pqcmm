@@ -101,7 +101,7 @@ runtime:
       component: textarea
       rows: 2
       required: false
-      hint: "Only when the result depends on a crypto library the product does not ship. One line per library with its minimum version, for example: OpenSSL 3.5 or later (system library). The assessment applies to every build that meets these minimums."
+      hint: "Only when the result depends on a crypto library the product does not ship. One line per library with its minimum version, for example: OpenSSL 3.5 or later (system library). The result is claimed for builds that meet these minimums."
 
     - key: assessorName
       label: Person completing the assessment

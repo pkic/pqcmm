@@ -131,7 +131,7 @@ levels:
           assessmentQuestionIds: []
 
         - id: 0.1.4
-          text: The vendor has stated whether any quantum-safe algorithm is available for the product and, if so, in which release channel (general availability, beta, preview, or experimental).
+          text: The vendor has stated whether any quantum-safe algorithm is available for the product and, if so, in which release channel (stable, beta, preview, or experimental).
           assessmentQuestionIds: []
 
     # Assessment. The record an assessor keeps, then the questions to ask, by group.
