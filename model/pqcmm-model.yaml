@@ -2282,6 +2282,8 @@ levels:
         - **Third-party audit** — report reference, audit firm name, and stated scope; whether the methodology section was reviewed, specifically: was the assessment CBOM-based, code-review-based, or both? Which tools were named?
         - **Unverified claims** — flag each explicitly as *"vendor-stated, not independently verified"*.
 
+        Report separately (1) the product maturity achieved, (2) the evidence and verification activities performed for each finding, and (3) the assessment route and accountable assessor. Reviewing supplied test results is distinct from observing or independently repeating tests. A higher maturity level does not by itself state that a deeper verification method was used. Qualification, leadership attestation, and scheme review must not be described as proof that laboratory testing occurred.
+
         > [!NOTE]
         > Any claim at Level 5 that is not independently verifiable via a public database or reproducible test must be explicitly flagged in the report.
       # Question groups. "assessment" questions establish the criteria; "intake" questions collect supplier information.
