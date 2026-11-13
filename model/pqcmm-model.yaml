@@ -1975,7 +1975,7 @@ levels:
           questions:
             - id: 4.3.1
               question: Can the product be configured to disable all non-quantum-safe algorithms? Provide the exact configuration steps.
-              guidance: "Record the exact configuration mechanism (configuration file key, API call, CLI flag, UI setting) and the documentation URL. Where possible, reproduce in a test environment: apply the zero-legacy configuration, then test using a client that supports only classical algorithms — e.g., `openssl s_client -cipher \"AES256-SHA\" -tls1_2 -connect host:port`. Record: test tool name and version, exact command used, product version, configuration applied, and outcome (connection rejected / accepted). A connection that succeeds under this test is a finding."
+              guidance: "Record the exact configuration mechanism (configuration file key, API call, CLI flag, UI setting) and the documentation URL. Where possible, reproduce in a test environment: apply the zero-legacy configuration, then test each in-scope role with a client restricted to classical algorithms for that role; a cipher-suite test does not test key establishment. For example, `openssl s_client -tls1_3 -groups X25519:secp256r1 -connect host:port` must fail; for server authentication, record the certificate's signature algorithm; for other protocols, restrict the product's own client the same way. Record: test tool name and version, exact command used, product version, configuration applied, role tested, and outcome (connection rejected / accepted). A connection that succeeds under this test is a finding."
               # Answer form shown by the assessment tool.
               response:
                 fields:
