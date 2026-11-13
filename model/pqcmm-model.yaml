@@ -1109,10 +1109,10 @@ levels:
         - id: 3.1.3
           text: A **Software Bill of Materials (SBOM)** or equivalent component inventory is available, enabling consumers to identify cryptographic dependencies.
           assessmentQuestionIds:
+            - 3.4.4
             - 3.4.1
             - 3.4.2
             - 3.4.3
-            - 3.4.4
 
         - id: 3.1.4
           text: "**Crypto-agility mechanisms** exist for key product features: at least two algorithms can be selected for the same cryptographic role through configuration (for example two different signature algorithms, or a pure-PQC vs. hybrid option in the same role) without major architectural redesign or a hardware refresh. Selecting only between parameter sets of the same algorithm (for example ML-KEM-768 and ML-KEM-1024) does not by itself satisfy this criterion."
@@ -1346,6 +1346,43 @@ levels:
           name: SBOM
           kind: assessment
           questions:
+            - id: 3.4.4
+              question: Does the SBOM identify the assessed product itself, and its third-party components, with standardised product identifiers — Common Platform Enumeration (CPE), Package URL (purl), or SPDX `externalRef` of type `cpe23Type` / `purl`?
+              guidance: "Record, for the top-level product component: the CPE identifier and any Package URL (purl) present in the SBOM, and the SBOM field in which each is declared. If neither is present for the top-level product, this is a finding — without a standardised identifier the product cannot be correlated with CVE feeds (e.g., the NIST National Vulnerability Database) or with the [Certified Products & Services](/wg/pqc/pqcmm/products/) registry. Sample at least five third-party components from the SBOM and record whether each carries a CPE or purl. Components with neither identifier should be noted; widespread absence indicates an inventory that cannot be machine-correlated with vulnerability data. Establish these identifiers before the detailed SBOM checks that follow, and compare them with the product and version recorded in the assessment scope; record a mismatch as a finding."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: topLevelCpe
+                    label: Top-level product CPE 2.3 name
+                    type: cpe-2.3
+                    required: false
+                    pattern: ^cpe:2\.3:(?:(?:\\.|[^:])*:){10}(?:\\.|[^:])*$
+                  - key: topLevelPurl
+                    label: Top-level product package URL (pURL)
+                    type: package-url
+                    required: false
+                    pattern: ^pkg:[a-z][a-z0-9.+-]*/[^\s/]+(?:/[^\s/]+)*(?:@[^\s?#]+)?(?:\?[^\s#]+)?(?:#[^\s]+)?$
+                  - key: sampledComponents
+                    label: Sampled component identifiers and gaps
+                    type: textarea
+                    rows: 5
+                    required: true
+                rules:
+                  - kind: at-least-one
+                    fields:
+                      - topLevelCpe
+                      - topLevelPurl
+                    message: Provide at least one top-level CPE 2.3 name or package URL (pURL).
+                evidence:
+                  label: SPDX or CycloneDX SBOM
+                  description: Attach the machine-readable SBOM containing the product and sampled component identifiers cited above.
+                  required: true
+                  acceptedMediaTypes:
+                    - application/json
+                    - application/xml
+                    - text/xml
+                  maxFiles: 1
+
             - id: 3.4.1
               question: Does the vendor provide an SBOM in SPDX or CycloneDX format?
               guidance: "Request the SBOM for the assessed product version. Record: format and schema version (e.g., CycloneDX 1.6), generation tool and version (e.g., Syft 1.4.0, cdxgen 10.7, Microsoft sbom-tool 2.x), generation method (automated CI pipeline / manual export / hybrid), generation date, and the product version covered. Validate the SBOM using a validator (e.g., CycloneDX CLI at https://github.com/CycloneDX/cyclonedx-cli, or NTIA minimum elements checker). Record the validation result. Run a quantum-safety check and compare against the vendor's own disclosure — record any gaps."
@@ -1452,43 +1489,6 @@ levels:
                     - text/xml
                     - text/plain
                   maxFiles: 2
-
-            - id: 3.4.4
-              question: Does the SBOM identify the assessed product itself, and its third-party components, with standardised product identifiers — Common Platform Enumeration (CPE), Package URL (purl), or SPDX `externalRef` of type `cpe23Type` / `purl`?
-              guidance: "Record, for the top-level product component: the CPE identifier and any Package URL (purl) present in the SBOM, and the SBOM field in which each is declared. If neither is present for the top-level product, this is a finding — without a standardised identifier the product cannot be correlated with CVE feeds (e.g., the NIST National Vulnerability Database) or with the [Certified Products & Services](/wg/pqc/pqcmm/products/) registry. Sample at least five third-party components from the SBOM and record whether each carries a CPE or purl. Components with neither identifier should be noted; widespread absence indicates an inventory that cannot be machine-correlated with vulnerability data."
-              # Answer form shown by the assessment tool.
-              response:
-                fields:
-                  - key: topLevelCpe
-                    label: Top-level product CPE 2.3 name
-                    type: cpe-2.3
-                    required: false
-                    pattern: ^cpe:2\.3:(?:(?:\\.|[^:])*:){10}(?:\\.|[^:])*$
-                  - key: topLevelPurl
-                    label: Top-level product package URL (pURL)
-                    type: package-url
-                    required: false
-                    pattern: ^pkg:[a-z][a-z0-9.+-]*/[^\s/]+(?:/[^\s/]+)*(?:@[^\s?#]+)?(?:\?[^\s#]+)?(?:#[^\s]+)?$
-                  - key: sampledComponents
-                    label: Sampled component identifiers and gaps
-                    type: textarea
-                    rows: 5
-                    required: true
-                rules:
-                  - kind: at-least-one
-                    fields:
-                      - topLevelCpe
-                      - topLevelPurl
-                    message: Provide at least one top-level CPE 2.3 name or package URL (pURL).
-                evidence:
-                  label: SPDX or CycloneDX SBOM
-                  description: Attach the machine-readable SBOM containing the product and sampled component identifiers cited above.
-                  required: true
-                  acceptedMediaTypes:
-                    - application/json
-                    - application/xml
-                    - text/xml
-                  maxFiles: 1
 
         - id: "3.5"
           name: Crypto Agility
