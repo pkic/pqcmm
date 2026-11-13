@@ -1685,7 +1685,7 @@ levels:
           - Code, firmware, and update signing
           - Key wrapping and key-encryption keys (KEKs)
           - Random number generation and entropy sources
-          - Time sources and time synchronization (e.g., NTS, Roughtime, secured PTP, unauthenticated NTP; the upstream sources the product operates or relies on, and the authenticated time protocols it supports as a client)
+          - Time sources and synchronization (e.g., NTS, Roughtime, secured PTP)
           - Telemetry, logging, and audit-trail integrity
           - Build, CI/CD, and supply-chain signing (where part of the product)
           - Attestation and remote-attestation (where applicable)
