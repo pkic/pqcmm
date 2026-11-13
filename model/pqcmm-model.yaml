@@ -2261,7 +2261,7 @@ levels:
             - 5.4.2
 
         - id: 5.1.4
-          text: The cryptographic implementation is **independently verified or certified** — through FIPS 140 validation covering the PQC algorithms, an applicable Common Criteria evaluation whose Security Target includes the cryptographic implementation, or a widely scrutinised cryptographic library with a published, third-party formal security analysis specifically covering the implemented PQC algorithms. Where a library-based claim is made, the audit report submitted with the assessment must identify the library, version, the analysing organisation, and the analysis publication.
+          text: The implemented PQC algorithms are supported by **traceable evidence of a maintained implementation and correct integration** for the assessed version and configuration. Evidence may include applicable cryptographic module validation, an applicable Common Criteria evaluation, or independent review and published analysis or testing of the cryptographic library and implemented PQC algorithms. A library-based assessment must identify the library and version, the relevant analysis or test results, and evidence that the product uses that implementation in the assessed configuration. Library popularity alone does not satisfy this requirement. Additional certification requirements may apply to the product's intended use and are reported separately.
           assessmentQuestionIds:
             - 5.5.1
             - 5.5.2
