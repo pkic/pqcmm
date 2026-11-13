@@ -1208,7 +1208,7 @@ levels:
 
             - id: 3.2.3
               question: How frequently is the inventory reviewed and updated?
-              guidance: Request the inventory for the current and one previous product release. Compare entries. Record the version and last-updated date for each document. An inventory with no changes between major releases that included PQC updates is not actively maintained — record this as a process gap.
+              guidance: Request the inventory for the current and one previous product release. Record when the inventory was last reviewed, its version, and its last-updated date, and compare it with inventory-relevant product changes. An unchanged inventory is acceptable when the review confirms it remains accurate; record unexplained omissions or outdated entries as a process gap.
               # Answer form shown by the assessment tool.
               response:
                 fields:
