@@ -423,7 +423,7 @@ levels:
 
             - id: 1.2.3
               question: Is the feature available to all customers or only to a subset?
-              guidance: Record the access model as stated in the vendor's written documentation or announcement — quote the relevant text with the source URL. Any restriction must be sourced from a written document, not paraphrased from a verbal claim.
+              guidance: Record the access model as stated in the vendor's written documentation or announcement — quote the relevant text with the source URL. An explicit statement that the feature is available to all customers, supported by the normal product documentation, is a complete answer. Record restrictions only when they exist; any restriction must be sourced from a written document, not paraphrased from a verbal claim.
 
             - id: 1.2.4
               question: Is the quantum-safe feature accessible without custom builds or source-code modification?
