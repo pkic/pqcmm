@@ -126,6 +126,20 @@ for (const level of model.levels) {
       if (fieldKeys.size !== question.response.fields.length) {
         throw new Error(`Question ${question.id} has duplicate response fields.`);
       }
+      for (const field of question.response.fields) {
+        for (const value of field.nonSupportingValues ?? []) {
+          const allowed =
+            field.type === "boolean"
+              ? typeof value === "boolean"
+              : (field.type === "select" || field.type === "multiselect") &&
+                field.options.some((option) => option.value === value);
+          if (!allowed) {
+            throw new Error(
+              `Question ${question.id} field ${field.key} marks ${JSON.stringify(value)} as non-supporting, which is not one of its answers.`,
+            );
+          }
+        }
+      }
       for (const rule of question.response.rules ?? []) {
         for (const field of rule.fields) {
           if (!fieldKeys.has(field)) {
