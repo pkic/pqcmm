@@ -1592,14 +1592,14 @@ levels:
                     label: Random bit generation provider used for PQC key material
                     type: text
                     required: true
-                    hint: For example the operating system DRBG, a library DRBG, or a hardware module, with its version.
+                    hint: For example the operating system or library DRBG, or a hardware module, with its version.
                   - key: strengthRequirements
                     label: Strength requirements for the supported parameter sets
                     type: textarea
                     rows: 3
                     required: true
                   - key: migrationChangesProvider
-                    label: Does the migration change the provider, its configuration, or the deployment assumptions?
+                    label: Migration changes the provider or its assumptions
                     type: select
                     required: true
                     options:
