@@ -1585,6 +1585,28 @@ levels:
             - id: 3.6.2
               question: Does the product use random number generation appropriate for cryptographic key material?
               guidance: Record the random bit generator, implementation and version, entropy source, instantiation and reseeding process, and the security strength required by each supported algorithm and parameter set. Check the applicable algorithm specification and random bit generation requirements. Distinguish seed length from entropy and security strength; do not apply a universal 256-bit seed threshold. Record unsupported assumptions, insufficient entropy, or failure to meet the applicable requirements as findings. For ML-KEM, consult FIPS 203 section 3.3 and Table 2.
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: rbgProvider
+                    label: Random bit generation provider used for PQC key material
+                    type: text
+                    required: true
+                    hint: For example the operating system DRBG, a library DRBG, or a hardware module, with its version.
+                  - key: strengthRequirements
+                    label: Strength requirements for the supported parameter sets
+                    type: textarea
+                    rows: 3
+                    required: true
+                  - key: migrationChangesProvider
+                    label: Does the migration change the provider, its configuration, or the deployment assumptions?
+                    type: select
+                    required: true
+                    options:
+                      - value: "no"
+                        label: No change
+                      - value: "yes"
+                        label: Yes, changes recorded
 
             - id: 3.6.3
               question: Has the vendor published an algorithm deprecation policy describing how it responds to a vulnerability or parameter-set deprecation in an algorithm the product depends on?
@@ -1666,7 +1688,7 @@ levels:
           text: Long-lived exposure register covering confidentiality (including HNDL), integrity and authenticity (including TNFL), required lifetimes, affected trust dependencies, and protection or migration measures.
 
         - id: 3.e.7
-          text: Identification of the DRBG / RNG used for cryptographic key material and its seed strength.
+          text: Identification of the random bit generation provider used for PQC key material, the strength requirements applicable to the supported parameter sets, and whether the migration changes the provider, its configuration, or the deployment assumptions.
 
         - id: 3.e.8
           text: A production-representative test or deployment record demonstrating the quantum-safe configuration operating under realistic load.
