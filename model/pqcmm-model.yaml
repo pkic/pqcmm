@@ -545,6 +545,33 @@ levels:
             - id: 1.5.1
               question: Does the product implement quantum-safe algorithms via a third-party cryptographic library, or through a custom in-house implementation? If libraries are used, which library and exact version implements each quantum-safe algorithm and role?
               guidance: "Most products rely on a well-known cryptographic library rather than writing cryptographic primitives from scratch — implementing cryptography in-house is strongly discouraged and rare in commercial products. Common libraries include OpenSSL, wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, Crypto++, LibOQS, and PQ Code Package. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** the URL from the library's own official release notes, changelog, or PQC documentation page confirming that the identified version supports the specific claimed quantum-safe algorithm — the assessor must verify this independently, not accept the vendor's assertion alone; **(c)** whether the library version is currently maintained and eligible for security patches (record the library's support policy URL). If the vendor claims a custom implementation, record the justification and apply heightened scrutiny to question 1.5.2. Record this per quantum-safe algorithm and role where different libraries or providers serve them, using the one selected in the assessed configuration. An integrator answers for the product as deployed and lists each upstream component with its exact version."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: implementationType
+                    label: Implementation
+                    type: select
+                    required: true
+                    options:
+                      - value: library
+                        label: Third-party library
+                      - value: custom
+                        label: Custom in-house implementation
+                      - value: mixed
+                        label: Both
+                  - key: libraries
+                    label: Library name and exact version per algorithm and role
+                    type: textarea
+                    rows: 4
+                    required: true
+                  - key: releaseNotesUrl
+                    label: Library release notes or PQC documentation URL
+                    type: url
+                    required: false
+                  - key: supportPolicyUrl
+                    label: Library support policy URL
+                    type: url
+                    required: false
 
             - id: 1.5.2
               question: Can the vendor provide an artefact confirming the implementation — such as test vectors, NIST Known Answer Test (KAT) results, an interoperability report, or a lab result?
@@ -802,6 +829,33 @@ levels:
             - id: 2.2.3
               question: Does the product implement quantum-safe algorithms via a third-party cryptographic library, or through a custom in-house implementation? If libraries are used, which library and exact version implements each quantum-safe algorithm and role?
               guidance: "Most products rely on a well-known cryptographic library rather than writing cryptographic primitives from scratch. Common libraries include OpenSSL, wolfSSL, Bouncy Castle, AWS-LC, Microsoft CNG / BCryptPrimitives, NSS, mbedTLS, LibreSSL, Botan, Crypto++, LibOQS, and PQ Code Package. Record: **(a)** library name and exact version string as reported by the vendor; **(b)** the URL from the library's own official release notes or PQC documentation page confirming that the identified version supports the claimed quantum-safe algorithm in production (not only in a beta or preview build) — the assessor must verify this independently against the library's official sources; **(c)** whether the library version is currently maintained and eligible for security patches (record the library's support policy URL). If the vendor claims a custom in-house implementation, record the justification and apply heightened scrutiny to standards conformance questions. Record this per quantum-safe algorithm and role where different libraries or providers serve them, using the one selected in the assessed configuration. An integrator answers for the product as deployed and lists each upstream component with its exact version. Reuse the 1.5.1 record where it still applies."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: implementationType
+                    label: Implementation
+                    type: select
+                    required: true
+                    options:
+                      - value: library
+                        label: Third-party library
+                      - value: custom
+                        label: Custom in-house implementation
+                      - value: mixed
+                        label: Both
+                  - key: libraries
+                    label: Library name and exact version per algorithm and role
+                    type: textarea
+                    rows: 4
+                    required: true
+                  - key: releaseNotesUrl
+                    label: Library release notes or PQC documentation URL
+                    type: url
+                    required: false
+                  - key: supportPolicyUrl
+                    label: Library support policy URL
+                    type: url
+                    required: false
 
             - id: 2.2.4
               question: Is the feature supported under the vendor's standard support and maintenance terms, including security patch coverage?
