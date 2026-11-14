@@ -861,7 +861,7 @@ levels:
           questions:
             - id: 2.3.1
               question: Which standards does the quantum-safe implementation conform to? Provide the specific standard document reference and edition.
-              guidance: "Record the exact standard designation and publication date for each algorithm — e.g., NIST FIPS 203 (ML-KEM, August 2024, https://csrc.nist.gov/publications/detail/fips/203/final), or an algorithm recommended by another recognized body such as FrodoKEM or Classic McEliece in BSI TR-02102-1. The implementation must follow the final version of the standard it claims; a pre-standardization draft (e.g., Kyber round 3) does not count. For protocol use, such as a TLS group, also record the protocol specification and code point; a protocol-layer draft is not nonconformance of the algorithm."
+              guidance: "Record the exact standard designation and publication date for each algorithm — e.g., NIST FIPS 203 (ML-KEM, August 2024, https://csrc.nist.gov/publications/detail/fips/203/final), or a recommendation from another recognized national or international body, such as FrodoKEM or Classic McEliece in BSI TR-02102-1. The implementation must follow the final version of the standard or recommendation it claims; a pre-standardization draft (e.g., Kyber round 3) does not count. For protocol use, such as a TLS group, also record the protocol specification and code point; a protocol-layer draft is not nonconformance of the algorithm."
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -2504,8 +2504,8 @@ levels:
           kind: assessment
           questions:
             - id: 5.4.1
-              question: Which PQC algorithms and parameter sets are implemented for each relevant cryptographic role, and which applicable standard, approved by a recognized national or international standards body, does each follow? Provide the specific publication reference and date.
-              guidance: "Verify each claimed algorithm name against the FIPS publication. Record the exact FIPS designation with publication URL: NIST FIPS 203 (ML-KEM, August 2024, https://csrc.nist.gov/publications/detail/fips/203/final), FIPS 204 (ML-DSA, https://csrc.nist.gov/publications/detail/fips/204/final), FIPS 205 (SLH-DSA, https://csrc.nist.gov/publications/detail/fips/205/final). A draft name is a documentation discrepancy when conformance evidence for the final standard exists (CAVP/ACVP validation, final known-answer tests, or interoperability with a final-standard implementation, usually from 1.5.2 and 2.3.1 to 2.3.2); it is nonconformance only when the implementation is shown to follow the draft. Record the names used and the evidence."
+              question: Which PQC algorithms and parameter sets are implemented for each relevant cryptographic role, and which applicable standard or recommendation from a recognized national or international body does each follow? Provide the specific publication reference and date.
+              guidance: "Verify each claimed algorithm name against the standard or recommendation it claims, and record its designation and publication URL, for example NIST FIPS 203 (ML-KEM, August 2024, https://csrc.nist.gov/publications/detail/fips/203/final), FIPS 204 (ML-DSA, https://csrc.nist.gov/publications/detail/fips/204/final), FIPS 205 (SLH-DSA, https://csrc.nist.gov/publications/detail/fips/205/final). A draft name is a documentation discrepancy when conformance evidence for the final standard exists (CAVP/ACVP validation, final known-answer tests, or interoperability with a final-standard implementation, usually from 1.5.2 and 2.3.1 to 2.3.2); it is nonconformance only when the implementation is shown to follow the draft. Record the names used and the evidence."
               # Answer form shown by the assessment tool.
               response:
                 fields:
