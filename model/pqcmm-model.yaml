@@ -1642,6 +1642,23 @@ levels:
             - id: 3.8.1
               question: Has the quantum-safe implementation been exercised at a scale and in an environment representative of real production use — not only in a developer or lab setting?
               guidance: "Request the test report. Record: test environment (cloud region, instance class, network topology, peer implementations), workload profile (request rate, concurrent sessions, key-operation rate, payload sizes), duration, and the algorithm/parameter sets exercised. Representative means the product's stated workload: a web server needs many concurrent handshakes, a timestamping service far fewer. The test must simulate conditions the product is expected to encounter in production — a single-instance lab measurement, a unit test, or a notebook-scale benchmark is **not sufficient evidence** for this question. Record any production deployment where the configuration has been run in earnest. Absence of any representative test is a finding; deeper benchmarking and SLA correlation is required at [Level 5](/wg/pqc/pqcmm/levels/5-optimized/)."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: testEnvironment
+                    label: Test environment and peer implementations
+                    type: textarea
+                    rows: 3
+                    required: true
+                  - key: workloadProfile
+                    label: Workload profile, duration, and algorithms exercised
+                    type: textarea
+                    rows: 3
+                    required: true
+                  - key: testReport
+                    label: Test report reference
+                    type: text
+                    required: false
 
     # Evidence checklist. A request list for assessors and a reference for vendors.
     evidenceChecklist:
