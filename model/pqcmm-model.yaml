@@ -218,6 +218,30 @@ levels:
                     - text/plain
                   maxFiles: 1
 
+            - id: 0.2.5
+              question: Does the product use any proprietary or custom cryptographic algorithm, mode, or protocol, or its own implementation of a standard algorithm?
+              expectedInput: Yes, no, or unknown, with each instance listed for yes.
+              purpose: Such cryptography cannot be inventoried, migrated, or verified like standard algorithms in a maintained library, so it needs attention early. Answer to the best of your current knowledge; "unknown" is valid here. The Level 3 inventory confirms the answer.
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: customCryptography
+                    label: Proprietary or custom cryptography used
+                    type: select
+                    required: true
+                    options:
+                      - value: "yes"
+                        label: "Yes"
+                      - value: "no"
+                        label: "No"
+                      - value: unknown
+                        label: Unknown
+                  - key: instances
+                    label: Each proprietary or custom algorithm, mode, protocol, or implementation
+                    type: textarea
+                    rows: 3
+                    required: false
+
     # Evidence checklist. A request list for assessors and a reference for vendors.
     evidenceChecklist:
       introduction: ""
