@@ -143,9 +143,9 @@ levels:
           introduction: When onboarding a supplier or reviewing an existing product, the following questions help establish a baseline and set expectations for progression. These are not assessment questions — they do not require evidence collection or verification. They are planning and risk-register inputs.
           questions:
             - id: 0.2.1
-              question: By what date do you expect to reach Level 1 — with at least one quantum-safe algorithm available for evaluation?
-              expectedInput: Date (YYYY-MM-DD).
-              purpose: Helps both the organization and the vendor set a concrete milestone for the supplier roadmap and ensures clear communication of the post-quantum cryptography (PQC) timeline.
+              question: By what date do you expect to reach Level 1 — with at least one quantum-safe algorithm available for evaluation? Optionally, give the dates you expect or commit to for Levels 2 to 5.
+              expectedInput: Date (YYYY-MM-DD) for Level 1; optional dates for Levels 2 to 5, each marked expected or committed.
+              purpose: Helps both the organization and the vendor set a concrete milestone for the supplier roadmap and ensures clear communication of the post-quantum cryptography (PQC) timeline. Later dates show whether a roadmap exists beyond the first step; leaving them empty is valid.
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -153,6 +153,58 @@ levels:
                     label: Target date for Level 1
                     type: date
                     required: true
+                  - key: level2Date
+                    label: Target date for Level 2
+                    type: date
+                    required: false
+                  - key: level2Commitment
+                    label: Level 2 date: expected or committed
+                    type: select
+                    required: false
+                    options:
+                      - value: expected
+                        label: Expected
+                      - value: committed
+                        label: Committed
+                  - key: level3Date
+                    label: Target date for Level 3
+                    type: date
+                    required: false
+                  - key: level3Commitment
+                    label: Level 3 date: expected or committed
+                    type: select
+                    required: false
+                    options:
+                      - value: expected
+                        label: Expected
+                      - value: committed
+                        label: Committed
+                  - key: level4Date
+                    label: Target date for Level 4
+                    type: date
+                    required: false
+                  - key: level4Commitment
+                    label: Level 4 date: expected or committed
+                    type: select
+                    required: false
+                    options:
+                      - value: expected
+                        label: Expected
+                      - value: committed
+                        label: Committed
+                  - key: level5Date
+                    label: Target date for Level 5
+                    type: date
+                    required: false
+                  - key: level5Commitment
+                    label: Level 5 date: expected or committed
+                    type: select
+                    required: false
+                    options:
+                      - value: expected
+                        label: Expected
+                      - value: committed
+                        label: Committed
 
             - id: 0.2.2
               question: Is a Software Bill of Materials (SBOM) or Cryptographic Bill of Materials (CBOM) available for this product in SPDX or CycloneDX format?
