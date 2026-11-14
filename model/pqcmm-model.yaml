@@ -2053,7 +2053,7 @@ levels:
 
             - id: 4.3.3
               question: Are there components in which non-quantum-safe algorithms cannot be disabled — e.g., internal diagnostics, boot sequences, hardware-enforced algorithms, firmware update signing, or root-of-trust operations?
-              guidance: "Zero legacy means zero legacy: any in-scope component in which a non-quantum-safe algorithm cannot be disabled is a finding that caps the product's PQCMM level below Level 4 for the affected component. Record each such component by: name, algorithm in use, reason it cannot be disabled, the vendor's planned remediation timeline, and the resulting effective maturity level for that component. The assessment report must clearly state where the product does and does not achieve zero-legacy operation."
+              guidance: "Zero legacy means zero legacy: any in-scope component in which a non-quantum-safe algorithm cannot be disabled is a finding that caps the product's PQCMM level below Level 4 for the affected component. Record each such component by: name, algorithm in use, reason it cannot be disabled, the vendor's planned remediation timeline, and the resulting effective maturity level for that component. The assessment report must clearly state where the product does and does not achieve zero-legacy operation. Record ecosystem-blocked dependencies (criterion 4.1.2) separately; they do not cap the level but are reported alongside it."
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -2067,6 +2067,12 @@ levels:
                     rows: 5
                     required: true
                     hint: One row per component with algorithm, reason, planned remediation, and the resulting effective level. Record "none" when every component can be disabled.
+                  - key: ecosystemBlocked
+                    label: Ecosystem-blocked dependencies
+                    type: textarea
+                    rows: 3
+                    required: false
+                    hint: One row per dependency with what it waits on, evidence that the product is ready, and the committed adoption period. Leave empty when there are none.
 
         - id: "4.4"
           name: Symmetric and Hash Strengths for Long-Lived Data
