@@ -650,7 +650,7 @@ levels:
                   - key: limitationsReference
                     label: Known limitations document or URL
                     type: text
-                    required: false
+                    required: true
                     hint: If none exists, record the date and source of the vendor's written confirmation that there are no known limitations.
                   - key: assessorFoundIncompatibilities
                     label: Incompatibilities found in testing that the vendor did not document
