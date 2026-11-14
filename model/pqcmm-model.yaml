@@ -158,7 +158,7 @@ levels:
                     type: date
                     required: false
                   - key: level2Commitment
-                    label: Level 2 date: expected or committed
+                    label: Commitment for the Level 2 date
                     type: select
                     required: false
                     options:
@@ -171,7 +171,7 @@ levels:
                     type: date
                     required: false
                   - key: level3Commitment
-                    label: Level 3 date: expected or committed
+                    label: Commitment for the Level 3 date
                     type: select
                     required: false
                     options:
@@ -184,7 +184,7 @@ levels:
                     type: date
                     required: false
                   - key: level4Commitment
-                    label: Level 4 date: expected or committed
+                    label: Commitment for the Level 4 date
                     type: select
                     required: false
                     options:
@@ -197,7 +197,7 @@ levels:
                     type: date
                     required: false
                   - key: level5Commitment
-                    label: Level 5 date: expected or committed
+                    label: Commitment for the Level 5 date
                     type: select
                     required: false
                     options:
