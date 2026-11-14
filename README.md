@@ -7,9 +7,10 @@ This repository is the versioned, machine-readable source package for the PKI Co
 ## Package contents
 
 - `model/pqcmm-model.yaml` is the editable working model; versioned files in `model/` are immutable release snapshots.
+- Each level carries its criteria, assessment questions, evidence checklist, and `sections`: titled Markdown guidance that explains what the level means and how it is assessed. A section's `placement` states where it belongs relative to the criteria, assessment, and evidence checklist. Callouts use GitHub alert syntax (`> [!NOTE]`, `> [!WARNING]`). The website renders every published version from these files, so guidance for a version ships with that version.
 - `profiles/pqcmm-self-assessment-profile.yaml` is the editable working profile; versioned files preserve released assessment behavior.
 - `schemas/pqcmm-model.schema.json` and `schemas/assessment-profile.schema.json` are the working schemas; versioned files preserve released contracts. Portable assessment packages use the model-neutral schema maintained by the assessment tool.
-- `scripts/validate.mjs` validates all current package contracts and stable identifiers.
+- `scripts/validate.mjs` validates all current package contracts and stable identifiers, and checks that a released version on `main` still matches its snapshot.
 
 The model and assessment profile are deliberately separate. Criteria and assessment questions remain immutable within a released model version, while form fields, cross-field subject rules, evidence limits, assurance states, report sections, and registered policy identifiers can advance in a separately versioned profile.
 
@@ -32,7 +33,7 @@ pnpm run validate
 
 Edit the stable working paths above in pull requests so GitHub shows changes to the same files across versions. Internal model, profile, and schema versions identify the intended release; an unversioned filename does not imply approval or publication. Keep model and profile versions independent. Contributors normally leave version fields unchanged; maintainers advance the affected versions in a release-preparation PR before tagging.
 
-Keep the released model's content and model version on `main`. Tooling-only changes may add typed representations, mappings, validation, or independently versioned schemas and profiles without advancing the model version or changing its criteria, question wording, guidance, or evidence requirements. A newer schema or profile does not mean that a newer model has been released. The tagged release remains the exact published source; the working representation may use newer tooling contracts.
+Keep the released model's content and model version on `main`. A released model is immutable: any change to the model file, including guidance, typed representations, and its `schemaVersion`, requires a new model version, at minimum a patch release. While `main` carries a released model version, validation requires the file to match that release's snapshot exactly, comments and formatting included. Validation logic, profiles, and schemas can still advance on their own versions without changing the model; a newer schema or profile does not mean that a newer model has been released. The tagged release remains the exact published source.
 
 Proposed model and assessment content stays on explicitly registered draft branches until release preparation. Parallel drafts can target different expected versions, such as 1.1.0 and 2.0.0; these expectations may change during review. Before merging approved model content into `main`, prepare the final model/profile versions and release tag. The website defaults to the released model and publishes draft branches only as labeled, commit-pinned previews. A maintenance release can be prepared independently from its released tag while future drafts remain on their branches.
 

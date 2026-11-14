@@ -1,6 +1,22 @@
 ## Suggested change
 
-What could be better, and why? Link related feedback if available.
+- Related issue and recorded decision:
+- Item identifier(s), source version, and page:
+- Problem (one or two bullets):
+
+Current wording:
+> Quote the affected wording.
+
+Proposed wording:
+> Quote the replacement, or identify the decision still needed.
+
+## Review and scope
+
+- Target branch and intended draft or maintained release line:
+- Effect on criteria/objectives, applicability, evidence obligations, and pass conditions:
+- Linked questions, response contracts, checklists, and consumers checked:
+- Validation and semantic change summary:
+- Reporter confirmation needed (a review request requires authorization):
 
 ## Type of change
 
