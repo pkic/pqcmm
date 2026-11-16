@@ -1812,8 +1812,8 @@ levels:
           kind: assessment
           questions:
             - id: 4.2.1
-              question: Does the vendor produce a CBOM for this product? Request it in machine-readable format (CycloneDX with `cryptoProperties` extension, or equivalent).
-              guidance: "Record: format and schema version (CycloneDX 1.6+ supports full `cryptoProperties`), generation tool name and version (e.g., IBM Sonar crypto-analyzer, cdxgen with crypto extension, CycloneDX Maven/Gradle plugin), generation method (automated CI pipeline / manual export / hybrid), date generated, and product version covered. Perform an SBOM-to-CBOM cross-check: every cryptographic library or module in the SBOM maps to a CBOM entry or is recorded as present but not invoked; any other library is a gap. A matching name alone proves neither completeness nor quantum-safe operation."
+              question: Does the vendor produce a CBOM for this product? Request it in a machine-readable format, for example CycloneDX with `cryptoProperties`.
+              guidance: "Record: format and schema version (for example CycloneDX 1.6 or later, which supports `cryptoProperties`), generation tool name and version (e.g., IBM Sonar crypto-analyzer, cdxgen with crypto extension, CycloneDX Maven/Gradle plugin), generation method (automated CI pipeline / manual export / hybrid), date generated, and product version covered. Perform an SBOM-to-CBOM cross-check: every cryptographic library or module in the SBOM maps to a CBOM entry or is recorded as present but not invoked; any other library is a gap. A matching name alone proves neither completeness nor quantum-safe operation."
               # Answer form shown by the assessment tool.
               response:
                 fields:
@@ -1827,7 +1827,7 @@ levels:
                       - value: cyclonedx-xml
                         label: CycloneDX XML with cryptoProperties
                       - value: equivalent
-                        label: Equivalent machine-readable format
+                        label: Other machine-readable format (name it with the schema version)
                   - key: schemaVersion
                     label: CBOM schema version
                     type: text
@@ -2189,7 +2189,7 @@ levels:
       introduction: The items below are a level-specific summary of the artefacts a vendor should be able to produce. They can serve as a concise request list for an assessor, or as a self-assessment reference for a vendor preparing evidence before a formal assessment. The detailed requirements and acceptance criteria for each item are in the assessment questions above. All artefacts from [Level 1](/wg/pqc/pqcmm/levels/1-initial/#evidence-checklist), [Level 2](/wg/pqc/pqcmm/levels/2-foundational/#evidence-checklist), and [Level 3](/wg/pqc/pqcmm/levels/3-advanced/#evidence-checklist) remain required.
       items:
         - id: 4.e.1
-          text: CBOM in CycloneDX format (with cryptography extension) or equivalent structured format.
+          text: CBOM in a machine-readable format, for example CycloneDX with the cryptography extension.
 
         - id: 4.e.2
           text: Configuration guide for enabling zero-legacy mode, including a list of any caveats.
