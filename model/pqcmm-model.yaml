@@ -526,10 +526,36 @@ levels:
             - id: 1.3.1
               question: In which product components or functional areas is the quantum-safe feature implemented — e.g., TLS, firmware update signing, certificate issuance, key generation, key exchange?
               guidance: "Request a written component map or architecture document. Record each named component with the algorithm and parameter set it uses. A general claim (\"PQC is used in TLS\") without component-level attribution does not meet this criterion. Ask specifically about high-risk areas: firmware signing, certificate issuance, root key operations."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: componentMap
+                    label: Components with the algorithm and parameter set each uses
+                    type: textarea
+                    rows: 5
+                    required: true
+                  - key: architectureDocument
+                    label: Component map or architecture document
+                    type: text
+                    required: false
 
             - id: 1.3.2
               question: What cryptography is used in each identified component, and where — including low-level components such as firmware or bootloader?
               guidance: Record each component with algorithm name, parameter set, and usage context (e.g., "ML-DSA-65 — firmware update package signing — applied at build time"). A product with firmware that has no firmware entry in this list requires an explanation — record the gap and the vendor's justification.
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: componentCryptography
+                    label: Components with algorithm, parameter set, and usage context
+                    type: textarea
+                    rows: 5
+                    required: true
+                    hint: Include low-level components such as firmware and bootloader.
+                  - key: firmwareGap
+                    label: Missing firmware entry and the vendor's justification
+                    type: textarea
+                    rows: 2
+                    required: false
 
             - id: 1.3.3
               question: Are there product components where quantum-safe support is explicitly not planned at this stage?
@@ -641,10 +667,48 @@ levels:
             - id: 1.5.3
               question: Can the quantum-safe feature be exercised in a test or sandbox environment accessible to the assessor?
               guidance: "The assessor must attempt to exercise the feature independently. Record: environment type (vendor-hosted sandbox / trial licence / own installation), product version, the specific algorithm exercised, the test procedure, and the outcome. A feature that could only be observed in a vendor-controlled demonstration must be flagged as \"vendor-demonstrated, not independently reproduced\"."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: environmentType
+                    label: Environment
+                    type: select
+                    required: true
+                    options:
+                      - value: vendor-sandbox
+                        label: Vendor-hosted sandbox
+                      - value: trial-licence
+                        label: Trial license
+                      - value: own-installation
+                        label: Own installation
+                      - value: vendor-demonstrated
+                        label: Vendor-demonstrated, not independently reproduced
+                  - key: algorithmExercised
+                    label: Product version and algorithm exercised
+                    type: text
+                    required: true
+                  - key: testProcedure
+                    label: Test procedure and outcome
+                    type: textarea
+                    rows: 4
+                    required: true
 
             - id: 1.5.4
               question: Has the vendor documented known interoperability limitations or incompatibilities with this quantum-safe implementation?
               guidance: Record the URL or document reference for any known limitations list. If no such document exists, record the date and source of the vendor's written confirmation that no known limitations exist. Any incompatibility discovered by the assessor during independent testing that is not in the vendor's documentation is a finding — record it explicitly.
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: limitationsReference
+                    label: Known limitations document or URL
+                    type: text
+                    required: true
+                    hint: If none exists, record the date and source of the vendor's written confirmation that there are no known limitations.
+                  - key: assessorFoundIncompatibilities
+                    label: Incompatibilities found in testing that the vendor did not document
+                    type: textarea
+                    rows: 3
+                    required: false
 
         - id: "1.6"
           name: Roadmap
@@ -653,6 +717,32 @@ levels:
             - id: 1.6.1
               question: Does the vendor have a roadmap for progression to production readiness (Level 2)? What is the target release or date?
               guidance: "Record the target version/date and the source of the commitment: (a) public roadmap URL — record URL and date accessed; (b) written statement under NDA — record document reference and date; (c) verbal only — record as \"vendor-stated, no written artefact confirmed\". Verbal-only commitments must be flagged as unconfirmed."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: targetRelease
+                    label: Target release or version for Level 2
+                    type: text
+                    required: false
+                  - key: targetDate
+                    label: Target date for Level 2
+                    type: date
+                    required: false
+                  - key: commitmentSource
+                    label: Source of the commitment
+                    type: select
+                    required: true
+                    options:
+                      - value: public-roadmap
+                        label: Public roadmap
+                      - value: written-nda
+                        label: Written statement under NDA
+                      - value: verbal
+                        label: Verbal only, unconfirmed
+                  - key: sourceReference
+                    label: Roadmap URL or document reference, with date
+                    type: text
+                    required: false
 
     # Evidence checklist. A request list for assessors and a reference for vendors.
     evidenceChecklist:
@@ -1028,6 +1118,20 @@ levels:
             - id: 2.3.4
               question: Are there known deviations from the referenced standard, and are these documented?
               guidance: Record any documented deviation with the document reference (title, version, URL). If the vendor states there are none, record the date and source of that written statement. Deviations found by the assessor during independent testing that are not disclosed by the vendor are a disqualifying finding.
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: deviations
+                    label: Documented deviations with document reference
+                    type: textarea
+                    rows: 3
+                    required: true
+                    hint: Record "none" with the date and source of the vendor's written statement when there are none.
+                  - key: undisclosedDeviations
+                    label: Deviations found in testing that the vendor did not disclose
+                    type: textarea
+                    rows: 2
+                    required: false
 
         - id: "2.4"
           name: Documentation & Migration
@@ -1114,6 +1218,17 @@ levels:
             - id: 2.4.3
               question: How does the vendor respond to a cryptographic vulnerability in a deployed quantum-safe algorithm? Has a security advisory process been published?
               guidance: Record the security advisory page URL (e.g., vendor security page, CVE disclosure policy URL). If a prior advisory covering a cryptographic component exists (for any algorithm, not just PQC), note it — it is evidence the process is active. Absence of any defined disclosure process is a finding.
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: advisoryUrl
+                    label: Security advisory or disclosure policy URL
+                    type: url
+                    required: true
+                  - key: priorCryptoAdvisory
+                    label: Prior advisory covering a cryptographic component
+                    type: text
+                    required: false
 
     # Evidence checklist. A request list for assessors and a reference for vendors.
     evidenceChecklist:
@@ -1633,6 +1748,19 @@ levels:
             - id: 3.6.1
               question: Which algorithms protect the keys (KEKs, key-wrapping keys, root keys) used by the product itself — not only the keys exchanged with peers?
               guidance: "Cryptographic agility for traffic algorithms is undermined if the keys protecting them are wrapped with classical algorithms vulnerable to a future quantum attacker. Record each KEK / key-wrapping role with: algorithm, parameter set, key size, and whether it is classical or quantum-safe. A product that exchanges traffic with ML-KEM but wraps long-lived keys with RSA-2048 must document this explicitly — it is a finding for any data with long confidentiality requirements."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: keyProtection
+                    label: Key roles with algorithm, parameter set, key size, and classical or quantum-safe
+                    type: textarea
+                    rows: 5
+                    required: true
+                  - key: externalKeys
+                    label: Keys imported from or exported to a customer or third-party key manager
+                    type: textarea
+                    rows: 2
+                    required: false
 
             - id: 3.6.2
               question: Does the product use random number generation appropriate for cryptographic key material?
@@ -1641,6 +1769,25 @@ levels:
             - id: 3.6.3
               question: Has the vendor published an algorithm deprecation policy describing how it responds to a vulnerability or parameter-set deprecation in an algorithm the product depends on?
               guidance: "Record the policy document URL, version, and date. The policy should state: how the vendor monitors algorithm developments; the maximum time between a credible deprecation event and a vendor advisory; and the mechanism used to remove or disable the affected algorithm. Absence of any published policy is a finding. The detail need not match a security-incident response process but must be a written commitment."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: policyUrl
+                    label: Deprecation policy URL
+                    type: url
+                    required: true
+                  - key: policyVersion
+                    label: Policy version and date
+                    type: text
+                    required: true
+                  - key: maxTimeToAdvisory
+                    label: Maximum time from a deprecation event to a vendor advisory
+                    type: duration
+                    required: false
+                  - key: removalMechanism
+                    label: Mechanism to remove or disable an affected algorithm
+                    type: text
+                    required: false
 
         - id: "3.7"
           name: Long-Lived Exposure Register (including HNDL and TNFL)
