@@ -2533,7 +2533,7 @@ levels:
                     required: false
 
             - id: 5.4.2
-              question: Does the CBOM confirm that algorithm usage matches the declared FIPS standards? Cross-reference the CBOM against the declared algorithms.
+              question: Does the CBOM confirm that algorithm usage matches the declared standards? Cross-reference the CBOM against the declared algorithms.
               guidance: "Run a CBOM analysis. Record: tool name and version, date run, and for each algorithm entry checked — the name found in the CBOM and whether it matches the FIPS name. A CBOM entry showing \"Kyber-768\" instead of \"ML-KEM-768\", or \"Dilithium-3\" instead of \"ML-DSA-65\", is a documentation discrepancy when 5.4.1 holds conformance evidence, and disqualifies Level 5 only when nonconformance is shown. Sample at least three entries per algorithm type and record the results individually."
               # Answer form shown by the assessment tool.
               response:
