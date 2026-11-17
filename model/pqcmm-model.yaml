@@ -1620,7 +1620,7 @@ levels:
                       - value: none-applicable
                         label: Neither class applies, justification recorded
                   - key: lifetimeYears
-                    label: Longest required protection lifetime (years)
+                    label: Longest required protection or reliance lifetime (years)
                     type: number
                     min: 0
                     step: 1
