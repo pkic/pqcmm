@@ -642,7 +642,7 @@ levels:
                     required: true
 
             - id: 1.5.4
-              question: Has the vendor documented known interoperability limitations or incompatibilities with this quantum-safe implementation?
+              question: Has the vendor documented known interoperability limitations or incompatibilities with this quantum-safe standard implementation?
               guidance: Record the URL or document reference for any known limitations list. If no such document exists, record the date and source of the vendor's written confirmation that no known limitations exist. Any incompatibility discovered by the assessor during independent testing that is not in the vendor's documentation is a finding — record it explicitly.
               # Answer form shown by the assessment tool.
               response:
