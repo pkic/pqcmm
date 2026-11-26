@@ -2166,7 +2166,7 @@ levels:
             - 4.2.5
 
         - id: 4.1.2
-          text: "**Quantum-safe operation (zero legacy):** the product or service can operate without relying on quantum-vulnerable cryptography for its own security, including boot, updates, key protection and the external services it depends on."
+          text: "**Quantum-safe operation (zero legacy):** the product or service can operate without relying on quantum-vulnerable cryptography for any security property it claims, including boot, updates, key protection and the external services it depends on."
           assessmentQuestionIds:
             - 4.3.1
             - 4.3.2
@@ -2457,28 +2457,28 @@ levels:
                   maxFiles: 2
 
             - id: 4.3.3
-              question: Does any component, or any external service the product relies on for its own security, still need a non-quantum-safe algorithm? For example boot, update signing, hardware-enforced algorithms, or an external service.
-              guidance: "A component or service counts when forging or breaking it would defeat a security property the product claims. It does not count when an independent quantum-safe control gives the same protection, such as a file signed with a quantum-safe algorithm and verified with a key that is not delivered over the classical channel. Classical outputs a customer explicitly selects for migration do not count. Each one that counts is a finding against criterion 4.1.2, also when no quantum-safe path is available yet."
+              question: Does the product still depend on a quantum-vulnerable algorithm for any security property it claims, in its own components or in an external service it uses?
+              guidance: "Record each place where it does, for example boot, update signing, a hardware-enforced algorithm or an external service. Each one is a finding against 4.1.2, also when no quantum-safe alternative exists yet. A finding is mitigated, and does not block the level, when an independent quantum-safe control gives the same protection (for example, an update downloaded over classical TLS but signed with a quantum-safe algorithm and verified with a key the product already holds), or when it concerns classical outputs a customer explicitly selects for migration. Mitigated findings are recorded and reported with the level."
               # Answer form shown by the assessment tool.
               response:
                 fields:
                   - key: allComponentsDisableable
-                    label: No component or relied-on service needs a non-quantum-safe algorithm
+                    label: The product depends on no quantum-vulnerable algorithm
                     type: boolean
                     nonSupportingValues: [false]
                     required: true
                   - key: nonDisableableComponents
-                    label: Components and services that still need a non-quantum-safe algorithm
+                    label: Unmitigated findings: where the product still depends on a quantum-vulnerable algorithm
                     type: textarea
                     rows: 5
                     required: true
                     hint: One row each with the algorithm, the reason, and the planned remediation and timeline. Record "none" when there are none.
                   - key: quantumSafeControls
-                    label: Classical dependencies covered by an independent quantum-safe control
+                    label: Mitigated findings
                     type: textarea
                     rows: 3
                     required: false
-                    hint: One row each with the classical dependency, the quantum-safe control that covers it, how it mitigates the risk, and where its key comes from. Leave empty when there are none.
+                    hint: One row each with the dependency and how it is mitigated: the quantum-safe control and where its key comes from, or the customer selection. Leave empty when there are none.
 
         - id: "4.4"
           name: Symmetric and Hash Strengths for Long-Lived Data
@@ -2600,7 +2600,7 @@ levels:
           questions:
             - id: 4.6.1
               question: Does the product warn the operator when it relies on a classical algorithm?
-              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm for a security property it claims or provides, including the connections and outputs it protects. Reliance without a warning is a finding. A classical algorithm that cannot be migrated yet but is covered by an independent quantum-safe control needs no warning; it is documented under 4.3.3.
+              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm for a security property it claims or provides, including the connections and outputs it protects. Reliance without a warning is a finding. A classical algorithm that cannot be migrated yet but is covered by an independent quantum-safe control needs no warning; it is recorded as a mitigated finding under 4.3.3.
               # Answer form shown by the assessment tool.
               response:
                 fields:
