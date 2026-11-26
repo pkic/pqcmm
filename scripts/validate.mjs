@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import YAML from "yaml";
+import { releasedContentChanges } from "./released-content.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = async (relativePath) =>
@@ -71,6 +72,25 @@ if (
   );
 }
 
+// A released version is immutable: while the working model carries it, the file must match the
+// snapshot byte for byte, comments and spacing included.
+const releasedPath = `model/pqcmm-model-${model.model.version}.yaml`;
+const releasedText = await readFile(join(root, releasedPath), "utf8").catch((error) => {
+  if (error.code === "ENOENT") return undefined;
+  throw error;
+});
+if (releasedText !== undefined) {
+  const workingText = await readFile(join(root, "model/pqcmm-model.yaml"), "utf8");
+  if (workingText !== releasedText) {
+    const changed = releasedContentChanges(YAML.parse(releasedText), model);
+    throw new Error(
+      `PQCMM ${model.model.version} is released and cannot change. Advance the model version (a patch release at minimum) or restore ${
+        changed.length ? changed.join(", ") : "its comments and formatting"
+      }.`,
+    );
+  }
+}
+
 const ids = model.levels.flatMap((level) => [
   ...level.criteria.items.map((item) => item.id),
   ...(level.sections ?? []).map((section) => section.id),
@@ -125,6 +145,20 @@ for (const level of model.levels) {
       );
       if (fieldKeys.size !== question.response.fields.length) {
         throw new Error(`Question ${question.id} has duplicate response fields.`);
+      }
+      for (const field of question.response.fields) {
+        for (const value of field.nonSupportingValues ?? []) {
+          const allowed =
+            field.type === "boolean"
+              ? typeof value === "boolean"
+              : (field.type === "select" || field.type === "multiselect") &&
+                field.options.some((option) => option.value === value);
+          if (!allowed) {
+            throw new Error(
+              `Question ${question.id} field ${field.key} marks ${JSON.stringify(value)} as non-supporting, which is not one of its answers.`,
+            );
+          }
+        }
       }
       for (const rule of question.response.rules ?? []) {
         for (const field of rule.fields) {

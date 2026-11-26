@@ -128,6 +128,13 @@
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/durationUnit" }
         },
+        "nonSupportingValues": {
+          "description": "Answers that mean the question does not support its criterion, such as a failed test or a capability the product lacks. The answer is still recorded and complete, but a criterion linked to it cannot be Met. Values are option values for select and multiselect fields, or true or false for boolean fields.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": ["string", "boolean"] }
+        },
         "allowCustom": {
           "description": "Lets a multiselect answer also hold entries that are not among its options, for example an algorithm the list does not name. Each entry is one line of text.",
           "type": "boolean"
