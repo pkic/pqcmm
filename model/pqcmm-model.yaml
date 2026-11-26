@@ -2185,7 +2185,7 @@ levels:
             - 4.5.3
 
         - id: 4.1.5
-          text: "**Visible legacy use:** if classical algorithms remain available for compatibility, the product warns the operator when it relies on them for its own security."
+          text: "**Visible legacy use:** if classical algorithms remain available for compatibility, the product warns the operator when it relies on them."
           assessmentQuestionIds:
             - 4.6.1
 
@@ -2478,7 +2478,7 @@ levels:
                     type: textarea
                     rows: 3
                     required: false
-                    hint: One row each with the control and where its key comes from. Leave empty when there are none.
+                    hint: One row each with the classical dependency, the quantum-safe control that covers it, how it mitigates the risk, and where its key comes from. Leave empty when there are none.
 
         - id: "4.4"
           name: Symmetric and Hash Strengths for Long-Lived Data
@@ -2600,7 +2600,7 @@ levels:
           questions:
             - id: 4.6.1
               question: Does the product warn the operator when it relies on a classical algorithm?
-              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm for its own security, as defined in 4.3.3. Reliance without a warning is a finding.
+              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm for a security property it claims or provides, including the connections and outputs it protects. Reliance without a warning is a finding. A classical algorithm that cannot be migrated yet but is covered by an independent quantum-safe control needs no warning; it is documented under 4.3.3.
               # Answer form shown by the assessment tool.
               response:
                 fields:
