@@ -2166,11 +2166,12 @@ levels:
             - 4.2.5
 
         - id: 4.1.2
-          text: "**Quantum-safe operation (zero legacy):** the product or service can operate without relying on quantum-vulnerable cryptography for any security property it claims, including boot, updates, key protection and the external services it depends on."
+          text: "**Quantum-safe operation (zero legacy):** the product or service can operate without relying on quantum-vulnerable cryptography for the security it claims, including boot, updates, key protection and the external services it depends on."
           assessmentQuestionIds:
             - 4.3.1
             - 4.3.2
             - 4.3.3
+            - 4.3.4
 
         - id: 4.1.3
           text: Symmetric and hash algorithms used to protect data with long-lived confidentiality or integrity requirements, for every exposure class recorded in the Level 3 long-lived exposure register, meet the parameter strengths recommended by NIST (or an equivalent national authority) for use beyond the anticipated availability of cryptographically relevant quantum computers.
@@ -2457,28 +2458,42 @@ levels:
                   maxFiles: 2
 
             - id: 4.3.3
-              question: Does the product still depend on a quantum-vulnerable algorithm for any security property it claims, in its own components or in an external service it uses?
-              guidance: "Record each place where it does, for example boot, update signing, a hardware-enforced algorithm or an external service. Each one is a finding against 4.1.2, also when no quantum-safe alternative exists yet. A finding is mitigated, and does not block the level, when an independent quantum-safe control gives the same protection (for example, an update downloaded over classical TLS but signed with a quantum-safe algorithm and verified with a key the product already holds), or when it concerns classical outputs a customer explicitly selects for migration. Mitigated findings are recorded and reported with the level."
+              question: Does the product still rely on a quantum-vulnerable algorithm for the security it claims?
+              guidance: Record each one, for example in boot, update signing, a hardware-enforced algorithm or an external service.
               # Answer form shown by the assessment tool.
               response:
                 fields:
-                  - key: allComponentsDisableable
-                    label: The product depends on no quantum-vulnerable algorithm
-                    type: boolean
-                    nonSupportingValues: [false]
-                    required: true
                   - key: nonDisableableComponents
-                    label: Unmitigated findings (where the product still depends on a quantum-vulnerable algorithm)
+                    label: Quantum-vulnerable algorithms the product relies on
                     type: textarea
                     rows: 5
                     required: true
-                    hint: One row each with the algorithm, the reason, and the planned remediation and timeline. Record "none" when there are none.
+                    hint: One row each with the algorithm, where it is used, and the planned remediation and timeline. Record "none" when there are none.
+
+            - id: 4.3.4
+              question: Is each of these mitigated by an independent quantum-safe control?
+              guidance: "A control mitigates when it gives the same protection on its own, for example an update downloaded over classical TLS but signed with a quantum-safe algorithm and verified with a key the product already holds. An unmitigated one is a finding against 4.1.2. Mitigated ones do not block the level and are reported with it."
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: mitigationStatus
+                    label: Mitigation
+                    type: select
+                    nonSupportingValues: [not-all-mitigated]
+                    required: true
+                    options:
+                      - value: nothing-to-mitigate
+                        label: Nothing recorded under 4.3.3
+                      - value: all-mitigated
+                        label: Each one is mitigated
+                      - value: not-all-mitigated
+                        label: At least one is not mitigated, which is a finding
                   - key: quantumSafeControls
-                    label: Mitigated findings
+                    label: Mitigating controls
                     type: textarea
                     rows: 3
                     required: false
-                    hint: One row each with the dependency and how it is mitigated (the quantum-safe control and where its key comes from, or the customer selection). Leave empty when there are none.
+                    hint: One row each with the algorithm it covers, the control, and where its key comes from.
 
         - id: "4.4"
           name: Symmetric and Hash Strengths for Long-Lived Data
@@ -2600,7 +2615,7 @@ levels:
           questions:
             - id: 4.6.1
               question: Does the product warn the operator when it relies on a classical algorithm?
-              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm for a security property it claims or provides, including the connections and outputs it protects. Reliance without a warning is a finding. A classical algorithm that cannot be migrated yet but is covered by an independent quantum-safe control needs no warning; it is recorded as a mitigated finding under 4.3.3.
+              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm. Reliance without a warning is a finding. One mitigated under 4.3.4 needs no warning.
               # Answer form shown by the assessment tool.
               response:
                 fields:
