@@ -2458,7 +2458,7 @@ levels:
                   maxFiles: 2
 
             - id: 4.3.3
-              question: Does the product still rely on a quantum-vulnerable algorithm for the security it claims?
+              question: Does the product still use a quantum-vulnerable algorithm for the security it claims?
               guidance: Record each one, for example in boot, update signing, a hardware-enforced algorithm or an external service.
               # Answer form shown by the assessment tool.
               response:
