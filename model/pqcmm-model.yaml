@@ -2122,7 +2122,7 @@ levels:
   - number: 4
     name: Managed
     title: Level 4 (Managed) - PQC Maturity Model (PQCMM)
-    description: A product at Level 4 maintains a Cryptographic Bill of Materials (CBOM), supports a zero-legacy configuration, warns the operator when classical algorithms are used, and clearly documents hybrid and composite algorithm support.
+    description: A product at Level 4 maintains a Cryptographic Bill of Materials (CBOM), supports a zero-legacy configuration, warns the operator when it relies on classical algorithms, and clearly documents hybrid and composite algorithm support.
     summary: Level 4 adds a CBOM, zero-legacy capability, and explicit hybrid/composite support. Suitable for high-assurance and regulated environments.
     sourcePage: /wg/pqc/pqcmm/levels/4-managed/
 
@@ -2185,7 +2185,7 @@ levels:
             - 4.5.3
 
         - id: 4.1.5
-          text: "**Visible legacy use:** if classical algorithms remain available for compatibility, the product warns the operator when they are used."
+          text: "**Visible legacy use:** if classical algorithms remain available for compatibility, the product warns the operator when it relies on them for its own security."
           assessmentQuestionIds:
             - 4.6.1
 
@@ -2599,13 +2599,13 @@ levels:
           kind: assessment
           questions:
             - id: 4.6.1
-              question: Does the product warn the operator when a classical algorithm is used?
-              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when a classical algorithm is used. Classical use without a warning is a finding.
+              question: Does the product warn the operator when it relies on a classical algorithm?
+              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm for its own security, as defined in 4.3.3. Reliance without a warning is a finding.
               # Answer form shown by the assessment tool.
               response:
                 fields:
                   - key: operatorWarning
-                    label: Operator warning when a classical algorithm is used
+                    label: Operator warning when the product relies on a classical algorithm
                     type: select
                     nonSupportingValues: [no-warning]
                     required: true
@@ -2638,7 +2638,7 @@ levels:
           text: Test results or validation reports confirming zero-legacy operation.
 
         - id: 4.e.5
-          text: Documentation, source code or test results showing the operator warning when a classical algorithm is used.
+          text: Documentation, source code or test results showing the operator warning when the product relies on a classical algorithm.
 
 # ============================================================================
 # Level 5 · Optimized
