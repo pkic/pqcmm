@@ -2615,7 +2615,7 @@ levels:
           questions:
             - id: 4.6.1
               question: Does the product warn the operator when it relies on a classical algorithm?
-              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm. Reliance without a warning is a finding. One mitigated under 4.3.4 needs no warning.
+              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when it relies on a classical algorithm. Reliance without a warning is a finding.
               # Answer form shown by the assessment tool.
               response:
                 fields:
