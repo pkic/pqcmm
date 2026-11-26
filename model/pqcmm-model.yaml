@@ -2468,7 +2468,7 @@ levels:
                     nonSupportingValues: [false]
                     required: true
                   - key: nonDisableableComponents
-                    label: Unmitigated findings: where the product still depends on a quantum-vulnerable algorithm
+                    label: Unmitigated findings (where the product still depends on a quantum-vulnerable algorithm)
                     type: textarea
                     rows: 5
                     required: true
@@ -2478,7 +2478,7 @@ levels:
                     type: textarea
                     rows: 3
                     required: false
-                    hint: One row each with the dependency and how it is mitigated: the quantum-safe control and where its key comes from, or the customer selection. Leave empty when there are none.
+                    hint: One row each with the dependency and how it is mitigated (the quantum-safe control and where its key comes from, or the customer selection). Leave empty when there are none.
 
         - id: "4.4"
           name: Symmetric and Hash Strengths for Long-Lived Data
