@@ -366,7 +366,7 @@ levels:
     # Assessment. The record an assessor keeps, then the questions to ask, by group.
     assessment:
       methodology: |-
-        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+        Existing documentation, source code and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
 
         The assessment report must record:
 
@@ -939,7 +939,7 @@ levels:
     # Assessment. The record an assessor keeps, then the questions to ask, by group.
     assessment:
       methodology: |-
-        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+        Existing documentation, source code and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
 
         The assessment report must record:
 
@@ -1415,7 +1415,7 @@ levels:
     # Assessment. The record an assessor keeps, then the questions to ask, by group.
     assessment:
       methodology: |-
-        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+        Existing documentation, source code and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
 
         The assessment report must record:
 
@@ -2122,7 +2122,7 @@ levels:
   - number: 4
     name: Managed
     title: Level 4 (Managed) - PQC Maturity Model (PQCMM)
-    description: A product at Level 4 maintains a Cryptographic Bill of Materials (CBOM), supports a zero-legacy configuration, and clearly documents hybrid and composite algorithm support.
+    description: A product at Level 4 maintains a Cryptographic Bill of Materials (CBOM), supports a zero-legacy configuration, warns the operator when classical algorithms are used, and clearly documents hybrid and composite algorithm support.
     summary: Level 4 adds a CBOM, zero-legacy capability, and explicit hybrid/composite support. Suitable for high-assurance and regulated environments.
     sourcePage: /wg/pqc/pqcmm/levels/4-managed/
 
@@ -2166,7 +2166,7 @@ levels:
             - 4.2.5
 
         - id: 4.1.2
-          text: "**Quantum-safe operational capability (zero legacy):** the assessed product or service can perform its in-scope operational functions without depending on quantum-vulnerable cryptography. This includes boot and update verification, internal integrity protection, key protection, and required external operational dependencies. A required dependency without a quantum-safe operating path prevents this criterion from being met, unless no quantum-safe path for that dependency is available on the market. Such a dependency is recorded as **ecosystem-blocked** when the vendor (a) identifies it, (b) shows that its own side is ready to adopt a quantum-safe path, and (c) commits to adopt one within a stated period once it becomes available. Ecosystem-blocked dependencies are reported alongside the level. A dependency for which a quantum-safe path is available but not adopted remains a blocker. The product may separately support explicitly selected classical customer outputs for migration, provided those outputs are identified and do not make its own operation depend on quantum-vulnerable cryptography. Suitable symmetric and hash algorithms are assessed against their applicable strength requirements."
+          text: "**Quantum-safe operation (zero legacy):** the product or service can operate without relying on quantum-vulnerable cryptography for its own security, including boot, updates, key protection and the external services it depends on."
           assessmentQuestionIds:
             - 4.3.1
             - 4.3.2
@@ -2184,10 +2184,15 @@ levels:
             - 4.5.2
             - 4.5.3
 
+        - id: 4.1.5
+          text: "**Visible legacy use:** if classical algorithms remain available for compatibility, the product warns the operator when they are used."
+          assessmentQuestionIds:
+            - 4.6.1
+
     # Assessment. The record an assessor keeps, then the questions to ask, by group.
     assessment:
       methodology: |-
-        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+        Existing documentation, source code and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
 
         The assessment report must record:
 
@@ -2452,28 +2457,28 @@ levels:
                   maxFiles: 2
 
             - id: 4.3.3
-              question: Are there components in which non-quantum-safe algorithms cannot be disabled — e.g., internal diagnostics, boot sequences, hardware-enforced algorithms, firmware update signing, or root-of-trust operations?
-              guidance: "Zero legacy means zero legacy: any in-scope component in which a non-quantum-safe algorithm cannot be disabled is a finding that caps the product's PQCMM level below Level 4 for the affected component. Record each such component by: name, algorithm in use, reason it cannot be disabled, the vendor's planned remediation timeline, and the resulting effective maturity level for that component. The assessment report must clearly state where the product does and does not achieve zero-legacy operation. Record ecosystem-blocked dependencies (criterion 4.1.2) separately; they do not cap the level but are reported alongside it."
+              question: Does any component, or any external service the product relies on for its own security, still need a non-quantum-safe algorithm? For example boot, update signing, hardware-enforced algorithms, or an external service.
+              guidance: "A component or service counts when forging or breaking it would defeat a security property the product claims. It does not count when an independent quantum-safe control gives the same protection, such as a file signed with a quantum-safe algorithm and verified with a key that is not delivered over the classical channel. Classical outputs a customer explicitly selects for migration do not count. Each one that counts is a finding against criterion 4.1.2, also when no quantum-safe path is available yet."
               # Answer form shown by the assessment tool.
               response:
                 fields:
                   - key: allComponentsDisableable
-                    label: Non-quantum-safe algorithms can be disabled in every in-scope component
+                    label: No component or relied-on service needs a non-quantum-safe algorithm
                     type: boolean
                     nonSupportingValues: [false]
                     required: true
                   - key: nonDisableableComponents
-                    label: Components where non-quantum-safe algorithms cannot be disabled
+                    label: Components and services that still need a non-quantum-safe algorithm
                     type: textarea
                     rows: 5
                     required: true
-                    hint: One row per component with algorithm, reason, planned remediation, and the resulting effective level. Record "none" when every component can be disabled.
-                  - key: ecosystemBlocked
-                    label: Ecosystem-blocked dependencies
+                    hint: One row each with the algorithm, the reason, and the planned remediation and timeline. Record "none" when there are none.
+                  - key: quantumSafeControls
+                    label: Classical dependencies covered by an independent quantum-safe control
                     type: textarea
                     rows: 3
                     required: false
-                    hint: One row per dependency with what it waits on, evidence that the product is ready, and the committed adoption period. Leave empty when there are none.
+                    hint: One row each with the control and where its key comes from. Leave empty when there are none.
 
         - id: "4.4"
           name: Symmetric and Hash Strengths for Long-Lived Data
@@ -2589,6 +2594,33 @@ levels:
                     type: url
                     required: false
 
+        - id: "4.6"
+          name: Visible Legacy Use
+          kind: assessment
+          questions:
+            - id: 4.6.1
+              question: Does the product warn the operator when a classical algorithm is used?
+              guidance: Check that the product warns the operator, in its interface, logs or audit trail, when a classical algorithm is used. Classical use without a warning is a finding.
+              # Answer form shown by the assessment tool.
+              response:
+                fields:
+                  - key: operatorWarning
+                    label: Operator warning when a classical algorithm is used
+                    type: select
+                    nonSupportingValues: [no-warning]
+                    required: true
+                    options:
+                      - value: warns
+                        label: Warns the operator
+                      - value: no-warning
+                        label: No warning, which is a finding
+                      - value: no-classical
+                        label: No classical algorithms available
+                  - key: warningLocation
+                    label: Where the warning appears
+                    type: text
+                    required: false
+
     # Evidence checklist. A request list for assessors and a reference for vendors.
     evidenceChecklist:
       introduction: The items below are a level-specific summary of the artefacts a vendor should be able to produce. They can serve as a concise request list for an assessor, or as a self-assessment reference for a vendor preparing evidence before a formal assessment. The detailed requirements and acceptance criteria for each item are in the assessment questions above. All artefacts from [Level 1](/wg/pqc/pqcmm/levels/1-initial/#evidence-checklist), [Level 2](/wg/pqc/pqcmm/levels/2-foundational/#evidence-checklist), and [Level 3](/wg/pqc/pqcmm/levels/3-advanced/#evidence-checklist) remain required.
@@ -2604,6 +2636,9 @@ levels:
 
         - id: 4.e.4
           text: Test results or validation reports confirming zero-legacy operation.
+
+        - id: 4.e.5
+          text: Documentation, source code or test results showing the operator warning when a classical algorithm is used.
 
 # ============================================================================
 # Level 5 · Optimized
@@ -2648,7 +2683,7 @@ levels:
       introduction: "A product meets Level 5 when all Level 4 criteria are met, plus:"
       items:
         - id: 5.1.1
-          text: Quantum-safe algorithms are the **default and preferred setting** for all relevant features; any legacy algorithm requires explicit enablement by the operator.
+          text: "**Quantum-safe by default:** classical algorithms are off until the operator explicitly enables them, and are only preferred over quantum-safe algorithms when the operator explicitly sets this."
           assessmentQuestionIds:
             - 5.2.1
             - 5.2.2
@@ -2678,7 +2713,7 @@ levels:
     # Assessment. The record an assessor keeps, then the questions to ask, by group.
     assessment:
       methodology: |-
-        Existing product documentation and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
+        Existing documentation, source code and test results may be reused where they directly support the requirement for the assessed version, configuration, and scope. Cite the exact section or result for each requirement; a generic document reference is insufficient. Reuse does not waive any criterion. Record whether evidence was reviewed, a test was observed, or a test was independently reproduced, and identify gaps.
 
         The assessment report must record:
 
@@ -2745,29 +2780,23 @@ levels:
                     required: true
 
             - id: 5.2.2
-              question: How does an operator explicitly enable classical (non-quantum-safe) algorithms? Show the exact configuration step.
-              guidance: "Record the exact configuration step required (configuration key, flag, UI setting, API call). Test it: apply the enablement step, verify it works, and verify the product emits a warning or audit log entry indicating a downgrade. Record: test environment, product version, steps performed, and outcome. **A default that silently falls back to classical when a quantum-safe peer is unavailable — without an explicit operator action and an audit log entry — is a disqualifying finding for Level 5.**"
+              question: How does an operator enable classical algorithms, or make them preferred over quantum-safe algorithms?
+              guidance: "Record the setting that enables classical algorithms and any setting that makes them preferred (configuration key, flag, UI setting, API call). **Classical use without an explicit operator setting is a disqualifying finding for Level 5.**"
               # Answer form shown by the assessment tool.
               response:
                 fields:
                   - key: enablementStep
-                    label: Exact step required to enable classical algorithms
+                    label: Setting that enables classical algorithms
                     type: text
                     required: true
-                  - key: warningOrAuditEntry
-                    label: Product emits a warning or audit log entry on downgrade
-                    type: boolean
-                    required: true
+                  - key: preferenceSetting
+                    label: Setting that makes classical algorithms preferred
+                    type: text
+                    required: false
                   - key: silentFallbackObserved
-                    label: Silent fallback to classical observed without operator action
+                    label: Classical used without an explicit operator setting
                     type: boolean
                     nonSupportingValues: [true]
-                    required: true
-                    hint: A silent fallback is a disqualifying finding for Level 5.
-                  - key: testOutcome
-                    label: Test environment, product version, steps performed, and outcome
-                    type: textarea
-                    rows: 4
                     required: true
 
             - id: 5.2.3
