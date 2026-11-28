@@ -2132,7 +2132,7 @@ levels:
         title: What Level 4 Means
         placement: before-criteria
         body: |-
-          A product at **Level 4** builds on the visibility and agility of Level 3, adding the precision of a **Cryptographic Bill of Materials (CBOM)**, a demonstrated ability to **disable all non-quantum-safe algorithms entirely** while remaining functional, and clarity about **hybrid and composite algorithm support**.
+          A product at **Level 4** builds on the visibility and agility of Level 3, adding the precision of a **Cryptographic Bill of Materials (CBOM)**, a demonstrated ability to remain functional **without relying on quantum-vulnerable cryptography for the security the product claims**, and clarity about **hybrid and composite algorithm support**.
 
           > [!NOTE]
           > Level 4 is the benchmark for **high-assurance deployments**. It provides both the documentation precision needed for compliance and the operational capability to enforce a fully quantum-safe configuration.
@@ -2199,7 +2199,7 @@ levels:
 
         - **CBOM analysis** — whether vendor-provided or assessor-generated; tool name and version; generation method (automated CI pipeline / manual export / hybrid); date generated; product version covered.
         - **SBOM-to-CBOM cross-check** — method used to verify every cryptographic library in the SBOM maps to at least one CBOM entry, and any gaps found.
-        - **Zero-legacy testing** — product version; configuration applied; test tool name and version; exact test command or procedure; outcome (classical connection rejected / accepted / untested).
+        - **Zero-legacy operation** — assessed configuration, cryptographic uses and dependencies, and evidence for each. For tests performed, record the tool, procedure and outcome.
         - **Hybrid/composite verification** — whether the assessor tested interoperability with a reference implementation; if so: implementation name and version, and result.
         - **Unverified claims** — flag each explicitly as *"vendor-stated, not independently verified"*.
 
@@ -2378,41 +2378,40 @@ levels:
           kind: assessment
           questions:
             - id: 4.3.1
-              question: Can the product be configured to disable all non-quantum-safe algorithms? Provide the exact configuration steps.
-              guidance: "Record the exact configuration mechanism (configuration file key, API call, CLI flag, UI setting) and the documentation URL. Where possible, reproduce in a test environment: apply the zero-legacy configuration, then test each in-scope role with a client restricted to classical algorithms for that role; a cipher-suite test does not test key establishment. For example, `openssl s_client -tls1_3 -groups X25519:secp256r1 -connect host:port` must fail; for server authentication, record the certificate's signature algorithm; for other protocols, restrict the product's own client the same way. Record: test tool name and version, exact command used, product version, configuration applied, role tested, and outcome (connection rejected / accepted). A connection that succeeds under this test is a finding."
+              question: How is the product configured to operate without relying on quantum-vulnerable cryptography for the security it claims?
+              guidance: "Use the inventory to cover each in-scope cryptographic use and dependency, including boot, updates and external services. Cite the evidence for the assessed configuration. For example, if TLS provides confidentiality, a test can check whether a client restricted to classical key establishment succeeds. Record any remaining quantum-vulnerable use under 4.3.3 and assess its mitigation under 4.3.4."
               # Answer form shown by the assessment tool.
               response:
                 fields:
                   - key: configurationMechanism
-                    label: Zero-legacy configuration mechanism
+                    label: Assessed configuration
                     type: text
                     required: true
-                    hint: Configuration file key, API call, CLI flag, or UI setting.
+                    hint: Cite the existing inventory or configuration record and identify any settings specific to this assessment.
                   - key: documentationUrl
                     label: Configuration documentation URL
                     type: url
                     required: false
                   - key: testTool
-                    label: Test tool and version
+                    label: Test tool and version, if tested
                     type: text
-                    required: true
+                    required: false
                   - key: testCommand
                     label: Exact test command or procedure
                     type: textarea
                     rows: 3
-                    required: true
+                    required: false
                   - key: classicalConnectionOutcome
-                    label: Classical-only client connection outcome
+                    label: Classical-only connection test, if applicable
                     type: select
-                    nonSupportingValues: [accepted]
                     required: true
                     options:
                       - value: rejected
                         label: Rejected as expected
                       - value: accepted
-                        label: Accepted, which is a finding
+                        label: Accepted, assess the dependency under 4.3.3 and 4.3.4
                       - value: untested
-                        label: Not tested
+                        label: Not tested or not applicable
 
             - id: 4.3.2
               question: When configured in zero-legacy mode, does the product remain fully functional with a quantum-safe client?
@@ -3128,13 +3127,14 @@ levels:
               response:
                 fields:
                   - key: libraryName
-                    label: Cryptographic library name
+                    label: Library name or reference to the applicable implementation record
+                    hint: Cite the earlier answer (for example, 1.5.1) or the CBOM entry that identifies the exact library version, algorithm and role.
                     type: text
                     required: true
                   - key: libraryVersion
-                    label: Exact library version string
+                    label: Exact library version, if not already identified in the referenced record
                     type: text
-                    required: true
+                    required: false
                   - key: repositoryUrl
                     label: Repository URL for open-source libraries
                     type: url
