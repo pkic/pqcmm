@@ -2132,7 +2132,7 @@ levels:
         title: What Level 4 Means
         placement: before-criteria
         body: |-
-          A product at **Level 4** builds on the visibility and agility of Level 3, adding the precision of a **Cryptographic Bill of Materials (CBOM)**, a demonstrated ability to **disable all non-quantum-safe algorithms entirely** while remaining functional, and clarity about **hybrid and composite algorithm support**.
+          A product at **Level 4** builds on the visibility and agility of Level 3, adding the precision of a **Cryptographic Bill of Materials (CBOM)**, a demonstrated ability to remain functional **without relying on quantum-vulnerable cryptography for the security the product claims**, and clarity about **hybrid and composite algorithm support**.
 
           > [!NOTE]
           > Level 4 is the benchmark for **high-assurance deployments**. It provides both the documentation precision needed for compliance and the operational capability to enforce a fully quantum-safe configuration.
@@ -2199,7 +2199,7 @@ levels:
 
         - **CBOM analysis** — whether vendor-provided or assessor-generated; tool name and version; generation method (automated CI pipeline / manual export / hybrid); date generated; product version covered.
         - **SBOM-to-CBOM cross-check** — method used to verify every cryptographic library in the SBOM maps to at least one CBOM entry, and any gaps found.
-        - **Zero-legacy testing** — product version; configuration applied; test tool name and version; exact test command or procedure; outcome (classical connection rejected / accepted / untested).
+        - **Zero-legacy operation** — assessed configuration, cryptographic uses and dependencies, and evidence for each. For tests performed, record the tool, procedure and outcome.
         - **Hybrid/composite verification** — whether the assessor tested interoperability with a reference implementation; if so: implementation name and version, and result.
         - **Unverified claims** — flag each explicitly as *"vendor-stated, not independently verified"*.
 
@@ -2378,31 +2378,31 @@ levels:
           kind: assessment
           questions:
             - id: 4.3.1
-              question: Can the product be configured to disable all non-quantum-safe algorithms? Provide the exact configuration steps.
-              guidance: "Record the exact configuration mechanism (configuration file key, API call, CLI flag, UI setting) and the documentation URL. Where possible, reproduce in a test environment: apply the zero-legacy configuration, then test each in-scope role with a client restricted to classical algorithms for that role; a cipher-suite test does not test key establishment. For example, `openssl s_client -tls1_3 -groups X25519:secp256r1 -connect host:port` must fail; for server authentication, record the certificate's signature algorithm; for other protocols, restrict the product's own client the same way. Record: test tool name and version, exact command used, product version, configuration applied, role tested, and outcome (connection rejected / accepted). A connection that succeeds under this test is a finding."
+              question: How is the product configured to operate without relying on quantum-vulnerable cryptography for the security it claims?
+              guidance: "Use the inventory to cover each in-scope cryptographic use and dependency, including boot, updates and external services. Cite the evidence for the assessed configuration. For example, if the claimed confidentiality depends on TLS key establishment, accepting a client restricted to classical key establishment is a finding. Apply this connection test only when the claimed protection depends on the role being tested. Record any remaining quantum-vulnerable use under 4.3.3 and assess its mitigation under 4.3.4."
               # Answer form shown by the assessment tool.
               response:
                 fields:
                   - key: configurationMechanism
-                    label: Zero-legacy configuration mechanism
+                    label: Assessed configuration
                     type: text
                     required: true
-                    hint: Configuration file key, API call, CLI flag, or UI setting.
+                    hint: Cite the existing inventory or configuration record and identify the settings that select this configuration, or cite the documented default.
                   - key: documentationUrl
                     label: Configuration documentation URL
                     type: url
                     required: false
                   - key: testTool
-                    label: Test tool and version
+                    label: Test tool and version, if tested
                     type: text
-                    required: true
+                    required: false
                   - key: testCommand
                     label: Exact test command or procedure
                     type: textarea
                     rows: 3
-                    required: true
+                    required: false
                   - key: classicalConnectionOutcome
-                    label: Classical-only client connection outcome
+                    label: Classical-only connection test for a role providing the claimed protection
                     type: select
                     nonSupportingValues: [accepted]
                     required: true
@@ -2410,25 +2410,27 @@ levels:
                       - value: rejected
                         label: Rejected as expected
                       - value: accepted
-                        label: Accepted, which is a finding
+                        label: Accepted, claimed protection can be bypassed
                       - value: untested
                         label: Not tested
+                      - value: not-applicable
+                        label: Connection test does not apply
 
             - id: 4.3.2
-              question: When configured in zero-legacy mode, does the product remain fully functional with a quantum-safe client?
-              guidance: "Test with a representative quantum-safe workload. Record: test environment details, product version, zero-legacy configuration applied, quantum-safe client tool and version (e.g., OpenSSL, a TLS client with ML-KEM support), test procedure, and outcome. Document any feature that fails or degrades in zero-legacy mode — each exception must be named, scoped, and risk-assessed."
+              question: When configured in zero-legacy mode, does the product remain fully functional for its intended workload?
+              guidance: Cite the evidence for functional operation in the assessed configuration, including the relevant section of any evidence already recorded for 4.1.2. Identify and risk-assess any failed or degraded feature. If a test was used, record or reference its procedure and result.
               # Answer form shown by the assessment tool.
               response:
                 fields:
                   - key: quantumSafeClient
-                    label: Quantum-safe client tool and version
+                    label: Client or tool and version, if tested
                     type: text
-                    required: true
+                    required: false
                   - key: testProcedure
-                    label: Test environment, product version, and procedure
+                    label: Test environment and procedure, if tested
                     type: textarea
                     rows: 4
-                    required: true
+                    required: false
                   - key: functionalOutcome
                     label: Functional outcome in zero-legacy mode
                     type: select
@@ -2448,9 +2450,9 @@ levels:
                     required: false
                     hint: Name, scope, and risk-assess each exception. Leave empty when fully functional.
                 evidence:
-                  label: Zero-legacy functional test results
-                  description: Attach the test output or report confirming operation in zero-legacy mode.
-                  required: true
+                  label: Supporting evidence for functional operation
+                  description: Attach additional evidence here if needed. Evidence already cited for this criterion can be reused.
+                  required: false
                   acceptedMediaTypes:
                     - application/pdf
                     - application/json
@@ -2650,7 +2652,7 @@ levels:
           text: Technical documentation of hybrid and composite support with protocol/standard references.
 
         - id: 4.e.4
-          text: Test results or validation reports confirming zero-legacy operation.
+          text: Evidence confirming operation in the assessed zero-legacy configuration, such as documentation, source analysis or test results.
 
         - id: 4.e.5
           text: Documentation, source code or test results showing the operator warning when the product relies on a classical algorithm.
@@ -3127,14 +3129,19 @@ levels:
               # Answer form shown by the assessment tool.
               response:
                 fields:
+                  - key: implementationReference
+                    label: Existing implementation record
+                    type: text
+                    required: false
+                    hint: Cite the earlier answer or CBOM entry identifying the exact library version, algorithm and role. Otherwise enter the library name and version below.
                   - key: libraryName
                     label: Cryptographic library name
                     type: text
-                    required: true
+                    required: false
                   - key: libraryVersion
-                    label: Exact library version string
+                    label: Exact library version
                     type: text
-                    required: true
+                    required: false
                   - key: repositoryUrl
                     label: Repository URL for open-source libraries
                     type: url
@@ -3156,6 +3163,13 @@ levels:
                     type: text
                     required: false
                     hint: Record the analysing organisation and the analysis reference.
+                rules:
+                  - kind: at-least-one
+                    fields: [implementationReference, libraryName]
+                    message: Cite an implementation record or enter the library name.
+                  - kind: at-least-one
+                    fields: [implementationReference, libraryVersion]
+                    message: Cite an implementation record or enter the exact library version.
 
             - id: 5.5.4
               question: Are the results of any third-party cryptographic audit of the quantum-safe implementation available?
